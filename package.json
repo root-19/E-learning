@@ -1,0 +1,16 @@
+{
+  "name": "capstone21-elearning",
+  "version": "1.0.0",
+  "description": "This is a lightweight PHP MVC project with a simple CLI for generating files and managing database tables (migrations).",
+  "main": "index.js",
+ "scripts": {
+  "dev": "node start.js"
+},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chokidar": "^4.0.3",
+    "ws": "^8.18.1"
+  }
+}
