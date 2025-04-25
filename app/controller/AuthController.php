@@ -19,6 +19,7 @@ class AuthController {
                 if (password_verify($password, $userData['password'])) {
                     
                     // Store user session
+                    session_start();
                     $_SESSION['user_id'] = $userData['id'];
                     $_SESSION['username'] = $userData['username'];
                     $_SESSION['role'] = $userData['role']; 

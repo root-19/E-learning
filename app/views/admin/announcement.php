@@ -3,10 +3,9 @@
 require_once __DIR__ . '/../../../config/database.php';
 require_once __DIR__ . '/../../models/Announcement.php';
 require_once __DIR__ . '/../../controller/AnnouncementController.php';
-
+// session_start();
 $announcementController = new AnnouncementController();
-$userId = $_SESSION['user_id'] ?? 1; // Replace 1 with redirect or login check if needed
-
+$userId = $_SESSION['user_id'] ?? null;
 $successMessage = '';
 $errorMessage = '';
 
@@ -42,14 +41,26 @@ include 'layout/side-header.php';
 ?>
 
 <!-- Button to open modal -->
-<button id="openModalButton" class="bg-blue-500 text-white px-4 py-2 rounded-md">Add Announcement</button>
+<div class="flex justify-between items-center mb-4">
+    <!-- Add Announcement Button (Left Aligned) -->
+    <button id="openModalButton" class="bg-green-500 text-white px-4 py-2 rounded-md">
+        Create Announcement
+    </button>
 
-<!-- Search -->
-<div class="my-4">
-    <form method="GET">
-        <input type="text" name="search" class="border rounded px-4 py-2" placeholder="Search announcements..." value="<?= htmlspecialchars($_GET['search'] ?? '') ?>">
-        <button type="submit" class="bg-gray-500 text-white px-4 py-2 rounded-md">Search</button>
-    </form>
+    <!-- Search Box with Suggestions -->
+    <div class="relative w-1/2">
+        <input 
+            type="text" 
+            id="searchInput" 
+            class="border rounded px-4 py-2 w-full" 
+            placeholder="Search announcements by title..." 
+            autocomplete="off"
+        >
+        <ul 
+            id="suggestions" 
+            class="absolute z-10 w-full bg-white border border-gray-200 rounded shadow-md hidden"
+        ></ul>
+    </div>
 </div>
 
 <!-- Success/Error Message -->
@@ -75,9 +86,7 @@ include 'layout/side-header.php';
                 <tr>
                     <td class="border px-4 py-2"><?= htmlspecialchars($announcement['title']) ?></td>
                     <td class="border px-4 py-2"><?= htmlspecialchars($announcement['description']) ?></td>
-                    <!-- <td class="border px-4 py-2"><?= htmlspecialchars($announcement['user_id']) ?></td> -->
                     <td class="border px-4 py-2"><?= htmlspecialchars($announcement['username']) ?></td>
-
                     <td class="border px-4 py-2"><?= htmlspecialchars($announcement['posted_at']) ?></td>
                 </tr>
             <?php endforeach; ?>
@@ -110,7 +119,42 @@ include 'layout/side-header.php';
     closeModalButton.addEventListener('click', () => modal.classList.add('hidden'));
 
     <?php if (!empty($successMessage)): ?>
-        // Close modal if successful
         window.addEventListener('DOMContentLoaded', () => modal.classList.add('hidden'));
     <?php endif; ?>
+
+    // Announcements passed from PHP to JS
+    const announcements = <?= json_encode($announcements) ?>;
+
+    const searchInput = document.getElementById('searchInput');
+    const suggestions = document.getElementById('suggestions');
+
+    searchInput.addEventListener('input', () => {
+        const query = searchInput.value.toLowerCase().trim();
+        suggestions.innerHTML = '';
+        suggestions.classList.add('hidden');
+
+        if (query.length > 0) {
+            const matches = announcements.filter(a => a.title.toLowerCase().includes(query));
+            
+            if (matches.length > 0) {
+                matches.forEach(match => {
+                    const li = document.createElement('li');
+                    li.textContent = match.title;
+                    li.classList = "px-4 py-2 hover:bg-gray-100 cursor-pointer";
+                    li.addEventListener('click', () => {
+                        searchInput.value = match.title;
+                        suggestions.classList.add('hidden');
+                    });
+                    suggestions.appendChild(li);
+                });
+                suggestions.classList.remove('hidden');
+            }
+        }
+    });
+
+    document.addEventListener('click', function (e) {
+        if (!searchInput.contains(e.target) && !suggestions.contains(e.target)) {
+            suggestions.classList.add('hidden');
+        }
+    });
 </script>

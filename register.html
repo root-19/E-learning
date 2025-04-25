@@ -1,0 +1,419 @@
+Try AI directly in your favorite apps … Use Gemini to generate drafts and refine content, plus get Gemini Advanced with access to Google’s next-gen AI for ₱1,100.00 ₱550.00 for 2 months
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title> LearnInsure | In-Progress Dashboard </title>
+        <link rel="stylesheet" href="registration.css">
+    </head>
+    <body>
+        <style> 
+            /* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #ffffff;
+    color: #212529;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensure full viewport height */
+    margin: 0;
+    padding: 0;
+    justify-content: center; /* Center content vertically */
+}
+
+/* Page Wrapper styles */
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Allow the content to grow and fill the remaining space */
+    min-height: 100vh; /* Ensure full height */
+    justify-content: center; /* Center content vertically */
+}
+
+header {
+    background-color: #4B793E;
+    padding: 10px 30px;
+    box-shadow: 0 2px 4px #080D07;
+}
+
+.header-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Left Section: Logo and Brand */
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-image {
+    width: 45px;
+    height: 45px;
+}
+
+.navbar-brand {
+    color: #FFFFFF;
+    font-family: 'Times New Roman', sans-serif;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+/* Center Section: Nav Menu */
+.header-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.navbar-nav {
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    gap: 25px;
+    padding: 0;
+    margin: 0;
+}
+
+.navbar-nav .nav-link {
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 18px;
+    text-decoration: none;
+    position: relative;
+    padding: 8px 0;
+}
+
+.navbar-nav .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #F4C542;
+    transition: width 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover::after,
+.navbar-nav .nav-link.active::after {
+    width: 100%;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    color: #F4C542;
+}
+
+/* Right Section: Profile & Login */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.profile-icon-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.profile-icon {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 45px;
+    right: 0;
+    background: #FFFFFF;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 180px;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    visibility: hidden;
+    overflow: hidden;
+    z-index: 99;
+}
+
+.profile-icon-container:hover .dropdown-menu,
+.dropdown-menu.active {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+}
+
+.dropdown-menu .dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    text-decoration: none;
+    color: #333333;
+    font-size: 14px;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.dropdown-menu .dropdown-item:hover {
+    background: #56CCF2;
+    color: #ffffff;
+}
+
+.login-link {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 2px solid white;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.login-link:hover {
+    color: #4B793E;
+    background-color: #F4C542;
+    border-color: #F4C542;
+}
+
+/* Container for the form */
+.form-container {
+    width: 75%; /* Reduce width of the form by 25% */
+    max-width: 600px; /* Restrict maximum width */
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px auto; /* Center the container */
+    text-align: center; /* Center content inside the container */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center the content vertically */
+}
+
+/* Heading */
+.form-container h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #4CAF50;
+    text-align: center; /* Ensure text is centered */
+    width: 100%; /* Ensure header takes full width */
+}
+
+/* Paragraph */
+.form-container p {
+    font-size: 14px;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+/* Form Styles */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 80%;
+}
+
+label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    text-align: left;
+    width: 80%;
+}
+
+/* Input fields */
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%; /* Ensure inputs take full container width */
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+/* Checkbox styling */
+input[type="checkbox"] {
+    margin-right: 20px;
+    vertical-align: middle; /* Align checkbox with label */
+}
+
+/* Stack checkboxes and labels (1 checkbox per line) */
+.checkboxes {
+    text-align: left;
+    margin-bottom: 0px;
+}
+
+.checkboxes > div {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0px;
+}
+
+.checkboxes > div:last-child {
+    margin-bottom: 0; /* Remove margin-bottom for the last item */
+}
+
+.checkboxes label {
+    margin-left: 20px; /* Space between checkbox and label */
+}
+
+button {
+    width: 35%;
+    padding: 12px;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    color: #4B793E;
+    background-color: #F4C542;
+    border-color: #F4C542;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .form-container {
+        padding: 15px;
+    }
+
+    .form-container h1 {
+        font-size: 20px;
+    }
+
+    .form-container p {
+        font-size: 12px;
+    }
+
+    button {
+        font-size: 14px;
+    }
+}
+
+/* Footer Section */
+.footer {
+    background-color: #3F6634;
+    color: #ffffff;
+    text-align: center;
+    padding: 20px 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.footer p {
+    margin: 0;
+    font-size: 14px;
+}
+
+/* Center the text outside the form container */
+.text-center {
+    text-align: center;
+    width: 100%; /* Ensure the text spans the full width */
+    margin-bottom: 20px; /* Add some space below the text */
+}
+        </style>
+        <header>
+            <!---------- HEADER/NAVIGATION BAR SECTION ---------->
+            <div class="header-wrapper">
+                <!-- Left: Logo and Brand -->
+                <div class="header-left">
+                    <img src="learninsure-logo.png" alt="InsureLearn Logo" class="logo-image" />
+                    <span class="navbar-brand">InsureLearn</span>
+                </div>
+            
+                <!-- Center: Navigation Links -->
+                <nav class="header-center">
+                    <ul class="navbar-nav">
+                        <li><a class="nav-link" href="index.html">Home</a></li>
+                        <li><a class="nav-link" href="#">Explore</a></li>
+                        <li><a class="nav-link" href="#">My Learning</a></li>
+                        <li><a class="nav-link" href="about us.html">About Us</a></li>
+                        <li><a class="nav-link" href="contact.html">Contacts</a></li>
+                    </ul>
+                </nav>
+            
+                <!-- Right: Profile Icon and Login -->
+                <div class="header-right">
+                    <div class="profile-icon-container">
+                        <img src="profile-icon.png" alt="Profile Icon" class="profile-icon" />
+                        <div class="dropdown-menu">
+                            <a href="#" class="dropdown-item">Dashboard</a>
+                            <a href="#" class="dropdown-item">Settings</a>
+                            <a href="#" class="dropdown-item">Logout</a>
+                        </div>
+                    </div>
+                    <a href="login.html" class="login-link">Login</a>
+                </div>
+            </div>
+        </header>
+        
+        <br>
+        <div class="container">
+            <!-- Centered Text Section -->
+            <div class="text-center">
+                <h1>Sign up and Join LearnInsure!</h1>
+                <p>Please complete this registration form. Required fields are marked with an asterisk (*).</p>
+            </div>
+            
+            <!-- Form Container -->
+            <div class="form-container">
+                <form>
+                    <label for="full-name">Full Name: *</label>
+                    <input type="text" id="full-name" name="full-name" required>
+                    
+                    <label for="email">Email Address: *</label>
+                    <input type="email" id="email" name="email" required>
+                    
+                    <label for="password">Password: *</label>
+                    <input type="password" id="password" name="password" required>
+                    
+                    <label for="confirm-password">Confirm Password: *</label>
+                    <input type="password" id="confirm-password" name="confirm-password" required>
+                    
+                    <label for="access-token">Access Token: *</label>
+                    <input type="text" id="access-token" name="access-token" required>
+                    
+                    <div class="checkboxes">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="terms">I agree to InterActive Advisor's Terms & Conditions.</label><br>
+                        
+                        <input type="checkbox" id="privacy" name="privacy" required>
+                        <label for="privacy">I agree to InterActive Advisor's Privacy Policy.</label>
+                    </div>
+                    <br>
+                    <button type="submit">Create an Account</button>
+                </form>
+            </div>
+        </div>
+        <br><br>
+        
+        <!-- Footer Section -->
+        <footer class="footer">
+            <div class="container">
+                <p> LearnInsure. ©2024 by LearnInsure. All rights reserved. </p>
+            </div>
+        </footer>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="scripts.js"></script>
+    </body>
+</html>

@@ -25,8 +25,18 @@
         <div class="flex justify-between items-center">
             <div class="text-2xl font-semibold">LearnInsure</div>
             <div class="space-x-4">
-                <a href="/profile" class="hover:text-gray-300">Profile</a>
-                <a href="/logout" class="hover:text-gray-300">Logout</a>
+                <!-- Profile as a clickable logo -->
+                <a href="javascript:void(0);" id="profileLogo" class="flex items-center space-x-2">
+                    <img src="../../../resources/image/profile-icon.png" alt="Profile Logo" class="w-8 h-8 rounded-full">
+                    <span>Profile</span>
+                </a>
+                <!-- Logout button with an icon, initially hidden -->
+                <a href="/logout" id="logoutButton" class="flex items-center space-x-2 hover:text-gray-300 hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m10 0a2 2 0 00-2-2h-6a2 2 0 00-2 2V5a2 2 0 012-2h6a2 2 0 012 2v11z"/>
+                    </svg>
+                    <span>Logout</span>
+                </a>
             </div>
         </div>
     </header>
@@ -36,12 +46,10 @@
     <div class="w-64 bg-custom-green text-white p-6">
     <div class="mt-8">
         <nav>
-           
             <a href="/admin/courses" class="block py-2 px-4 text-custom-green bg-white rounded-md hover:bg-yellow-500 hover:text-white mt-4 transition-all duration-300 font-bold">Course Management</a>
             <a href="/admin/users" class="block py-2 px-4 text-custom-green bg-white rounded-md hover:bg-yellow-500 hover:text-white mt-4 transition-all duration-300 font-bold">User Management</a>
-            <a href="/admin/instractor" class="block py-2 px-4 text-custom-green bg-white rounded-md hover:bg-yellow-500 hover:text-white mt-4 transition-all duration-300 font-bold">Instractor Management</a>
-
-            <a href="/admin/announcements" class="block py-2 px-4 text-custom-green bg-white rounded-md hover:bg-yellow-500 hover:text-white mt-4 transition-all duration-300 font-bold">Announcements</a>
+            <a href="/admin/instractor" class="block py-2 px-4 text-custom-green bg-white rounded-md hover:bg-yellow-500 hover:text-white mt-4 transition-all duration-300 font-bold">Instructor Management</a>
+            <a href="/admin/announcement" class="block py-2 px-4 text-custom-green bg-white rounded-md hover:bg-yellow-500 hover:text-white mt-4 transition-all duration-300 font-bold">Announcements</a>
         </nav>
     </div>
 </div>
@@ -57,6 +65,19 @@
     <div class="mt-auto bg-custom-green text-white py-4 text-center">
         LearnInsure. ©2024 by LearnInsure. All rights reserved.
     </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Get references to the profile logo and logout button
+        const profileLogo = document.getElementById('profileLogo');
+        const logoutButton = document.getElementById('logoutButton');
+
+        // Add event listener to profile logo for toggling logout button visibility
+        profileLogo.addEventListener('click', () => {
+            // Toggle the 'hidden' class to show/hide the logout button
+            logoutButton.classList.toggle('hidden');
+        });
+    </script>
 
 </body>
 </html>
