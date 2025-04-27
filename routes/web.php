@@ -22,6 +22,16 @@ $routes = [
     '/about' => ['view', 'about', true, 'user'],
     '/contact' => ['view', 'contact', true, 'user'],
 
+    //Routes for instractor 
+    '/instructor/dashboard' => ['view', 'instructor/dashboard', true, 'instructor'],
+    '/instructor/module' => ['view', 'instructor/module', true, 'instructor'],
+    '/instructor/chapter' => ['view', 'instructor/chapter', true, 'instructor'],
+
+
+    // '/home' => ['view', 'home', true, 'user'],
+    // '/about' => ['view', 'about', true, 'user'],
+    // '/contact' => ['view', 'contact', true, 'user'],
+
     // Routes accessible to 'admin'
     '/admin/dashboard' => ['view', 'admin/dashboard', true, 'admin'],
     '/admin/users' => ['view', 'admin/users', true, 'admin'],

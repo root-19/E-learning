@@ -17,22 +17,21 @@ class AuthController {
                 $userData = $user->getUserByEmail($email);
     
                 if (password_verify($password, $userData['password'])) {
-                    
-                    // Store user session
+                    // Start session
                     session_start();
                     $_SESSION['user_id'] = $userData['id'];
                     $_SESSION['username'] = $userData['username'];
                     $_SESSION['role'] = $userData['role']; 
 
-                     // Redirect based on role
-                if ($userData['role'] === 'admin') {
-                    header('Location: /admin/dashboard');
-                } elseif ($userData['role'] === 'instructor') {
-                    header('Location: /instructor/dashboard');
-                } else {
-                    header('Location: /dashboard'); // Default user role
-                }
-                exit();
+                    // Redirect based on role
+                    if ($userData['role'] === 'admin') {
+                        header('Location: /admin/dashboard');
+                    } elseif ($userData['role'] === 'instructor') {
+                        header('Location: /instructor/dashboard');
+                    } else {
+                        header('Location: /dashboard'); // Default user role
+                    }
+                    exit();
                 } else {
                     $error = "Invalid password.";
                     require_once __DIR__ . '/../../public/login.php';
@@ -51,9 +50,8 @@ class AuthController {
             $username = $_POST['username'];
             $email = $_POST['email'];
             $password = $_POST['password'];
-            
-
-            $role = isset($_POST['role']) ? $_POST['role'] : 'user'; 
+            $role = isset($_POST['role']) ? $_POST['role'] : 'user'; // Default to 'user'
+    
             $user = new User();
     
             if ($user->emailExists($email)) {
@@ -62,6 +60,7 @@ class AuthController {
             } else {
                 if ($user->register($username, $email, $password, $role)) {
                     $userData = $user->getUserByEmail($email);
+                    session_start();
                     $_SESSION['user_id'] = $userData['id'];
                     $_SESSION['username'] = $userData['username'];
                     $_SESSION['role'] = $userData['role']; 
@@ -77,7 +76,6 @@ class AuthController {
             require_once __DIR__ . '/../../public/register.php';
         }
     }
-    
 
     // Handle user logout
     public function logout() {
@@ -118,4 +116,4 @@ class AuthController {
             require_once __DIR__ . '/../../public/forget-password.php';
         }
     }
-}   
+}

@@ -29,12 +29,37 @@ class User {
     }
 
     // Register a new user
-    public function register($username, $email, $password) {
+    public function register($username, $email, $password){
         $db = Database::connect();
-        $query = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+        $query = "INSERT INTO users (username, email, password) VALUES (?, ?, ?";
         $stmt = $db->prepare($query);
         return $stmt->execute([$username, $email, password_hash($password, PASSWORD_DEFAULT)]);
     }
+        // Register a new user
+        public function registerInstructor($username, $email, $password, $imageName) {
+            $db = Database::connect();
+        
+            // Prepare the query
+            $query = "INSERT INTO users (username, email, password, profile_image, role) VALUES (?, ?, ?, ?, ?)";
+            $stmt = $db->prepare($query);
+        
+            // Check if the query was successful
+            if ($stmt->execute([
+                $username, 
+                $email, 
+                password_hash($password, PASSWORD_DEFAULT), 
+                $imageName,
+                'instructor'
+            ])) {
+                return true; // Success
+            } else {
+                // Get the error if query fails
+                $_SESSION['error'] = "Error registering instructor: " . implode(", ", $stmt->errorInfo());
+                return false;
+            }
+        }
+        
+        
 
     //update password
     public function updatePasswordByEmail($email, $newPassword) {
