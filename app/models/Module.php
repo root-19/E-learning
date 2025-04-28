@@ -25,4 +25,24 @@ class Module {
         $stmt = $this->conn->query("SELECT * FROM courses ORDER BY id DESC");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function getChaptersByCourseId($courseId) {
+        try {
+            $stmt = $this->conn->prepare("
+                SELECT c.*, 
+                       CASE 
+                           WHEN EXISTS (SELECT 1 FROM quizzes q WHERE q.chapter_id = c.id) THEN 'interactive'
+                           ELSE 'traditional'
+                       END as type
+                FROM chapters c
+                WHERE c.course_id = :course_id
+            ");
+            $stmt->bindParam(':course_id', $courseId);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "Error fetching chapters: " . $e->getMessage();
+            return [];
+        }
+    }
 }

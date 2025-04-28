@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elearning</title>
+    <title>LearnInsure - Instructor Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* Custom Green Color */
+        /* Custom Colors */
         .bg-custom-green {
             background-color: #4B793E;
         }
@@ -16,75 +17,142 @@
         .hover-bg-custom-green:hover {
             background-color: #4B793E;
         }
+        
+        /* Custom Animations */
+        .nav-link {
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            transform: translateX(5px);
+        }
+        
+        /* Custom Shadows */
+        .custom-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        /* Active State */
+        .nav-link.active {
+            background-color: #ffffff;
+            color: #4B793E;
+            font-weight: 600;
+        }
     </style>
 </head>
-<body class="bg-white font-sans leading-normal tracking-normal">
+<body class="bg-gray-50 font-sans leading-normal tracking-normal">
 
     <!-- Header -->
-    <header class="bg-custom-green text-white py-4 px-6">
-        <div class="flex justify-between items-center">
-            <div class="text-2xl font-semibold">LearnInsure</div>
-            <div class="space-x-4">
-                <!-- Profile as a clickable logo -->
-                <a href="javascript:void(0);" id="profileLogo" class="flex items-center space-x-2">
-                    <img src="../../../resources/image/profile-icon.png" alt="Profile Logo" class="w-8 h-8 rounded-full">
-                    <span>Profile</span>
-                </a>
-                <!-- Logout button with an icon, initially hidden -->
-                <a href="/logout" id="logoutButton" class="flex items-center space-x-2 hover:text-gray-300 hidden">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m10 0a2 2 0 00-2-2h-6a2 2 0 00-2 2V5a2 2 0 012-2h6a2 2 0 012 2v11z"/>
-                    </svg>
-                    <span>Logout</span>
-                </a>
+    <header class="bg-custom-green text-white py-4 px-6 custom-shadow">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-graduation-cap text-2xl"></i>
+                <div class="text-2xl font-bold">LearnInsure</div>
+            </div>
+            <div class="flex items-center space-x-6">
+                <!-- Notifications -->
+                <button class="relative p-2 hover:bg-white/10 rounded-full transition-colors">
+                    <i class="fas fa-bell text-xl"></i>
+                    <span class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">3</span>
+                </button>
+                
+                <!-- Profile Dropdown -->
+                <div class="relative">
+                    <button id="profileButton" class="flex items-center space-x-3 hover:bg-white/10 p-2 rounded-lg transition-colors">
+                        <img src="../../../resources/image/profile-icon.png" alt="Profile" class="w-10 h-10 rounded-full border-2 border-white">
+                        <span class="font-medium">Profile</span>
+                        <i class="fas fa-chevron-down text-sm"></i>
+                    </button>
+                    
+                    <!-- Dropdown Menu -->
+                    <div id="profileDropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 hidden">
+                        <a href="/profile" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+                            <i class="fas fa-user mr-2"></i> My Profile
+                        </a>
+                        <a href="/settings" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+                            <i class="fas fa-cog mr-2"></i> Settings
+                        </a>
+                        <hr class="my-2">
+                        <a href="/logout" class="block px-4 py-2 text-red-600 hover:bg-gray-100">
+                            <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
 
-    <div class="flex h-screen">
- 
-    <div class="w-64 bg-custom-green text-white p-6">
-    <div class="mt-8">
-    <nav>
-            <!-- Course Management with Dropdown -->
-            <div class="relative group">
-                <a href="/instructor/module" class="block py-2 px-4 text-custom-green bg-white rounded-md hover:bg-yellow-500 hover:text-white mt-4 transition-all duration-300 font-bold">
-                    Course Management
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <div class="w-64 bg-custom-green text-white p-6 custom-shadow">
+            <nav class="mt-8 space-y-2">
+                <a href="/instructor/dashboard" class="nav-link flex items-center space-x-3 py-3 px-4 rounded-lg hover:bg-white/10">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
                 </a>
-                <a href="/instructor/chapter" class="block py-2 px-4 text-custom-green bg-white rounded-md hover:bg-yellow-500 hover:text-white mt-4 transition-all duration-300 font-bold">
-                    Content Management
+                
+                <a href="/instructor/module" class="nav-link flex items-center space-x-3 py-3 px-4 rounded-lg hover:bg-white/10">
+                    <i class="fas fa-book"></i>
+                    <span>Course Management</span>
                 </a>
-    <a href="/admin/users" class="block py-2 px-4 text-custom-green bg-white rounded-md hover:bg-yellow-500 hover:text-white mt-4 transition-all duration-300 font-bold">User Management</a>
-            
-            <a href="/admin/announcement" class="block py-2 px-4 text-custom-green bg-white rounded-md hover:bg-yellow-500 hover:text-white mt-4 transition-all duration-300 font-bold">Announcements</a>
-        </nav>
-    </div>
-</div>
-
-
-        <!-- Main content -->
-        <div class="flex-2 bg-white p-6">
-        
+                
+                <a href="/instructor/chapter" class="nav-link flex items-center space-x-3 py-3 px-4 rounded-lg hover:bg-white/10">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Content Management</span>
+                </a>
+                
+                <a href="/instructor/interactive_chapter" class="nav-link flex items-center space-x-3 py-3 px-4 rounded-lg hover:bg-white/10">
+                    <i class="fas fa-puzzle-piece"></i>
+                    <span>Interactive Management</span>
+                </a>
+                
+                <a href="/instructor/learning-modules" class="nav-link flex items-center space-x-3 py-3 px-4 rounded-lg hover:bg-white/10">
+                    <i class="fas fa-book-open"></i>
+                    <span>Learning Modules</span>
+                </a>
+                
+                <a href="/admin/users" class="nav-link flex items-center space-x-3 py-3 px-4 rounded-lg hover:bg-white/10">
+                    <i class="fas fa-users"></i>
+                    <span>User Management</span>
+                </a>
+                
+                <a href="/admin/announcement" class="nav-link flex items-center space-x-3 py-3 px-4 rounded-lg hover:bg-white/10">
+                    <i class="fas fa-bullhorn"></i>
+                    <span>Announcements</span>
+                </a>
+            </nav>
         </div>
 
-
-    <!-- Footer -->
-    <!-- <div class="mt-auto bg-custom-green text-white py-4 text-center">
-        LearnInsure. ©2024 by LearnInsure. All rights reserved.
+        <!-- Main Content -->
+        <div class="flex-2 bg-gray-50 p-6 ml-60 ">
+            <!-- Content will be injected here -->
+        <!-- </div>
     </div> -->
 
     <!-- JavaScript -->
     <script>
-        // Get references to the profile logo and logout button
-        const profileLogo = document.getElementById('profileLogo');
-        const logoutButton = document.getElementById('logoutButton');
+        // Profile Dropdown Toggle
+        const profileButton = document.getElementById('profileButton');
+        const profileDropdown = document.getElementById('profileDropdown');
 
-        // Add event listener to profile logo for toggling logout button visibility
-        profileLogo.addEventListener('click', () => {
-            // Toggle the 'hidden' class to show/hide the logout button
-            logoutButton.classList.toggle('hidden');
+        profileButton.addEventListener('click', () => {
+            profileDropdown.classList.toggle('hidden');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!profileButton.contains(e.target) && !profileDropdown.contains(e.target)) {
+                profileDropdown.classList.add('hidden');
+            }
+        });
+
+        // Active Navigation Link
+        const currentPath = window.location.pathname;
+        document.querySelectorAll('.nav-link').forEach(link => {
+            if (link.getAttribute('href') === currentPath) {
+                link.classList.add('active');
+            }
         });
     </script>
-
 </body>
 </html>

@@ -26,6 +26,9 @@ $routes = [
     '/instructor/dashboard' => ['view', 'instructor/dashboard', true, 'instructor'],
     '/instructor/module' => ['view', 'instructor/module', true, 'instructor'],
     '/instructor/chapter' => ['view', 'instructor/chapter', true, 'instructor'],
+    '/instructor/interactive_chapter' => ['view', 'instructor/interactive_chapter', true, 'instructor'],
+    '/instructor/learning-modules' => ['view', 'learning_modules', true, 'instructor'],
+
 
 
     // '/home' => ['view', 'home', true, 'user'],
