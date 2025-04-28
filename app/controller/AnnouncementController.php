@@ -1,28 +1,31 @@
 <?php
+require_once __DIR__ . '/../models/Announcement.php';
 
 class AnnouncementController {
-
-    private $announcementModel;
+    private $announcement;
 
     public function __construct() {
-        $this->announcementModel = new Announcement();
+        $this->announcement = new Announcement();
     }
 
-    // Create announcement
-    public function createAnnouncement($title, $description, $userId) {
-        $result = $this->announcementModel->createAnnouncement($title, $description, $userId);
-         
-        if ($result === true) {
-            // Optionally redirect or return success message
-            return "Announcement posted successfully!";
-        } else {
-            return $result;  
-        }
+    public function getAllAnnouncements() {
+        return $this->announcement->getAllAnnouncements();
     }
 
-    // Get all announcements (return instead of echo)
-    public function viewAnnouncements() {
-        return $this->announcementModel->getAllAnnouncements();
+    public function getAnnouncementById($id) {
+        return $this->announcement->getAnnouncementById($id);
+    }
+
+    public function createAnnouncement($title, $content, $priority, $admin_id) {
+        return $this->announcement->createAnnouncement($title, $content, $priority, $admin_id);
+    }
+
+    public function updateAnnouncement($id, $title, $content, $priority) {
+        return $this->announcement->updateAnnouncement($id, $title, $content, $priority);
+    }
+
+    public function deleteAnnouncement($id) {
+        return $this->announcement->deleteAnnouncement($id);
     }
 }
 ?>

@@ -111,14 +111,14 @@
                     <span>Learning Modules</span>
                 </a>
                 
+                <a href="/instructor/announcements" class="nav-link flex items-center space-x-3 py-3 px-4 rounded-lg hover:bg-white/10">
+                    <i class="fas fa-bullhorn"></i>
+                    <span>Announcements</span>
+                </a>
+                
                 <a href="/admin/users" class="nav-link flex items-center space-x-3 py-3 px-4 rounded-lg hover:bg-white/10">
                     <i class="fas fa-users"></i>
                     <span>User Management</span>
-                </a>
-                
-                <a href="/admin/announcement" class="nav-link flex items-center space-x-3 py-3 px-4 rounded-lg hover:bg-white/10">
-                    <i class="fas fa-bullhorn"></i>
-                    <span>Announcements</span>
                 </a>
             </nav>
         </div>
