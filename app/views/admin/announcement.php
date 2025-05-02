@@ -64,11 +64,11 @@ include 'layout/side-header.php';
 </div>
 
 <!-- Success/Error Message -->
-<?php if ($successMessage): ?>
+<!-- <?php if ($successMessage): ?>
     <div class="bg-green-100 text-green-700 p-2 rounded mb-4"><?= $successMessage ?></div>
 <?php elseif ($errorMessage): ?>
     <div class="bg-red-100 text-red-700 p-2 rounded mb-4"><?= $errorMessage ?></div>
-<?php endif; ?>
+<?php endif; ?> -->
 
 <!-- Announcements Table -->
 <table class="min-w-full border-collapse border border-gray-200">
@@ -86,7 +86,7 @@ include 'layout/side-header.php';
                 <tr>
                     <td class="border px-4 py-2"><?= htmlspecialchars($announcement['title']) ?></td>
                     <td class="border px-4 py-2"><?= htmlspecialchars($announcement['description']) ?></td>
-                    <td class="border px-4 py-2"><?= htmlspecialchars($announcement['username']) ?></td>
+                    <td class="border px-4 py-2"><?= htmlspecialchars($announcement['admin_name']) ?></td>
                     <td class="border px-4 py-2"><?= htmlspecialchars($announcement['posted_at']) ?></td>
                 </tr>
             <?php endforeach; ?>

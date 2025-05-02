@@ -50,11 +50,7 @@
                 <div class="text-2xl font-bold">LearnInsure</div>
             </div>
             <div class="flex items-center space-x-6">
-                <!-- Notifications -->
-                <button class="relative p-2 hover:bg-white/10 rounded-full transition-colors">
-                    <i class="fas fa-bell text-xl"></i>
-                    <span class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">3</span>
-                </button>
+             
                 
                 <!-- Profile Dropdown -->
                 <div class="relative">
@@ -66,12 +62,12 @@
                     
                     <!-- Dropdown Menu -->
                     <div id="profileDropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 hidden">
-                        <a href="/profile" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+                        <!-- <a href="/profile" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">
                             <i class="fas fa-user mr-2"></i> My Profile
                         </a>
                         <a href="/settings" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">
                             <i class="fas fa-cog mr-2"></i> Settings
-                        </a>
+                        </a> -->
                         <hr class="my-2">
                         <a href="/logout" class="block px-4 py-2 text-red-600 hover:bg-gray-100">
                             <i class="fas fa-sign-out-alt mr-2"></i> Logout
@@ -90,6 +86,12 @@
                     <i class="fas fa-home"></i>
                     <span>Dashboard</span>
                 </a>
+
+                <a href="/instructor/profile" class="nav-link flex items-center space-x-3 py-3 px-4 rounded-lg hover:bg-white/10">
+               <i class="fas fa-user"></i>
+                <span>My Profile</span>
+                </a>
+                
                 
                 <a href="/instructor/module" class="nav-link flex items-center space-x-3 py-3 px-4 rounded-lg hover:bg-white/10">
                     <i class="fas fa-book"></i>

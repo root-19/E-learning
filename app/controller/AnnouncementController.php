@@ -8,7 +8,12 @@ class AnnouncementController {
         $this->announcement = new Announcement();
     }
 
+
     public function getAllAnnouncements() {
+        return $this->announcement->getAllAnnouncements();
+    }
+
+    public function viewAnnouncements() {
         return $this->announcement->getAllAnnouncements();
     }
 
@@ -16,8 +21,8 @@ class AnnouncementController {
         return $this->announcement->getAnnouncementById($id);
     }
 
-    public function createAnnouncement($title, $content, $priority, $admin_id) {
-        return $this->announcement->createAnnouncement($title, $content, $priority, $admin_id);
+    public function createAnnouncement($title, $content, $admin_id){
+        return $this->announcement->createAnnouncement($title, $content, $admin_id);
     }
 
     public function updateAnnouncement($id, $title, $content, $priority) {

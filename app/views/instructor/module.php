@@ -1,8 +1,19 @@
 <?php
 require_once __DIR__ . '/../../controller/ModuleController.php';
-// Get all courses
+
 $controller = new ModuleController();
 $courses = $controller->listCourses();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['course_id'])) {
+    $courseId = intval($_POST['course_id']);
+    $currentStatus = $controller->getCourseStatus($courseId);
+    $newStatus = $currentStatus === 'active' ? 'inactive' : 'active';
+    $controller->updateCourseStatus($courseId, $newStatus);
+
+    header("Location: /instructor/module");
+    exit;
+}
+
 include 'layout/header.php';
 ?>
 <!DOCTYPE html>
@@ -13,31 +24,7 @@ include 'layout/header.php';
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .course-card {
-            transition: all 0.3s ease;
-            background: white;
-            border-radius: 1rem;
-            overflow: hidden;
-        }
-        .course-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-        .course-image {
-            height: 200px;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-        .course-image::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 50%;
-            background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
-        }
+        
         .search-input {
             background: white;
             border-radius: 0.5rem;
@@ -88,12 +75,20 @@ include 'layout/header.php';
     </div>
 
     <!-- Course List -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="courseList">
-        <?php foreach ($courses as $course): ?>
-        <div class="course-card">
-            <div class="course-image" style="background-image: url('/<?= htmlspecialchars($course['course_image']) ?>')">
-                <div class="absolute top-4 right-4">
-                    <?php 
+    <div class="overflow-x-auto rounded-xl shadow-md border border-gray-200">
+    <table class="min-w-full text-sm text-left text-gray-700">
+        <thead class="bg-gray-50 uppercase text-xs font-semibold text-gray-600">
+            <tr>
+                <th class="px-6 py-4">Course Image</th>
+                <th class="px-6 py-4">Title</th>
+                <th class="px-6 py-4">Description</th>
+                <th class="px-6 py-4">Type</th>
+                <th class="px-6 py-4 text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100 bg-white">
+            <?php foreach ($courses as $course): ?>
+                <?php 
                     $hasInteractiveChapters = false;
                     $hasTraditionalChapters = false;
                     $chapters = $controller->getChaptersForCourse($course['id']);
@@ -105,34 +100,49 @@ include 'layout/header.php';
                         }
                     }
                     $courseType = $hasInteractiveChapters ? 'interactive' : 'traditional';
-                    ?>
-                    <span class="px-3 py-1 rounded-full text-sm font-medium <?= $courseType === 'interactive' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800' ?>">
-                        <?= ucfirst($courseType) ?>
-                    </span>
-                </div>
-            </div>
-            <div class="p-6">
-                <h3 class="text-xl font-bold mb-2 text-gray-800"><?= htmlspecialchars($course['course_title']) ?></h3>
-                <p class="text-gray-600 mb-4 line-clamp-2"><?= htmlspecialchars($course['description']) ?></p>
-                <div class="flex justify-between items-center">
-                    <div class="flex gap-3">
-                        <button onclick="editCourse(<?= $course['id'] ?>)" class="text-blue-600 hover:text-blue-800 transition-colors">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button onclick="deleteCourse(<?= $course['id'] ?>)" class="text-red-600 hover:text-red-800 transition-colors">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                    <a href="/instructor/chapter?course_id=<?= $course['id'] ?>" class="text-green-600 hover:text-green-800 transition-colors flex items-center gap-2">
-                        <i class="fas fa-book"></i>
-                        <span>Chapters</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <?php endforeach; ?>
-    </div>
+                ?>
+                <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="px-6 py-4">
+                        <img src="/<?= htmlspecialchars($course['course_image']) ?>" alt="Course" class="w-20 h-16 object-cover rounded-md border">
+                    </td>
+                    <td class="px-6 py-4 font-medium text-gray-900">
+                        <?= htmlspecialchars($course['course_title']) ?>
+                    </td>
+                    <td class="px-6 py-4 text-gray-600">
+                        <?= htmlspecialchars($course['description']) ?>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="inline-block px-3 py-1 rounded-full text-xs font-medium 
+                            <?= $courseType === 'interactive' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700' ?>">
+                            <?= ucfirst($courseType) ?>
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        <div class="flex items-center justify-center gap-3">
+                            <button onclick="editCourse(<?= $course['id'] ?>)" title="Edit" class="text-blue-500 hover:text-blue-700 transition">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="deleteCourse(<?= $course['id'] ?>)" title="Delete" class="text-red-500 hover:text-red-700 transition">
+                                <i class="fas fa-trash"></i>
+                            </button>
+
+                                <!-- Toggle Active/Inactive Button -->
+        <form method="POST" action="" class="inline">
+            <input type="hidden" name="course_id" value="<?= $course['id'] ?>">
+            <button type="submit" title="Toggle Status"
+                class="<?= $course['status'] === 'active' ? 'text-green-500 hover:text-green-700' : 'text-gray-400 hover:text-gray-600' ?>">
+                <i class="fas <?= $course['status'] === 'active' ? 'fa-toggle-on' : 'fa-toggle-off' ?> fa-lg"></i>
+            </button>
+        </form>
+
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
 </div>
+
 
 <!-- Add Course Modal -->
 <div id="addCourseModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 overflow-y-auto">

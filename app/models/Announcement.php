@@ -23,7 +23,7 @@ class Announcement {
         }
     }
 
-    // Method to fetch all announcements (optional for viewing)
+
     public function getAllAnnouncements() {
         try {
             $stmt = $this->conn->query("

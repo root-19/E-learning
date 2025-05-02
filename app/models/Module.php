@@ -45,4 +45,16 @@ class Module {
             return [];
         }
     }
+
+    public function getCourseStatus($id) {
+        $stmt = $this->conn->prepare("SELECT status FROM courses WHERE id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetchColumn();
+    }
+    
+    public function updateCourseStatus($id, $status) {
+        $stmt = $this->conn->prepare("UPDATE courses SET status = ? WHERE id = ?");
+        return $stmt->execute([$status, $id]);
+    }
+    
 }

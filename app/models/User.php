@@ -31,10 +31,11 @@ class User {
     // Register a new user
     public function register($username, $email, $password){
         $db = Database::connect();
-        $query = "INSERT INTO users (username, email, password) VALUES (?, ?, ?";
+        $query = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
         $stmt = $db->prepare($query);
         return $stmt->execute([$username, $email, password_hash($password, PASSWORD_DEFAULT)]);
     }
+    
         // Register a new user
         public function registerInstructor($username, $email, $password, $imageName) {
             $db = Database::connect();
@@ -71,4 +72,19 @@ class User {
     
         return $stmt->execute([$hashedPassword, $email]);
     }
+
+    public function getUserById($id) {
+        $db = Database::connect();
+        $stmt = $db->prepare("SELECT * FROM users WHERE id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    public function updateProfile($id, $bio, $imageName) {
+        $db = Database::connect();
+        $query = "UPDATE users SET bio = ?, profile_image = ? WHERE id = ?";
+        $stmt = $db->prepare($query);
+        return $stmt->execute([$bio, $imageName, $id]);
+    }
+    
 }
