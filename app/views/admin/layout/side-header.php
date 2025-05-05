@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,27 +42,27 @@
            
        
         <nav>
-    <a href="/admin/dashboard" class="flex items-center gap-3 py-2 px-4 text-custom-green bg-white rounded-md hover:bg-yellow-500 hover:text-white mt-4 transition-all duration-300 font-bold">
+    <a href="/admin/dashboard" class="flex items-center gap-3 py-2 px-4 <?php echo $current_page === 'admin/dashboard' ? 'bg-yellow-500 text-white' : 'text-custom-green bg-white'; ?> rounded-md hover:bg-yellow-500 hover:text-white mt-4 transition-all duration-300 font-bold">
         <i class="fas fa-tachometer-alt"></i>
         Dashboard
     </a>
 
-    <!-- <a href="/admin/course" class="flex items-center gap-3 py-2 px-4 text-custom-green bg-white rounded-md hover:bg-yellow-500 hover:text-white mt-4 transition-all duration-300 font-bold">
+    <a href="/admin/courses" class="flex items-center gap-3 py-2 px-4 <?php echo $current_page === 'admin/course' ? 'bg-yellow-500 text-white' : 'text-custom-green bg-white'; ?> rounded-md hover:bg-yellow-500 hover:text-white mt-4 transition-all duration-300 font-bold">
         <i class="fas fa-book"></i>
         Course Management
-    </a> -->
+    </a>
 
-    <!-- <a href="/admin/users" class="flex items-center gap-3 py-2 px-4 text-custom-green bg-white rounded-md hover:bg-yellow-500 hover:text-white mt-4 transition-all duration-300 font-bold">
+    <!-- <a href="/admin/users" class="flex items-center gap-3 py-2 px-4 <?php echo $current_page === 'admin/users' ? 'bg-yellow-500 text-white' : 'text-custom-green bg-white'; ?> rounded-md hover:bg-yellow-500 hover:text-white mt-4 transition-all duration-300 font-bold">
         <i class="fas fa-users"></i>
         User Management
     </a> -->
 
-    <a href="/admin/instractor" class="flex items-center gap-3 py-2 px-4 text-custom-green bg-white rounded-md hover:bg-yellow-500 hover:text-white mt-4 transition-all duration-300 font-bold">
+    <a href="/admin/instractor" class="flex items-center gap-3 py-2 px-4 <?php echo $current_page === 'admin/instractor' ? 'bg-yellow-500 text-white' : 'text-custom-green bg-white'; ?> rounded-md hover:bg-yellow-500 hover:text-white mt-4 transition-all duration-300 font-bold">
         <i class="fas fa-chalkboard-teacher"></i>
         Instructor Management
     </a>
 
-    <a href="/admin/announcement" class="flex items-center gap-3 py-2 px-4 text-custom-green bg-white rounded-md hover:bg-yellow-500 hover:text-white mt-4 transition-all duration-300 font-bold">
+    <a href="/admin/announcement" class="flex items-center gap-3 py-2 px-4 <?php echo $current_page === 'admin/announcement' ? 'bg-yellow-500 text-white' : 'text-custom-green bg-white'; ?> rounded-md hover:bg-yellow-500 hover:text-white mt-4 transition-all duration-300 font-bold">
         <i class="fas fa-bullhorn"></i>
         Announcements
     </a>

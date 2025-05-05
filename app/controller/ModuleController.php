@@ -12,6 +12,11 @@ class ModuleController {
         return $module->getAllCourses();
     }
 
+    public function getCourseById($courseId) {
+        $module = new Module();
+        return $module->getCourseById($courseId);
+    }
+
     public function getChaptersForCourse($courseId) {
         $module = new Module();
         return $module->getChaptersByCourseId($courseId);
