@@ -4,14 +4,16 @@ session_start();
 use root_dev\Controller\AuthController;
 use root_dev\Controller\EnrollmentController;
 use root_dev\Controller\QuizController;
+use root_dev\Controller\CourseController;
 
 require_once __DIR__ . '/../core/Controller.php';
 require_once __DIR__ . '/../app/models/User.php';
 require_once __DIR__ . '/../app/controller/AuthController.php';
 require_once __DIR__ . '/../app/controller/EnrollmentController.php';
 require_once __DIR__ . '/../app/controller/QuizController.php';
+require_once __DIR__ . '/../app/controller/CourseController.php';
 
-// Define routes ass handler_type, action, is_protected, required_role 
+// Define routes as [handler_type, action, is_protected, required_role] 
 $routes = [
     '/' => ['redirect', 'login', false],
     '/login' => [AuthController::class, 'login', false],
@@ -29,7 +31,7 @@ $routes = [
     '/chapter/{id}' => ['view', 'chapter-view', true, 'user'],
     '/submit-quiz' => [QuizController::class, 'submitQuiz', true, 'user'],
 
-    //Routes for instractor 
+    //Routes for instructor 
     '/instructor/dashboard' => ['view', 'instructor/dashboard', true, 'instructor'],
     '/instructor/module' => ['view', 'instructor/module', true, 'instructor'],
     '/instructor/chapter' => ['view', 'instructor/chapter', true, 'instructor'],
@@ -42,10 +44,14 @@ $routes = [
     '/admin/dashboard' => ['view', 'admin/dashboard', true, 'admin'],
     '/admin/users' => ['view', 'admin/users', true, 'admin'],
     '/admin/instractor' => ['view', 'admin/instractor', true, 'admin'],
-    '/admin/courses' => ['view', 'admin/courses', true, 'admin'],
+    '/admin/course' => ['view', 'admin/course', true, 'admin'],
+    '/admin/course/view/{id}' => ['view', 'admin/course-view', true, 'admin'],
     '/admin/announcement' => ['view', 'admin/announcement', true, 'admin'],
     '/my-learning' => ['view', 'my_learning', true],
-
+    
+    // API Routes
+    '/api/course/toggle-status/{id}' => [CourseController::class, 'toggleStatus', true, 'admin'],
+    '/api/course/reject/{id}' => [CourseController::class, 'rejectCourse', true, 'admin'],
 ];
 
 // Get the current path
@@ -103,6 +109,13 @@ if ($handler === 'redirect') {
 } elseif ($handler === 'view') {
     require_once __DIR__ . "/../app/views/$action.php";
 } else {
+    // Handle controller actions
     $controller = new $handler();
-    $controller->$action();
+    if (method_exists($controller, $action)) {
+        $controller->$action($_GET['id'] ?? null);
+    } else {
+        http_response_code(404);
+        echo "404 Not Found: Action [$action] not found in controller";
+        exit();
+    }
 }

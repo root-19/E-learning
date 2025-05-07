@@ -6,17 +6,33 @@ require_once __DIR__ . '/../controller/ModuleController.php';
 $controller = new ModuleController();
 $courses = $controller->listCourses();
 
-// Get user's enrolled courses
+// Get user's enrolled courses and their progress
 $user_id = $_SESSION['user_id'];
 $enrolled_courses = [];
+$course_progress = [];
 
 try {
     $conn = Database::connect();
-    $stmt = $conn->prepare("SELECT course_id FROM enrollments WHERE user_id = ?");
+    
+    // Get enrolled courses with progress
+    $stmt = $conn->prepare("
+        SELECT c.*, 
+               e.completion_percentage,
+               e.is_completed,
+               e.enrollment_date as enrolled_date
+        FROM courses c
+        LEFT JOIN enrollments e ON c.id = e.course_id AND e.user_id = ?
+        WHERE c.status = 'active' 
+        AND c.is_rejected = 0
+        ORDER BY c.id DESC
+    ");
     $stmt->execute([$user_id]);
-    $enrolled_courses = $stmt->fetchAll(PDO::FETCH_COLUMN);
+    $enrolled_courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    // Convert to associative array for easy lookup
+    $enrolled_courses_map = array_column($enrolled_courses, null, 'id');
+    
 } catch (PDOException $e) {
-    // If table doesn't exist or other database error, continue with empty enrollments
     error_log("Error fetching enrollments: " . $e->getMessage());
 }
 ?>
@@ -59,6 +75,11 @@ try {
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="courseGrid">
             <?php foreach ($courses as $course): 
+                // Skip rejected courses
+                if ($course['is_rejected'] == 1) {
+                    continue;
+                }
+                
                 $chapters = $controller->getChaptersForCourse($course['id']);
                 $courseType = 'traditional';
                 foreach ($chapters as $chapter) {
@@ -67,7 +88,8 @@ try {
                         break;
                     }
                 }
-                $isEnrolled = in_array($course['id'], $enrolled_courses);
+                $isEnrolled = isset($enrolled_courses_map[$course['id']]);
+                $progress = $isEnrolled ? $enrolled_courses_map[$course['id']] : null;
             ?>
             <div class="course-card bg-white rounded-xl shadow-md overflow-hidden border border-gray-200" 
                  data-course-type="<?= $courseType ?>">
@@ -79,17 +101,51 @@ try {
                         <?= $courseType === 'interactive' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800' ?>">
                         <?= ucfirst($courseType) ?>
                     </span>
+                    <?php if ($course['status'] === 'inactive'): ?>
+                        <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                            <span class="text-white font-semibold px-4 py-2 rounded-full bg-red-500">
+                                Course Inactive
+                            </span>
+                        </div>
+                    <?php endif; ?>
                 </div>
                 
                 <div class="p-6">
                     <h3 class="text-xl font-bold text-gray-800 mb-2"><?= htmlspecialchars($course['course_title']) ?></h3>
                     <p class="text-gray-600 mb-4"><?= htmlspecialchars($course['description']) ?></p>
                     
-                    <?php if ($isEnrolled): ?>
+                    <?php if ($course['status'] === 'inactive'): ?>
+                        <div class="text-red-500 mb-4">
+                            <i class="fas fa-exclamation-circle"></i>
+                            This course is currently inactive and not available for enrollment.
+                        </div>
+                    <?php elseif ($isEnrolled): ?>
+                        <?php if ($progress['is_completed']): ?>
+                            <div class="mb-4">
+                                <div class="flex justify-between text-sm text-gray-600 mb-1">
+                                    <span>Course Completed!</span>
+                                    <span><?= number_format($progress['completion_percentage'], 1) ?>%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-green-600 h-2 rounded-full" style="width: 100%"></div>
+                                </div>
+                            </div>
+                        <?php else: ?>
+                            <div class="mb-4">
+                                <div class="flex justify-between text-sm text-gray-600 mb-1">
+                                    <span>Progress</span>
+                                    <span><?= number_format($progress['completion_percentage'], 1) ?>%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-blue-600 h-2 rounded-full" style="width: <?= $progress['completion_percentage'] ?>%"></div>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                        
                         <a href="/course-view/<?= $course['id'] ?>" 
                            class="w-full bg-[#4B793E] text-white py-2 px-4 rounded-lg hover:bg-[#3d6232] transition-colors flex items-center justify-center gap-2">
                             <i class="fas fa-book-reader"></i>
-                            <span>View Course</span>
+                            <span>Continue Learning</span>
                         </a>
                     <?php else: ?>
                         <form action="/enroll" method="POST" class="w-full">

@@ -7,15 +7,41 @@ $course_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $user_id = $_SESSION['user_id'];
 
 try {
-    // Check if user is enrolled
+    // Check if user is enrolled and get progress information
     $conn = Database::connect();
-    $stmt = $conn->prepare("SELECT * FROM enrollments WHERE user_id = ? AND course_id = ?");
+    $stmt = $conn->prepare("
+        SELECT 
+            e.*,
+            COUNT(cp.chapter_id) as completed_chapters,
+            (SELECT COUNT(*) FROM chapters WHERE course_id = e.course_id) as total_chapters,
+            ROUND((COUNT(cp.chapter_id) * 100.0 / (SELECT COUNT(*) FROM chapters WHERE course_id = e.course_id)), 1) as completion_percentage
+        FROM enrollments e
+        LEFT JOIN course_progress cp ON e.course_id = cp.course_id 
+            AND e.user_id = cp.user_id 
+            AND cp.is_completed = 1
+        WHERE e.user_id = ? AND e.course_id = ?
+        GROUP BY e.id
+    ");
     $stmt->execute([$user_id, $course_id]);
     $enrollment = $stmt->fetch();
 
     if (!$enrollment) {
         header('Location: /my_learning');
         exit();
+    }
+
+    // Update the completion percentage in the enrollments table
+    if ($enrollment['completion_percentage'] != $enrollment['completion_percentage']) {
+        $updateStmt = $conn->prepare("
+            UPDATE enrollments 
+            SET completion_percentage = ? 
+            WHERE user_id = ? AND course_id = ?
+        ");
+        $updateStmt->execute([
+            $enrollment['completion_percentage'],
+            $user_id,
+            $course_id
+        ]);
     }
 
     // Get course and chapters
@@ -130,9 +156,26 @@ try {
                                 <div>
                                     <p class="text-sm text-gray-600">Enrolled Date</p>
                                     <p class="text-xl font-bold text-gray-800">
-                                        <?= date('M d, Y', strtotime($enrollment['enrolled_date'])) ?>
+                                        <?= date('M d, Y', strtotime($enrollment['enrollment_date'])) ?>
                                     </p>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Progress Section -->
+                    <div class="mt-8">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Your Progress</h3>
+                        <div class="bg-gray-50 rounded-lg border border-gray-200 p-6">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm text-gray-600">Course Completion</span>
+                                <span class="text-sm font-semibold text-gray-800"><?= number_format($enrollment['completion_percentage'], 1) ?>%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-[#4B793E] h-2.5 rounded-full" style="width: <?= $enrollment['completion_percentage'] ?>%"></div>
+                            </div>
+                            <div class="mt-4 text-sm text-gray-600">
+                                <?= $enrollment['completed_chapters'] ?> of <?= $enrollment['total_chapters'] ?> chapters completed
                             </div>
                         </div>
                     </div>

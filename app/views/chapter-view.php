@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../../config/database.php';
+require_once __DIR__ . '/../controller/EnrollmentController.php';
 
 // Get chapter ID from URL
 $chapter_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -35,6 +36,10 @@ try {
         exit();
     }
 
+    // Update progress for this chapter
+    $enrollmentController = new \root_dev\Controller\EnrollmentController();
+    $enrollmentController->updateProgress($user_id, $chapter['course_id'], $chapter_id);
+
     // Get quizzes for this chapter
     $quizzes = [];
     if ($chapter['quiz_count'] > 0) {
@@ -52,17 +57,40 @@ try {
             END as type
         FROM chapters 
         WHERE course_id = ? AND (id < ? OR id > ?)
-        ORDER BY ABS(id - ?)
+        ORDER BY id ASC
         LIMIT 2
     ");
-    $stmt->execute([$chapter_id, $chapter_id, $chapter['course_id'], $chapter_id, $chapter_id, $chapter_id]);
-    $navigation = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->execute([$chapter_id, $chapter_id, $chapter['course_id'], $chapter_id, $chapter_id]);
+    $navigation = $stmt->fetchAll(\PDO::FETCH_ASSOC);
     
     $prev_chapter = null;
     $next_chapter = null;
     foreach ($navigation as $nav) {
         if ($nav['type'] === 'prev') $prev_chapter = $nav;
         if ($nav['type'] === 'next') $next_chapter = $nav;
+    }
+
+    // Get all chapters for this course to determine first and last
+    $stmt = $conn->prepare("
+        SELECT id, chapter_title
+        FROM chapters 
+        WHERE course_id = ?
+        ORDER BY id ASC
+    ");
+    $stmt->execute([$chapter['course_id']]);
+    $all_chapters = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    
+    // Find current chapter index
+    $current_index = array_search($chapter_id, array_column($all_chapters, 'id'));
+    
+    // Set next chapter
+    if ($current_index !== false && $current_index < count($all_chapters) - 1) {
+        $next_chapter = $all_chapters[$current_index + 1];
+    }
+    
+    // Set previous chapter
+    if ($current_index !== false && $current_index > 0) {
+        $prev_chapter = $all_chapters[$current_index - 1];
     }
 
 } catch (PDOException $e) {
