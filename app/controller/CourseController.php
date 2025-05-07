@@ -75,6 +75,43 @@ class CourseController {
     }
 
     /**
+     * Create a notification for course rejection
+     * @param int $courseId
+     * @param int $instructorId
+     * @return void
+     * @throws \Exception
+     */
+    private function createRejectionNotification(int $courseId, int $instructorId): void {
+        try {
+            $stmt = $this->db->prepare("
+                INSERT INTO notifications (user_id, course_id, message)
+                VALUES (?, ?, 'Your course has been rejected by the administrator. Please review and make necessary changes.')
+            ");
+            $stmt->execute([$instructorId, $courseId]);
+        } catch (\PDOException $e) {
+            error_log("Notification creation failed: " . $e->getMessage());
+            // Don't throw exception here, just log the error
+        }
+    }
+
+    /**
+     * Get instructor ID for a course
+     * @param int $courseId
+     * @return int|null
+     */
+    private function getCourseInstructorId(int $courseId): ?int {
+        try {
+            $stmt = $this->db->prepare("SELECT instructor_id FROM courses WHERE id = ?");
+            $stmt->execute([$courseId]);
+            $instructorId = $stmt->fetchColumn();
+            return $instructorId ? (int)$instructorId : null;
+        } catch (\PDOException $e) {
+            error_log("Failed to get instructor ID: " . $e->getMessage());
+            return null;
+        }
+    }
+
+    /**
      * Reject a course
      * @param int $courseId
      * @return void
@@ -82,21 +119,46 @@ class CourseController {
     public function rejectCourse(int $courseId): void {
         try {
             $this->validateAdminAccess();
-            $this->getCourseById($courseId);
+            $course = $this->getCourseById($courseId);
             
-            $stmt = $this->db->prepare("UPDATE courses SET is_rejected = 1 WHERE id = ?");
-            $result = $stmt->execute([$courseId]);
+            // Start transaction
+            $this->db->beginTransaction();
             
-            if (!$result) {
-                throw new \Exception('Failed to reject course', 500);
+            try {
+                // Update course status
+                $stmt = $this->db->prepare("
+                    UPDATE courses 
+                    SET is_rejected = 1, 
+                        status = 'inactive' 
+                    WHERE id = ?
+                ");
+                $result = $stmt->execute([$courseId]);
+                
+                if (!$result) {
+                    throw new \Exception('Failed to update course status', 500);
+                }
+
+                // Try to get instructor ID and create notification
+                $instructorId = $this->getCourseInstructorId($courseId);
+                if ($instructorId) {
+                    $this->createRejectionNotification($courseId, $instructorId);
+                }
+                
+                $this->db->commit();
+                
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Course rejected successfully'
+                ]);
+                
+            } catch (\Exception $e) {
+                $this->db->rollBack();
+                error_log("Course rejection failed: " . $e->getMessage());
+                throw $e;
             }
             
-            echo json_encode([
-                'success' => true,
-                'message' => 'Course rejected successfully'
-            ]);
-            
         } catch (\Exception $e) {
+            error_log("Course rejection error: " . $e->getMessage());
             http_response_code($e->getCode() ?: 500);
             echo json_encode([
                 'success' => false,

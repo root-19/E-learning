@@ -50,24 +50,16 @@
                 <div class="text-2xl font-bold">LearnInsure</div>
             </div>
             <div class="flex items-center space-x-6">
-             
-                
                 <!-- Profile Dropdown -->
                 <div class="relative">
                     <button id="profileButton" class="flex items-center space-x-3 hover:bg-white/10 p-2 rounded-lg transition-colors">
-                        <img src="../../../resources/image/profile-icon.png" alt="Profile" class="w-10 h-10 rounded-full border-2 border-white">
+                        <img src="/resources/image/profile-icon.png" alt="Profile" class="w-10 h-10 rounded-full border-2 border-white">
                         <span class="font-medium">Profile</span>
                         <i class="fas fa-chevron-down text-sm"></i>
                     </button>
                     
                     <!-- Dropdown Menu -->
                     <div id="profileDropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 hidden">
-                        <!-- <a href="/profile" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">
-                            <i class="fas fa-user mr-2"></i> My Profile
-                        </a>
-                        <a href="/settings" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">
-                            <i class="fas fa-cog mr-2"></i> Settings
-                        </a> -->
                         <hr class="my-2">
                         <a href="/logout" class="block px-4 py-2 text-red-600 hover:bg-gray-100">
                             <i class="fas fa-sign-out-alt mr-2"></i> Logout
@@ -88,10 +80,9 @@
                 </a>
 
                 <a href="/instructor/profile" class="nav-link flex items-center space-x-3 py-3 px-4 rounded-lg hover:bg-white/10">
-               <i class="fas fa-user"></i>
-                <span>My Profile</span>
+                    <i class="fas fa-user"></i>
+                    <span>My Profile</span>
                 </a>
-                
                 
                 <a href="/instructor/module" class="nav-link flex items-center space-x-3 py-3 px-4 rounded-lg hover:bg-white/10">
                     <i class="fas fa-book"></i>
@@ -118,6 +109,22 @@
                     <span>Announcements</span>
                 </a>
                 
+                <a href="/instructor/notifications" class="nav-link flex items-center space-x-3 py-3 px-4 rounded-lg hover:bg-white/10">
+                    <i class="fas fa-bell"></i>
+                    <span>Notifications</span>
+                    <?php
+                    require_once __DIR__ . '/../../../../config/database.php';
+                    require_once __DIR__ . '/../../../../app/controller/NotificationController.php';
+                    use root_dev\Controller\NotificationController;
+                    $notificationController = new NotificationController();
+                    $unreadCount = $notificationController->getUnreadCount($_SESSION['user_id']);
+                    if ($unreadCount > 0): ?>
+                        <span class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                            <?php echo $unreadCount; ?>
+                        </span>
+                    <?php endif; ?>
+                </a>
+                
                 <a href="/admin/users" class="nav-link flex items-center space-x-3 py-3 px-4 rounded-lg hover:bg-white/10">
                     <i class="fas fa-users"></i>
                     <span>User Management</span>
@@ -126,10 +133,10 @@
         </div>
 
         <!-- Main Content -->
-        <div class="flex-2 bg-gray-50 p-6 ml-60 ">
+        <div class="flex-2 bg-gray-50 p-6 ml-60">
             <!-- Content will be injected here -->
-        <!-- </div>
-    </div> -->
+        
+    <!-- </div> -->
 
     <!-- JavaScript -->
     <script>

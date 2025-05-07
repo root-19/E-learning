@@ -40,6 +40,9 @@ include 'layout/side-header.php';
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">rejected</th>
+
+
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
@@ -66,6 +69,11 @@ include 'layout/side-header.php';
                                         <?= $course['status'] === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' ?>">
                                         <?= ucfirst($course['status']) ?>
                                     </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-500 max-w-md truncate">
+                                        <?= htmlspecialchars($course['is_rejected']) ?>
+                                    </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     <div class="flex items-center gap-2">

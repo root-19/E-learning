@@ -5,6 +5,7 @@ use root_dev\Controller\AuthController;
 use root_dev\Controller\EnrollmentController;
 use root_dev\Controller\QuizController;
 use root_dev\Controller\CourseController;
+use root_dev\Controller\NotificationController;
 
 require_once __DIR__ . '/../core/Controller.php';
 require_once __DIR__ . '/../app/models/User.php';
@@ -12,6 +13,7 @@ require_once __DIR__ . '/../app/controller/AuthController.php';
 require_once __DIR__ . '/../app/controller/EnrollmentController.php';
 require_once __DIR__ . '/../app/controller/QuizController.php';
 require_once __DIR__ . '/../app/controller/CourseController.php';
+require_once __DIR__ . '/../app/controller/NotificationController.php';
 
 // Define routes as [handler_type, action, is_protected, required_role] 
 $routes = [
@@ -39,6 +41,7 @@ $routes = [
     '/instructor/learning-modules' => ['view', 'learning_modules', true, 'instructor'],
     '/instructor/announcements' => ['view', 'instructor/announcements', true, 'instructor'],
     '/instructor/profile' => ['view', 'instructor/profile', true, 'instructor'],
+    '/instructor/notifications' => ['view', 'instructor/notifications', true, 'instructor'],
 
     // Routes accessible to 'admin'
     '/admin/dashboard' => ['view', 'admin/dashboard', true, 'admin'],
@@ -52,6 +55,7 @@ $routes = [
     // API Routes
     '/api/course/toggle-status/{id}' => [CourseController::class, 'toggleStatus', true, 'admin'],
     '/api/course/reject/{id}' => [CourseController::class, 'rejectCourse', true, 'admin'],
+    '/api/notifications/mark-read' => [NotificationController::class, 'markNotificationsAsRead', true, 'instructor'],
 ];
 
 // Get the current path
