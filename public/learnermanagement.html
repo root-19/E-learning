@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LearnInsure - Learner Management</title>
+
+    <!-- External Resources -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Inter+Tight:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Tailwind Configuration -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                50: "#f0fdf4",
+                100: "#dcfce7",
+                500: "#4aab4c",
+                600: "#3d8b40",
+              },
+              surface: {
+                50: "#f8fafc",
+                100: "#f1f5f9",
+                200: "#e2e8f0",
+                800: "#1e293b",
+              },
+              status: {
+                active: "#4AAB4C",
+                inactive: "#DC3545",
+              },
+            },
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+              display: ["Inter Tight", "sans-serif"],
+            },
+            boxShadow: {
+              soft: "0 4px 12px -2px rgba(0, 0, 0, 0.08)",
+              float: "0 8px 24px -4px rgba(0, 0, 0, 0.12)",
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Custom Styles -->
+    <style type="text/tailwindcss">
+      @layer utilities {
+        /* Action icon tooltips */
+        .action-icon::after {
+          content: attr(title);
+          position: absolute;
+          bottom: 100%;
+          left: 50%;
+          transform: translateX(-50%);
+          background-color: theme("colors.surface.800");
+          color: white;
+          padding: 4px 8px;
+          border-radius: 4px;
+          font-size: 12px;
+          white-space: nowrap;
+          opacity: 0;
+          visibility: hidden;
+          transition: all 0.2s ease;
+          pointer-events: none;
+          z-index: 10;
+        }
+        .action-icon:hover::after {
+          opacity: 1;
+          visibility: visible;
+          bottom: calc(100% + 5px);
+        }
+
+        /* Card hover effects */
+        .quick-action-card {
+          transition: all 0.2s ease;
+        }
+        .quick-action-card:hover {
+          border-color: #f4c542;
+          transform: translateY(-2px);
+        }
+      }
+    </style>
+  </head>
+
+  <body
+    class="font-sans bg-surface-50 text-surface-800 antialiased flex min-h-screen"
+  >
+    <!-- ===== SIDEBAR NAVIGATION ===== -->
+    <aside
+      class="w-64 bg-white border-r border-surface-200 py-6 px-4 flex-shrink-0 shadow-sm"
+    >
+      <div class="flex items-center gap-3 mb-8 px-3">
+        <img
+          src="./assets/insportal-logo.png"
+          alt="Instructor Portal Logo"
+          class="w-8 h-8 object-contain"
+        />
+        <span class="font-display font-bold text-lg tracking-tight"
+          >Instructor Portal</span
+        >
+      </div>
+
+      <nav class="space-y-1.5 px-2">
+        <a
+          href="#"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-surface-600 font-medium hover:bg-surface-100 transition-colors group"
+        >
+          <div
+            class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-100 group-hover:bg-surface-200 transition-colors"
+          >
+            <i class="fas fa-chart-line text-sm text-surface-500"></i>
+          </div>
+          <span>Dashboard</span>
+        </a>
+
+        <a
+          href="#"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-surface-600 font-medium hover:bg-surface-100 transition-colors group"
+        >
+          <div
+            class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-100 group-hover:bg-surface-200 transition-colors"
+          >
+            <i class="fas fa-book-open text-sm text-surface-500"></i>
+          </div>
+          <span>Create Learning Module</span>
+        </a>
+
+        <a
+          href="#"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-surface-600 font-medium hover:bg-surface-100 transition-colors group"
+        >
+          <div
+            class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-100 group-hover:bg-surface-200 transition-colors"
+          >
+            <i class="fas fa-laptop-code text-sm text-surface-500"></i>
+          </div>
+          <span>Create Interactive Module</span>
+        </a>
+
+        <a
+          href="#"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary-50 text-primary-600 font-medium transition-colors"
+        >
+          <div
+            class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary-100"
+          >
+            <i class="fas fa-book text-sm text-primary-600"></i>
+          </div>
+          <span>Manage Modules</span>
+        </a>
+
+        <a
+          href="#"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-surface-600 font-medium hover:bg-surface-100 transition-colors group"
+        >
+          <div
+            class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-100 group-hover:bg-surface-200 transition-colors"
+          >
+            <i class="fas fa-users text-sm text-surface-500"></i>
+          </div>
+          <span>Manage Learners</span>
+        </a>
+
+        <a
+          href="#"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-surface-600 font-medium hover:bg-surface-100 transition-colors group"
+        >
+          <div
+            class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-100 group-hover:bg-surface-200 transition-colors"
+          >
+            <i class="fas fa-cog text-sm text-surface-500"></i>
+          </div>
+          <span>Profile Settings</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- ===== MAIN CONTENT AREA ===== -->
+    <div class="flex-1 flex flex-col min-h-screen overflow-hidden">
+      <!-- Header Section -->
+      <header
+        class="bg-white border-b border-surface-200 px-6 py-4 flex items-center justify-between"
+      >
+        <div>
+          <h1 class="font-display font-bold text-xl tracking-tight">
+            Learner Management
+          </h1>
+          <p class="text-sm text-surface-500 mt-1">
+            142 active learners, 8 pending
+          </p>
+        </div>
+
+        <!-- Profile Dropdown -->
+        <div class="relative z-30">
+          <button
+            class="flex items-center gap-2 group"
+            id="profileDropdownButton"
+          >
+            <div
+              class="w-9 h-9 rounded-full bg-surface-100 border-2 border-white shadow-sm overflow-hidden"
+            >
+              <img
+                src="https://randomuser.me/api/portraits/men/32.jpg"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <span class="font-medium text-surface-700">John D.</span>
+            <i
+              class="fas fa-chevron-down text-xs text-surface-400 group-hover:text-surface-600 transition-transform"
+              id="dropdownArrow"
+            ></i>
+          </button>
+
+          <div
+            class="absolute right-0 top-full mt-2 w-56 origin-top-right divide-y divide-surface-100 rounded-lg bg-white shadow-float ring-1 ring-surface-200 opacity-0 invisible transition-all duration-150 transform scale-95"
+            id="dropdownMenu"
+          >
+            <div class="px-4 py-3">
+              <p class="text-sm font-medium">John Doe</p>
+              <p class="text-xs text-surface-500 truncate">
+                instructor@learninsure.com
+              </p>
+            </div>
+            <div class="py-1.5">
+              <a
+                href="#"
+                class="flex items-center gap-2 px-4 py-2 text-sm text-surface-700 hover:bg-surface-50"
+              >
+                <i class="fas fa-cog w-4 text-center text-surface-400"></i>
+                Settings
+              </a>
+              <a
+                href="#"
+                class="flex items-center gap-2 px-4 py-2 text-sm text-surface-700 hover:bg-surface-50"
+              >
+                <i
+                  class="fas fa-sign-out-alt w-4 text-center text-surface-400"
+                ></i>
+                Sign out
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content Section -->
+      <main class="flex-1 p-6 overflow-auto">
+        <!-- Search and Filter Controls -->
+        <div
+          class="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center mb-6"
+        >
+          <div class="relative w-full sm:w-80">
+            <i
+              class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-surface-400"
+            ></i>
+            <input
+              type="text"
+              placeholder="Search learners..."
+              class="w-full pl-10 pr-4 py-2.5 text-sm rounded-full border border-surface-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none transition-all"
+            />
+          </div>
+
+          <div class="flex flex-wrap gap-2 w-full sm:w-auto">
+            <div class="filter-dropdown relative">
+              <select
+                class="w-48 py-2.5 px-4 pr-9 border border-surface-200 rounded-full bg-white text-sm text-surface-500 appearance-none cursor-pointer transition-all hover:border-primary-500 focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
+              >
+                <option>Sort by: A-Z</option>
+                <option>Sort by: Z-A</option>
+              </select>
+              <i
+                class="fas fa-chevron-down absolute right-4 top-1/2 transform -translate-y-1/2 text-surface-400 text-xs pointer-events-none"
+              ></i>
+            </div>
+
+            <div class="filter-dropdown relative">
+              <select
+                class="w-48 py-2.5 px-4 pr-9 border border-surface-200 rounded-full bg-white text-sm text-surface-500 appearance-none cursor-pointer transition-all hover:border-primary-500 focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
+              >
+                <option>Sort by Enrollment</option>
+                <option>Most Enrolled</option>
+                <option>Least Enrolled</option>
+              </select>
+              <i
+                class="fas fa-chevron-down absolute right-4 top-1/2 transform -translate-y-1/2 text-surface-400 text-xs pointer-events-none"
+              ></i>
+            </div>
+
+            <div class="filter-dropdown relative">
+              <select
+                class="w-48 py-2.5 px-4 pr-9 border border-surface-200 rounded-full bg-white text-sm text-surface-500 appearance-none cursor-pointer transition-all hover:border-primary-500 focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
+              >
+                <option>Filter by Status</option>
+                <option>Active Only</option>
+                <option>Inactive Only</option>
+              </select>
+              <i
+                class="fas fa-chevron-down absolute right-4 top-1/2 transform -translate-y-1/2 text-surface-400 text-xs pointer-events-none"
+              ></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Learners Table -->
+        <div
+          class="bg-white rounded-xl border border-surface-200 shadow-soft overflow-hidden"
+        >
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-surface-200">
+              <thead class="bg-surface-50">
+                <tr>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-left text-xs font-display font-semibold text-surface-500 uppercase tracking-wider"
+                  >
+                    Learner
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-left text-xs font-display font-semibold text-surface-500 uppercase tracking-wider"
+                  >
+                    Status
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-left text-xs font-display font-semibold text-surface-500 uppercase tracking-wider"
+                  >
+                    Enrolled Modules
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-left text-xs font-display font-semibold text-surface-500 uppercase tracking-wider"
+                  >
+                    Completion Rate
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-left text-xs font-display font-semibold text-surface-500 uppercase tracking-wider"
+                  >
+                    Last Active
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-right text-xs font-display font-semibold text-surface-500 uppercase tracking-wider"
+                  >
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody class="divide-y divide-surface-100">
+                <!-- Learner Row Template -->
+                <tr class="hover:bg-surface-50 transition-colors">
+                  <td class="px-6 py-4">
+                    <div class="flex items-center gap-3">
+                      <div
+                        class="flex-shrink-0 w-10 h-10 rounded-full bg-surface-100 overflow-hidden"
+                      >
+                        <img
+                          src="https://randomuser.me/api/portraits/women/44.jpg"
+                          class="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div>
+                        <div class="font-medium text-surface-900">
+                          Sarah Johnson
+                        </div>
+                        <div class="text-xs text-surface-500">
+                          sarah.j@example.com
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4">
+                    <span
+                      class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-status-active/10 text-status-active"
+                    >
+                      Active
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-surface-600">5 modules</td>
+                  <td class="px-6 py-4">
+                    <div class="flex items-center gap-3">
+                      <div
+                        class="w-24 h-1.5 bg-surface-200 rounded-full overflow-hidden"
+                      >
+                        <div
+                          class="h-full bg-primary-500 rounded-full"
+                          style="width: 82%"
+                        ></div>
+                      </div>
+                      <span class="text-xs font-medium text-surface-600"
+                        >82%</span
+                      >
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-surface-500">
+                    2 hours ago
+                  </td>
+                  <td class="px-6 py-4 text-right">
+                    <div class="flex justify-end gap-1">
+                      <div
+                        class="action-icon view w-7 h-7 rounded-full flex items-center justify-center cursor-pointer transition-all relative text-blue-500 hover:bg-blue-50"
+                        title="View"
+                      >
+                        <i class="fas fa-eye text-sm"></i>
+                      </div>
+                      <div
+                        class="action-icon restrict w-7 h-7 rounded-full flex items-center justify-center cursor-pointer transition-all relative text-[#555555] hover:bg-yellow-50"
+                        title="Restrict"
+                        data-restricted="false"
+                        onclick="toggleRestriction(this)"
+                      >
+                        <i class="fas fa-lock text-sm"></i>
+                      </div>
+                      <div
+                        class="action-icon remove w-7 h-7 rounded-full flex items-center justify-center cursor-pointer transition-all relative text-red-500 hover:bg-red-50"
+                        title="Remove"
+                      >
+                        <i class="fas fa-trash-alt text-sm"></i>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Additional learner rows would follow the same pattern -->
+                <tr class="hover:bg-surface-50 transition-colors">
+                  <td class="px-6 py-4">
+                    <div class="flex items-center gap-3">
+                      <div
+                        class="flex-shrink-0 w-10 h-10 rounded-full bg-surface-100 overflow-hidden"
+                      >
+                        <img
+                          src="https://randomuser.me/api/portraits/men/32.jpg"
+                          class="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div>
+                        <div class="font-medium text-surface-900">
+                          Michael Chen
+                        </div>
+                        <div class="text-xs text-surface-500">
+                          michael.c@example.com
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4">
+                    <span
+                      class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-status-active/10 text-status-active"
+                    >
+                      Active
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-surface-600">3 modules</td>
+                  <td class="px-6 py-4">
+                    <div class="flex items-center gap-3">
+                      <div
+                        class="w-24 h-1.5 bg-surface-200 rounded-full overflow-hidden"
+                      >
+                        <div
+                          class="h-full bg-primary-500 rounded-full"
+                          style="width: 65%"
+                        ></div>
+                      </div>
+                      <span class="text-xs font-medium text-surface-600"
+                        >65%</span
+                      >
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-surface-500">1 day ago</td>
+                  <td class="px-6 py-4 text-right">
+                    <div class="flex justify-end gap-1">
+                      <div
+                        class="action-icon view w-7 h-7 rounded-full flex items-center justify-center cursor-pointer transition-all relative text-blue-500 hover:bg-blue-50"
+                        title="View"
+                      >
+                        <i class="fas fa-eye text-sm"></i>
+                      </div>
+                      <div
+                        class="action-icon restrict w-7 h-7 rounded-full flex items-center justify-center cursor-pointer transition-all relative text-[#555555] hover:bg-yellow-50"
+                        title="Restrict"
+                        data-restricted="false"
+                        onclick="toggleRestriction(this)"
+                      >
+                        <i class="fas fa-lock text-sm"></i>
+                      </div>
+                      <div
+                        class="action-icon remove w-7 h-7 rounded-full flex items-center justify-center cursor-pointer transition-all relative text-red-500 hover:bg-red-50"
+                        title="Remove"
+                      >
+                        <i class="fas fa-trash-alt text-sm"></i>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+
+                <tr class="hover:bg-surface-50 transition-colors">
+                  <td class="px-6 py-4">
+                    <div class="flex items-center gap-3">
+                      <div
+                        class="flex-shrink-0 w-10 h-10 rounded-full bg-surface-100 overflow-hidden"
+                      >
+                        <img
+                          src="https://randomuser.me/api/portraits/women/68.jpg"
+                          class="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div>
+                        <div class="font-medium text-surface-900">
+                          Emma Rodriguez
+                        </div>
+                        <div class="text-xs text-surface-500">
+                          emma.r@example.com
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4">
+                    <span
+                      class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-status-inactive/10 text-status-inactive"
+                    >
+                      Inactive
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-surface-600">2 modules</td>
+                  <td class="px-6 py-4">
+                    <div class="flex items-center gap-3">
+                      <div
+                        class="w-24 h-1.5 bg-surface-200 rounded-full overflow-hidden"
+                      >
+                        <div
+                          class="h-full bg-primary-500 rounded-full"
+                          style="width: 30%"
+                        ></div>
+                      </div>
+                      <span class="text-xs font-medium text-surface-600"
+                        >30%</span
+                      >
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-surface-500">
+                    3 weeks ago
+                  </td>
+                  <td class="px-6 py-4 text-right">
+                    <div class="flex justify-end gap-1">
+                      <div
+                        class="action-icon view w-7 h-7 rounded-full flex items-center justify-center cursor-pointer transition-all relative text-blue-500 hover:bg-blue-50"
+                        title="View"
+                      >
+                        <i class="fas fa-eye text-sm"></i>
+                      </div>
+                      <div
+                        class="action-icon restrict w-7 h-7 rounded-full flex items-center justify-center cursor-pointer transition-all relative text-yellow-500 bg-yellow-50 hover:bg-yellow-100"
+                        title="Unrestrict"
+                        data-restricted="true"
+                        onclick="toggleRestriction(this)"
+                      >
+                        <i class="fas fa-lock-open text-sm"></i>
+                      </div>
+                      <div
+                        class="action-icon remove w-7 h-7 rounded-full flex items-center justify-center cursor-pointer transition-all relative text-red-500 hover:bg-red-50"
+                        title="Remove"
+                      >
+                        <i class="fas fa-trash-alt text-sm"></i>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination Controls -->
+          <div
+            class="px-6 py-3 border-t border-surface-200 flex items-center justify-between"
+          >
+            <p class="text-sm text-surface-600">
+              Showing <span class="font-medium">1</span> to
+              <span class="font-medium">5</span> of
+              <span class="font-medium">142</span> learners
+            </p>
+            <div class="flex gap-1">
+              <button
+                class="w-9 h-9 flex items-center justify-center rounded-lg border border-surface-200 text-surface-500 hover:bg-surface-100 disabled:opacity-50"
+              >
+                <i class="fas fa-chevron-left text-xs"></i>
+              </button>
+              <button
+                class="w-9 h-9 flex items-center justify-center rounded-lg bg-primary-500 text-white font-medium"
+              >
+                1
+              </button>
+              <button
+                class="w-9 h-9 flex items-center justify-center rounded-lg border border-surface-200 text-surface-600 hover:bg-surface-100"
+              >
+                2
+              </button>
+              <button
+                class="w-9 h-9 flex items-center justify-center rounded-lg border border-surface-200 text-surface-600 hover:bg-surface-100"
+              >
+                3
+              </button>
+              <button
+                class="w-9 h-9 flex items-center justify-center rounded-lg border border-surface-200 text-surface-500 hover:bg-surface-100"
+              >
+                <i class="fas fa-chevron-right text-xs"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+          <div
+            class="quick-action-card bg-white p-5 rounded-xl border border-surface-200 shadow-soft cursor-pointer hover:shadow-md hover:border-[#F4C542]"
+          >
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-medium text-surface-500">
+                Active Learners
+              </h3>
+              <div
+                class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center text-green-600"
+              >
+                <i class="fas fa-user-check text-sm"></i>
+              </div>
+            </div>
+            <p class="text-2xl font-display font-bold text-surface-900 mt-2">
+              134
+            </p>
+            <p class="text-xs text-surface-500 mt-1">+12 this week</p>
+          </div>
+
+          <div
+            class="quick-action-card bg-white p-5 rounded-xl border border-surface-200 shadow-soft cursor-pointer hover:shadow-md hover:border-[#F4C542]"
+          >
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-medium text-surface-500">
+                Completion Rate
+              </h3>
+              <div
+                class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600"
+              >
+                <i class="fas fa-chart-line text-sm"></i>
+              </div>
+            </div>
+            <p class="text-2xl font-display font-bold text-surface-900 mt-2">
+              78%
+            </p>
+            <p class="text-xs text-surface-500 mt-1">+5% from last month</p>
+          </div>
+
+          <div
+            class="quick-action-card bg-white p-5 rounded-xl border border-surface-200 shadow-soft cursor-pointer hover:shadow-md hover:border-[#F4C542]"
+          >
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-medium text-surface-500">
+                Certificates Issued
+              </h3>
+              <div
+                class="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center text-purple-600"
+              >
+                <i class="fas fa-award text-sm"></i>
+              </div>
+            </div>
+            <p class="text-2xl font-display font-bold text-surface-900 mt-2">
+              89
+            </p>
+            <p class="text-xs text-surface-500 mt-1">+7 pending approval</p>
+          </div>
+        </div>
+
+        <!-- Quick Actions Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+          <div
+            class="quick-action-card bg-white p-5 rounded-xl border border-surface-200 shadow-soft cursor-pointer hover:shadow-md hover:border-status-draft"
+          >
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-medium text-surface-500">
+                Create Learning Module
+              </h3>
+              <div
+                class="w-10 h-10 rounded-lg bg-primary-50 flex items-center justify-center text-primary-600"
+              >
+                <i class="fas fa-book text-sm"></i>
+              </div>
+            </div>
+            <p class="text-xs text-surface-500 mt-3">
+              Create a new text-based learning module with quizzes
+            </p>
+          </div>
+
+          <div
+            class="quick-action-card bg-white p-5 rounded-xl border border-surface-200 shadow-soft cursor-pointer hover:shadow-md hover:border-status-draft"
+          >
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-medium text-surface-500">
+                Create Interactive Module
+              </h3>
+              <div
+                class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600"
+              >
+                <i class="fas fa-laptop-code text-sm"></i>
+              </div>
+            </div>
+            <p class="text-xs text-surface-500 mt-3">
+              Build an interactive course with scenario-based learning
+            </p>
+          </div>
+
+          <div
+            class="quick-action-card bg-white p-5 rounded-xl border border-surface-200 shadow-soft cursor-pointer hover:shadow-md hover:border-status-draft"
+          >
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-medium text-surface-500">Export Data</h3>
+              <div
+                class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center text-green-600"
+              >
+                <i class="fas fa-file-export text-sm"></i>
+              </div>
+            </div>
+            <p class="text-xs text-surface-500 mt-3">
+              Export learner data and progress reports
+            </p>
+          </div>
+
+          <div
+            class="quick-action-card bg-white p-5 rounded-xl border border-surface-200 shadow-soft cursor-pointer hover:shadow-md hover:border-status-draft"
+          >
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-medium text-surface-500">
+                Profile Settings
+              </h3>
+              <div
+                class="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center text-purple-600"
+              >
+                <i class="fas fa-user-edit text-sm"></i>
+              </div>
+            </div>
+            <p class="text-xs text-surface-500 mt-3">
+              Update your instructor profile
+            </p>
+          </div>
+        </div>
+      </main>
+
+      <!-- ===== FOOTER SECTION ===== -->
+      <footer class="bg-white px-6 py-8 border-t border-surface-200">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-6">
+          <div>
+            <div class="flex items-center gap-3 mb-4">
+              <img
+                src="./assets/learninsurelogo-footer.png"
+                alt="LearnInsure Logo"
+                class="w-10 h-10 object-contain"
+              />
+              <span class="font-display font-bold">LearnInsure</span>
+            </div>
+            <p class="text-sm text-surface-500 leading-relaxed">
+              LearnInsure is an eLearning platform designed for insurance
+              professionals to enhance their knowledge and skills through
+              interactive courses.
+            </p>
+          </div>
+
+          <div>
+            <h4
+              class="text-sm font-display font-semibold text-surface-700 mb-3"
+            >
+              Get Help
+            </h4>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="#"
+                  class="text-sm text-surface-500 hover:text-primary-600 transition-colors"
+                  >Contact Us</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-sm text-surface-500 hover:text-primary-600 transition-colors"
+                  >FAQ</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-sm text-surface-500 hover:text-primary-600 transition-colors"
+                  >Support Center</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4
+              class="text-sm font-display font-semibold text-surface-700 mb-3"
+            >
+              Get Started
+            </h4>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="#"
+                  class="text-sm text-surface-500 hover:text-primary-600 transition-colors"
+                  >Home</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-sm text-surface-500 hover:text-primary-600 transition-colors"
+                  >About Us</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-sm text-surface-500 hover:text-primary-600 transition-colors"
+                  >Explore Modules</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4
+              class="text-sm font-display font-semibold text-surface-700 mb-3"
+            >
+              Partnered Agency
+            </h4>
+            <div class="text-sm text-surface-500 space-y-1">
+              <p>123 Insurance Plaza</p>
+              <p>Makati City, Philippines</p>
+              <p>Phone: (+63) 917 777 1213</p>
+              <p>Email: sylabuco_associates@yahoo.com</p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="pt-6 border-t border-surface-200 flex flex-col sm:flex-row justify-between items-center gap-4"
+        >
+          <p class="text-xs text-surface-500">
+            LearnInsure. ©2024 by LearnInsure. All rights reserved.
+          </p>
+          <div class="flex gap-4">
+            <a
+              href="#"
+              class="text-surface-400 hover:text-surface-600 transition-colors"
+              ><i class="fab fa-facebook-f"></i
+            ></a>
+            <a
+              href="#"
+              class="text-surface-400 hover:text-surface-600 transition-colors"
+              ><i class="fab fa-instagram"></i
+            ></a>
+            <a
+              href="#"
+              class="text-surface-400 hover:text-surface-600 transition-colors"
+              ><i class="fas fa-envelope"></i
+            ></a>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <!-- ===== JAVASCRIPT ===== -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Profile dropdown toggle
+        const dropdownButton = document.getElementById("profileDropdownButton");
+        const dropdownMenu = document.getElementById("dropdownMenu");
+        const dropdownArrow = document.getElementById("dropdownArrow");
+
+        if (dropdownButton) {
+          let isOpen = false;
+
+          dropdownButton.addEventListener("click", function (e) {
+            e.stopPropagation();
+            isOpen = !isOpen;
+
+            if (isOpen) {
+              dropdownMenu.classList.remove(
+                "opacity-0",
+                "invisible",
+                "scale-95"
+              );
+              dropdownMenu.classList.add("opacity-100", "visible", "scale-100");
+              dropdownArrow.classList.add("rotate-180");
+            } else {
+              dropdownMenu.classList.remove(
+                "opacity-100",
+                "visible",
+                "scale-100"
+              );
+              dropdownMenu.classList.add("opacity-0", "invisible", "scale-95");
+              dropdownArrow.classList.remove("rotate-180");
+            }
+          });
+
+          // Close when clicking outside
+          document.addEventListener("click", function (e) {
+            if (
+              !dropdownButton.contains(e.target) &&
+              !dropdownMenu.contains(e.target)
+            ) {
+              dropdownMenu.classList.remove(
+                "opacity-100",
+                "visible",
+                "scale-100"
+              );
+              dropdownMenu.classList.add("opacity-0", "invisible", "scale-95");
+              dropdownArrow.classList.remove("rotate-180");
+              isOpen = false;
+            }
+          });
+        }
+
+        // Table row click handler
+        document.querySelectorAll("tbody tr").forEach((row) => {
+          row.addEventListener("click", (e) => {
+            if (!e.target.closest("button") && !e.target.closest("a")) {
+              window.location.href = "#view-learner";
+            }
+          });
+        });
+
+        // Button press effect
+        document.querySelectorAll("button").forEach((btn) => {
+          btn.addEventListener("mousedown", () =>
+            btn.classList.add("scale-95")
+          );
+          btn.addEventListener("mouseup", () =>
+            btn.classList.remove("scale-95")
+          );
+          btn.addEventListener("mouseleave", () =>
+            btn.classList.remove("scale-95")
+          );
+        });
+
+        // Restriction toggle function
+        function toggleRestriction(button) {
+          const isRestricted =
+            button.getAttribute("data-restricted") === "true";
+
+          if (isRestricted) {
+            button.setAttribute("data-restricted", "false");
+            button.setAttribute("title", "Restrict");
+            button.classList.remove(
+              "text-yellow-500",
+              "bg-yellow-50",
+              "hover:bg-yellow-100"
+            );
+            button.classList.add("text-[#555555]", "hover:bg-yellow-50");
+            button.innerHTML = '<i class="fas fa-lock text-sm"></i>';
+          } else {
+            button.setAttribute("data-restricted", "true");
+            button.setAttribute("title", "Unrestrict");
+            button.classList.remove("text-[#555555]", "hover:bg-yellow-50");
+            button.classList.add(
+              "text-yellow-500",
+              "bg-yellow-50",
+              "hover:bg-yellow-100"
+            );
+            button.innerHTML = '<i class="fas fa-lock-open text-sm"></i>';
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
