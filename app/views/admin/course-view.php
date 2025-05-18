@@ -58,7 +58,7 @@ foreach ($chapters as $chapter) {
         <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200 mb-8">
             <div class="relative h-64">
                 <?php if (!empty($course['course_image'])): ?>
-                <img src="<?= htmlspecialchars($course['course_image']) ?>" 
+                <img src="/<?= htmlspecialchars($course['course_image']) ?>" 
                      alt="<?= htmlspecialchars($course['course_title']) ?>" 
                      class="w-full h-full object-cover">
                 <?php else: ?>

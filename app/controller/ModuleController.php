@@ -9,7 +9,8 @@ class ModuleController {
 
     public function listCourses() {
         $module = new Module();
-        return $module->getAllCourses();
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        return $module->getAllCourses($page);
     }
 
     public function getCourseById($courseId) {

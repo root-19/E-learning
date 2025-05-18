@@ -19,15 +19,15 @@ include 'layout/side-header.php';
    
 </head>
 <body class="bg-gray-50">
-    <div class="container mx-auto px-4 py-8 mt-20">
+    <div class="container mx-auto px-4 py-8 mt-5">
         <!-- Header Section -->
         <div class="flex justify-between items-center mb-8">
             <h1 class="text-3xl font-bold text-gray-800">Course Management</h1>
-            <a href="/admin/course/create" 
+            <!-- <a href="/admin/course/create" 
                class="bg-[#4B793E] text-white px-4 py-2 rounded-lg hover:bg-[#3d6232] transition-colors flex items-center gap-2">
                 <i class="fas fa-plus"></i>
                 Add New Course
-            </a>
+            </a> -->
         </div>
 
         <!-- Course List -->
@@ -39,6 +39,7 @@ include 'layout/side-header.php';
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course Image</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Chapters</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">rejected</th>
 
@@ -47,7 +48,7 @@ include 'layout/side-header.php';
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        <?php foreach ($courses as $course): ?>
+                        <?php foreach ($courses['courses'] as $course): ?>
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <img src="/<?= htmlspecialchars($course['course_image']) ?>" 
@@ -62,6 +63,11 @@ include 'layout/side-header.php';
                                 <td class="px-6 py-4">
                                     <div class="text-sm text-gray-500 max-w-md truncate">
                                         <?= htmlspecialchars($course['description']) ?>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-medium text-gray-900">
+                                        <?= htmlspecialchars($course['chapter_count']) ?> chapters
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
@@ -101,6 +107,29 @@ include 'layout/side-header.php';
                 </table>
             </div>
         </div>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="flex justify-center items-center space-x-4 mt-6">
+        <?php if ($courses['total_pages'] > 1): ?>
+            <?php if ($courses['total_pages'] > 1 && isset($_GET['page']) && $_GET['page'] > 1): ?>
+                <a href="?page=<?= $_GET['page'] - 1 ?>" 
+                   class="bg-[#4B793E] text-white px-4 py-2 rounded-lg hover:bg-[#3d6232] transition-colors">
+                    Previous
+                </a>
+            <?php endif; ?>
+            
+            <span class="text-gray-600">
+                Page <?= isset($_GET['page']) ? $_GET['page'] : 1 ?> of <?= $courses['total_pages'] ?>
+            </span>
+            
+            <?php if ($courses['total_pages'] > 1 && (!isset($_GET['page']) || $_GET['page'] < $courses['total_pages'])): ?>
+                <a href="?page=<?= isset($_GET['page']) ? $_GET['page'] + 1 : 2 ?>" 
+                   class="bg-[#4B793E] text-white px-4 py-2 rounded-lg hover:bg-[#3d6232] transition-colors">
+                    Next
+                </a>
+            <?php endif; ?>
+        <?php endif; ?>
     </div>
 
     <script>

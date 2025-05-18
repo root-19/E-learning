@@ -7,33 +7,30 @@ $controller = new ModuleController();
 $courses = $controller->listCourses();
 
 // Get user's enrolled courses and their progress
-$user_id = $_SESSION['user_id'];
+$user_id = $_SESSION['user_id'] ?? null;
 $enrolled_courses = [];
-$course_progress = [];
+$enrolled_courses_map = [];
 
-try {
-    $conn = Database::connect();
-    
-    // Get enrolled courses with progress
-    $stmt = $conn->prepare("
-        SELECT c.*, 
-               e.completion_percentage,
-               e.is_completed,
-               e.enrollment_date as enrolled_date
-        FROM courses c
-        LEFT JOIN enrollments e ON c.id = e.course_id AND e.user_id = ?
-        WHERE c.status = 'active' 
-        AND c.is_rejected = 0
-        ORDER BY c.id DESC
-    ");
-    $stmt->execute([$user_id]);
-    $enrolled_courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    // Convert to associative array for easy lookup
-    $enrolled_courses_map = array_column($enrolled_courses, null, 'id');
-    
-} catch (PDOException $e) {
-    error_log("Error fetching enrollments: " . $e->getMessage());
+if ($user_id) {
+    try {
+        $conn = Database::connect();
+        $stmt = $conn->prepare("
+            SELECT c.*, 
+                   e.completion_percentage,
+                   e.is_completed,
+                   e.enrollment_date as enrolled_date
+            FROM courses c
+            LEFT JOIN enrollments e ON c.id = e.course_id AND e.user_id = ?
+            WHERE c.status = 'active' 
+            AND c.is_rejected = 0
+            ORDER BY c.id DESC
+        ");
+        $stmt->execute([$user_id]);
+        $enrolled_courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $enrolled_courses_map = array_column($enrolled_courses, null, 'id');
+    } catch (PDOException $e) {
+        error_log('Error fetching enrollments: ' . $e->getMessage());
+    }
 }
 ?>
 

@@ -71,30 +71,41 @@ include 'layout/side-header.php';
 <?php endif; ?> -->
 
 <!-- Announcements Table -->
-<table class="min-w-full border-collapse border border-gray-200">
-    <thead>
-        <tr class="bg-gray-100">
-            <th class="border px-4 py-2">Title</th>
-            <th class="border px-4 py-2">Description</th>
-            <th class="border px-4 py-2">Posted By</th>
-            <th class="border px-4 py-2">Date Posted</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php if (!empty($announcements)): ?>
-            <?php foreach ($announcements as $announcement): ?>
+<div class="overflow-x-auto rounded-lg shadow">
+    <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+            <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Posted By</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Posted</th>
+            </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+            <?php if (!empty($announcements)): ?>
+                <?php foreach ($announcements as $announcement): ?>
+                    <tr class="hover:bg-gray-50 transition-colors duration-200">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><?= htmlspecialchars($announcement['title']) ?></td>
+                        <td class="px-6 py-4 text-sm text-gray-500 max-w-md truncate"><?= htmlspecialchars($announcement['description']) ?></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><?= htmlspecialchars($announcement['admin_name']) ?></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><?= htmlspecialchars($announcement['posted_at']) ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
                 <tr>
-                    <td class="border px-4 py-2"><?= htmlspecialchars($announcement['title']) ?></td>
-                    <td class="border px-4 py-2"><?= htmlspecialchars($announcement['description']) ?></td>
-                    <td class="border px-4 py-2"><?= htmlspecialchars($announcement['admin_name']) ?></td>
-                    <td class="border px-4 py-2"><?= htmlspecialchars($announcement['posted_at']) ?></td>
+                    <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500 bg-gray-50">
+                        <div class="flex items-center justify-center space-x-2">
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span>No announcements found.</span>
+                        </div>
+                    </td>
                 </tr>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <tr><td colspan="4" class="text-center py-4">No announcements found.</td></tr>
-        <?php endif; ?>
-    </tbody>
-</table>
+            <?php endif; ?>
+        </tbody>
+    </table>
+</div>
 
 <!-- Modal -->
 <div id="announcementModal" class="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center hidden">
