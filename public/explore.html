@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Explore | LearnInsure</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+      }
+
+      /* Modern Text Animation */
+      .fade-in {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeIn 0.8s forwards;
+      }
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Stagger delays */
+      .delay-1 {
+        animation-delay: 0.2s;
+      }
+      .delay-2 {
+        animation-delay: 0.4s;
+      }
+      .delay-3 {
+        animation-delay: 0.6s;
+      }
+      .delay-4 {
+        animation-delay: 0.8s;
+      }
+
+      /* Button Animation */
+      .cta-button {
+        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      }
+      .cta-button:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 10px 25px rgba(244, 197, 66, 0.3);
+      }
+
+      /* Navigation underline animation */
+      .nav-link {
+        position: relative;
+      }
+      .nav-link::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 0;
+        height: 2px;
+        background-color: #F4C542;
+        transition: width 0.3s ease;
+      }
+      .nav-link:hover::after {
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body class="bg-white text-white">
+    <!-- Desktop-Optimized Header -->
+    <header class="bg-[#4B793E] px-8 py-2 sticky top-0 z-50 shadow-md font-sans">
+      <div class="flex items-center justify-between max-w-7xl mx-auto">
+        <!-- Logo -->
+        <a href="/" class="flex items-center gap-2 group">
+          <img
+            src="../resources/image/learninsure-logo.png"
+            alt="InsureLearn Logo"
+            class="w-10 h-10 transition-transform group-hover:scale-105"
+          />
+          <span
+            class="text-white font-bold text-lg group-hover:text-[#F4C542] transition-colors"
+            >LearnInsure</span
+          >
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="flex flex-1 justify-center">
+          <ul class="flex list-none gap-6 m-0 p-0 items-center">
+            <li>
+              <a
+                href="/"
+                class="nav-link text-white font-bold text-lg px-1 py-2 hover:text-[#F4C542] transition-colors"
+              >
+                <i class="fas fa-home mr-2"></i> Home
+              </a>
+            </li>
+            <li>
+              <a
+                href="/explore"
+                class="nav-link text-white font-bold text-lg px-1 py-2 hover:text-[#F4C542] transition-colors"
+              >
+                <i class="fas fa-compass mr-2"></i> Explore
+              </a>
+            </li>
+            <li>
+              <a
+                href="/learning"
+                class="nav-link text-white font-bold text-lg px-1 py-2 hover:text-[#F4C542] transition-colors"
+              >
+                <i class="fas fa-book-open mr-2"></i> My Learning
+              </a>
+            </li>
+            <li>
+              <a
+                href="/about"
+                class="nav-link text-white font-bold text-lg px-1 py-2 hover:text-[#F4C542] transition-colors"
+              >
+                <i class="fas fa-info-circle mr-2"></i> About Us
+              </a>
+            </li>
+            <li>
+              <a
+                href="/contact"
+                class="nav-link text-white font-bold text-lg px-1 py-2 hover:text-[#F4C542] transition-colors"
+              >
+                <i class="fas fa-envelope mr-2"></i> Contact
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <!-- Auth Buttons -->
+        <div class="flex items-center gap-4">
+          <a
+            href="#"
+            onclick="goToLogin()"
+            class="text-white text-sm font-bold border-2 border-white rounded px-4 py-1 hover:bg-[#F4C542] hover:text-[#4B793E] hover:border-[#F4C542] transition-all"
+          >
+            Sign In
+          </a>
+          <a
+            href="/register"
+            class="text-[#4B793E] text-sm font-bold bg-[#F4C542] rounded px-4 py-1 hover:bg-[#f4d042] transition-all"
+          >
+            Create Account
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section
+      id="hero"
+      class="relative w-full min-h-screen flex items-center justify-center text-center px-4 sm:px-6 lg:px-8 bg-black bg-opacity-60 overflow-hidden"
+    >
+      <!-- Background Image -->
+      <img
+        alt="Financial advisor working"
+        class="absolute inset-0 w-full h-full object-cover brightness-50 -z-10"
+        src="../resources/image/explore-bgimgsection1.png"
+      />
+
+      <!-- Header -->
+      <div class="relative max-w-4xl mx-auto">
+        <h1
+          class="text-white font-extrabold text-3xl sm:text-4xl md:text-5xl leading-tight"
+        >
+          <div class="fade-in italic">
+            Empowering Aspiring
+            <span class="text-[#28A745]">Financial Advisors</span> to Succeed.
+          </div>
+          <div class="fade-in delay-2 italic font-extrabold text-[#F4C542]">
+            One Lesson at a Time.
+          </div>
+        </h1>
+
+        <!-- Subtext -->
+        <div class="mt-6 fade-in delay-4">
+          <p
+            class="text-white font-semibold italic text-base sm:text-lg max-w-3xl mx-auto leading-relaxed"
+          >
+            We're here to help aspiring financial advisors in the Philippines
+            pass the Insurance Commission Licensure Exam with confidence—
+            through practical, expertly designed training.
+          </p>
+        </div>
+
+        <!-- Animated CTA Button -->
+        <button
+          class="cta-button mt-8 bg-[#F4C542] text-black font-semibold text-sm sm:text-base py-3 px-6 rounded-lg inline-flex items-center justify-center fade-in delay-4"
+        >
+          Let's Get Started Today!
+          <svg
+            class="ml-2 w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path d="M5 12h14M13 6l6 6-6 6"></path>
+          </svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- Mission and Vision Section -->
+    <section id="missionvision" class="relative font-['Inter'] min-h-[600px]">
+      <div class="absolute inset-0 w-full h-full -z-10">
+        <img
+          src="../resources/image/explore-bgimgsection2.png"
+          alt="Background image"
+          loading="lazy"
+          class="w-full h-full object-cover"
+        />
+      </div>
+
+      <!-- Content -->
+      <div class="max-w-7xl mx-auto px-6 py-16 relative z-10">
+        <div class="p-10 md:p-20">
+          <div class="max-w-xl">
+            <h1
+              class="font-extrabold text-4xl md:text-5xl text-[#1E1E1E] leading-tight mb-12 text-left"
+            >
+              Our Vision and Mission
+            </h1>
+            <div
+              class="flex flex-col md:flex-row md:justify-between gap-12 md:gap-0"
+            >
+              <div class="md:max-w-[45%]">
+                <h2 class="font-extrabold text-xl text-[#1E1E1E] mb-3">
+                  Our Vision
+                </h2>
+                <p class="italic text-sm text-[#1E1E1E] leading-relaxed">
+                  We envision a new generation of financial advisors who are not
+                  only licensed but also truly prepared to serve with
+                  competence, integrity, and care. We're here to replace boring
+                  lectures with interactive, relatable training that sticks.
+                </p>
+              </div>
+              <div class="md:max-w-[45%]">
+                <h2 class="font-extrabold text-xl text-[#1E1E1E] mb-3">
+                  Our Mission
+                </h2>
+                <p class="italic text-sm text-[#1E1E1E] leading-relaxed">
+                  We're building a training platform to help aspiring financial
+                  agents in the Philippines pass the Insurance Commission
+                  Licensure Exam with confidence. We make sure you're not just
+                  memorizing answers, but understanding how to help real
+                  clients.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features of LearnInsure -->
+    <section id="features" class="relative h-screen overflow-hidden">
+      <!-- Image Slides -->
+      <div class="absolute inset-0">
+        <!-- Slide 1 -->
+        <div
+          class="absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-100"
+        >
+          <img
+            src="../resources/image/explore-imgcarousel1.png"
+            alt=""
+            class="w-full h-full object-cover"
+          />
+        </div>
+
+        <!-- Slide 2 -->
+        <div
+          class="absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0"
+        >
+          <img
+            src="../resources/image/explore-imgcarousel2.png"
+            alt=""
+            class="w-full h-full object-cover"
+          />
+        </div>
+
+        <!-- Slide 3 -->
+        <div
+          class="absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0"
+        >
+          <img
+            src="../resources/image/explore-imgcarousel3.png"
+            alt=""
+            class="w-full h-full object-cover"
+          />
+        </div>
+      </div>
+
+      <!-- Navigation Controls -->
+      <div class="absolute inset-0 flex items-center justify-between px-4 z-10">
+        <button
+          class="carousel-prev bg-white/20 hover:bg-white/30 rounded-full w-12 h-12 flex items-center justify-center transition-colors"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 text-white"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+        </button>
+
+        <button
+          class="carousel-next bg-white/20 hover:bg-white/30 rounded-full w-12 h-12 flex items-center justify-center transition-colors"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 text-white"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Indicator Dots -->
+      <div
+        class="absolute bottom-8 left-0 right-0 flex justify-center space-x-2 z-10"
+      >
+        <button
+          class="carousel-dot w-3 h-3 rounded-full bg-white/80 hover:bg-white transition-colors"
+        ></button>
+        <button
+          class="carousel-dot w-3 h-3 rounded-full bg-white/30 hover:bg-white/50 transition-colors"
+        ></button>
+        <button
+          class="carousel-dot w-3 h-3 rounded-full bg-white/30 hover:bg-white/50 transition-colors"
+        ></button>
+      </div>
+    </section>
+
+    <!-- Overview Section -->
+    <section id="overview" class="relative w-full h-screen overflow-hidden">
+      <img 
+        src="../resources/image/explore-bgimgsection4.png"
+        alt="LearnInsure Metrics Background"
+        class="absolute inset-0 w-full h-full object-cover"
+      >
+      <div class="absolute inset-0 bg-black bg-opacity-10"></div>
+
+      <!-- Text Container with fade-in animations -->
+      <div class="absolute inset-0 px-6 md:px-16 py-10 flex flex-col justify-start text-black">
+        <!-- Boxes Text -->
+        <!-- Bottom Left: Instructors -->
+        <div class="absolute bottom-[41%] left-[16%] w-[170px] text-center fade-in delay-1">
+          <p class="font-bold text-2xl">40+</p>
+          <p class="text-sm">Instructors are here to help you learn.</p>
+        </div>
+
+        <!-- Bottom Center Left: Users -->
+        <div class="absolute bottom-[41%] left-[32%] w-[170px] text-center fade-in delay-2">
+          <p class="font-bold text-2xl">2000+</p>
+          <p class="text-sm">Users have joined the LearnInsure platform.</p>
+        </div>
+
+        <!-- Center Top Right: Lesson Description -->
+        <div class="absolute top-[19%] right-[32%] w-[150px] text-xs text-center fade-in">
+          <p>Lessons feature core insurance fundamentals. At the same time the skills that will set you apart as a financial agent or advisor. Life, Variable Life, and Non-Life insurance? We got you!</p>
+        </div>
+
+        <!-- Top Right: Exam Improvement -->
+        <div class="absolute top-[25%] right-[7.5%] w-[100px] text-center fade-in delay-3">
+          <p class="font-bold text-2xl">83%</p>
+          <p class="text-sm md:text-sm">Have improved their mock exam scores by 15+ points</p>
+        </div>
+
+        <!-- Bottom Center Right: Modules -->
+        <div class="absolute bottom-[17%] right-[31%] w-[170px] text-center fade-in delay-2">
+          <p class="font-bold text-2xl">100+</p>
+          <p class="text-base md:text-base">Available Learning Modules Just For You</p>
+        </div>
+
+        <!-- Bottom Right: Easier Lessons -->
+        <div class="absolute bottom-[7%] right-[11.5%] w-[120px] text-center fade-in delay-4">
+          <p class="font-bold text-2xl">96%</p>
+          <p class="text-base md:text-base">Said that lessons were easier than textbooks</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trusted Partner Section -->
+    <section id="ending" class="flex flex-col md:flex-row min-h-screen">
+      <div class="bg-[#2E2E2E] text-white flex flex-col justify-center px-10 py-16 md:w-1/2">
+        <h1 class="text-3xl md:text-5xl font-semibold tracking-widest mb-3 uppercase">
+          OUR TRUSTED PARTNER
+        </h1>
+        <h2 class="text-xl md:text-2xl font-semibold tracking-widest mb-8 uppercase">
+          SIYBAUCO &amp; ASSOCIATES INSURANCE
+          <br/>
+          AGENCY, INC.
+        </h2>
+        <p class="italic text-center md:text-left text-lg md:text-xl mb-10 leading-relaxed max-w-xl mx-auto md:mx-0">
+          For over 25 years, this Filipino-owned agency has helped individuals and businesses find the right insurance coverage across the Philippines.
+        </p>
+        <p class="italic mb-3 max-w-xl mx-auto md:mx-0">
+          An active member of prestigious industry groups like:
+        </p>
+        <ul class="list-disc list-inside italic max-w-xl mx-auto md:mx-0 mb-10">
+          <li>
+            Insurance Institute of Asia &amp; Pacific (IIAP)
+          </li>
+          <li>
+            Insurance Institute of Canada (IIC)
+          </li>
+        </ul>
+        <a 
+          href="https://siybaucoinsurance.com/" 
+          target="_blank"
+          class="inline-block bg-yellow-400 text-gray-900 font-bold text-sm rounded-md px-4 py-2 w-max mx-auto md:mx-0 hover:bg-yellow-300 transition"
+        >
+          Visit Siybauco's Website
+        </a>
+      </div>
+      <div class="md:w-1/2">
+        <img alt="Background Image" class="w-full h-full object-cover" height="600" src="../resources/image/explore-bgimgsection5.png" width="800"/>
+      </div>
+    </section>
+
+    <!-- Desktop-Optimized Footer -->
+    <footer class="bg-white border-t border-gray-200 py-12 px-12 lg:px-20">
+      <div class="max-w-7xl mx-auto">
+        <!-- Columns Container -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+          <!-- Column 1: Logo & Description (Spans 3 cols) -->
+          <div class="md:col-span-3">
+            <div class="flex items-center mb-4">
+              <img
+                alt="LearnInsure Logo"
+                class="w-10 h-10 mr-3"
+                src="../resources/image/learninsurelogo-footer.png"
+              />
+              <h2 class="text-xl text-[#1E1E1E] font-extrabold">LearnInsure</h2>
+            </div>
+            <p class="text-gray-700 text-sm leading-relaxed">
+              LearnInsure is an eLearning platform designed to help aspiring
+              financial advisors in the Philippines prepare for the Insurance
+              Commission Licensure Exam (IC Exam).
+            </p>
+          </div>
+
+          <!-- Column 2: Get Help (Spans 2 cols) -->
+          <div class="md:col-span-3 pl-20 pr-2">
+            <h3 class="font-semibold text-gray-900 text-sm mb-4">GET HELP</h3>
+            <ul class="space-y-3">
+              <li>
+                <a
+                  class="text-gray-700 text-sm font-medium hover:text-[#3BAB5A] transition-colors"
+                  href="#"
+                >
+                  Contact Us
+                </a>
+              </li>
+              <li>
+                <a
+                  class="text-gray-700 text-sm font-medium hover:text-[#3BAB5A] transition-colors"
+                  href="#"
+                >
+                  FAQ
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Column 3: Get Started -->
+          <div class="md:col-span-3 pl-18 pr-2">
+            <h3 class="font-semibold text-gray-900 text-sm mb-4">
+              GET STARTED
+            </h3>
+            <ul class="space-y-3">
+              <li>
+                <a
+                  class="text-gray-700 text-sm font-medium hover:text-[#3BAB5A] transition-colors"
+                  href="/"
+                >
+                  Home
+                </a>
+              </li>
+              <li>
+                <a
+                  class="text-gray-700 text-sm font-medium hover:text-[#3BAB5A] transition-colors"
+                  href="/about"
+                >
+                  About Us
+                </a>
+              </li>
+              <li>
+                <a
+                  class="text-gray-700 text-sm font-medium hover:text-[#3BAB5A] transition-colors"
+                  href="/explore"
+                >
+                  Explore Modules
+                </a>
+              </li>
+              <li>
+                <a
+                  class="text-gray-700 text-sm font-medium hover:text-[#3BAB5A] transition-colors"
+                  href="/register"
+                >
+                  Create An Account
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Column 4: Partnered Agency -->
+          <div class="md:col-span-3 pl-18 pr-2">
+            <h3 class="font-semibold text-gray-900 text-sm mb-4">
+              PARTNERED NON-LIFE AGENCY
+            </h3>
+            <p class="text-gray-700 text-sm leading-relaxed mb-4">
+              Address: 23 Florida Street, Brgy. Wack-Wack, Mandaluyong, Metro
+              Manila,<br />
+              55 Rizal Avenue, Brgy, Bayambang, Pangasinan
+            </p>
+            <p class="text-gray-700 text-sm leading-relaxed mb-4">
+              Phone: (+63) 917 777 1213<br />
+              Mail: siybauco_associates@yahoo.com
+            </p>
+            <div class="flex space-x-4 text-gray-700 text-lg">
+              <a
+                aria-label="LinkedIn"
+                class="hover:text-[#3BAB5A] transition-colors"
+                href="#"
+              >
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+              <a
+                aria-label="Facebook"
+                class="hover:text-[#3BAB5A] transition-colors"
+                href="#"
+              >
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a
+                aria-label="Instagram"
+                class="hover:text-[#3BAB5A] transition-colors"
+                href="#"
+              >
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a
+                aria-label="YouTube"
+                class="hover:text-[#3BAB5A] transition-colors"
+                href="#"
+              >
+                <i class="fab fa-youtube"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Copyright -->
+        <div class="mt-12 text-center text-gray-800 text-sm">
+          LearnInsure. @2024 by LearnInsure. All rights reserved.
+        </div>
+      </div>
+    </footer>
+
+    <!-- Carousel JavaScript -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Features Carousel
+        const slides = document.querySelectorAll(
+          "#features .absolute.inset-0 > div"
+        );
+        const dots = document.querySelectorAll(".carousel-dot");
+        const prevBtn = document.querySelector(".carousel-prev");
+        const nextBtn = document.querySelector(".carousel-next");
+
+        let currentIndex = 0;
+        const totalSlides = 3;
+        let autoSlideInterval;
+
+        function updateCarousel() {
+          // Update slides
+          slides.forEach((slide, index) => {
+            slide.classList.toggle("opacity-100", index === currentIndex);
+            slide.classList.toggle("opacity-0", index !== currentIndex);
+          });
+
+          // Update dots
+          dots.forEach((dot, index) => {
+            dot.classList.toggle("bg-white/80", index === currentIndex);
+            dot.classList.toggle("bg-white/30", index !== currentIndex);
+          });
+        }
+
+        function nextSlide() {
+          currentIndex = (currentIndex + 1) % totalSlides;
+          updateCarousel();
+          resetAutoSlide();
+        }
+
+        function prevSlide() {
+          currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+          updateCarousel();
+          resetAutoSlide();
+        }
+
+        function goToSlide(index) {
+          currentIndex = index;
+          updateCarousel();
+          resetAutoSlide();
+        }
+
+        function startAutoSlide() {
+          autoSlideInterval = setInterval(nextSlide, 5000);
+        }
+
+        function resetAutoSlide() {
+          clearInterval(autoSlideInterval);
+          startAutoSlide();
+        }
+
+        // Event listeners
+        nextBtn.addEventListener("click", nextSlide);
+        prevBtn.addEventListener("click", prevSlide);
+
+        dots.forEach((dot, index) => {
+          dot.addEventListener("click", () => goToSlide(index));
+        });
+
+        // Initialize
+        updateCarousel();
+        startAutoSlide();
+
+        // Pause on hover
+        const carouselSection = document.getElementById("features");
+        carouselSection.addEventListener("mouseenter", () =>
+          clearInterval(autoSlideInterval)
+        );
+        carouselSection.addEventListener("mouseleave", startAutoSlide);
+      });
+
+      // Login Modal Functions (from landing page)
+      function goToLogin() {
+        const loginForm = document.getElementById("loginForm");
+        const overlay = document.getElementById("loginOverlay");
+
+        if (loginForm && overlay) {
+          overlay.classList.remove("hidden");
+          loginForm.classList.remove("hidden");
+          setTimeout(() => {
+            overlay.classList.add("opacity-100");
+            loginForm.classList.add("login-transition-in");
+          }, 10);
+          document.body.style.overflow = "hidden";
+        } else {
+          window.location.href = "/login"; // Fallback
+        }
+      }
+    </script>
+  </body>
+</html>

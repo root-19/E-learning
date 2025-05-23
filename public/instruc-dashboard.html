@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LearnInsure - Instructor Dashboard</title>
+    <!-- Fonts & Stylesheets -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Inter+Tight:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Tailwind Config (Custom Colors, Fonts, Shadows) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                50: "#f0fdf4",
+                100: "#dcfce7",
+                500: "#4aab4c",
+                600: "#3d8b40",
+              },
+              surface: {
+                50: "#f8fafc",
+                100: "#f1f5f9",
+                200: "#e2e8f0",
+                800: "#1e293b",
+              },
+              status: {
+                active: "#4AAB4C",
+                inactive: "#DC3545",
+                draft: "#F4C542",
+              },
+            },
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+              display: ["Inter Tight", "sans-serif"],
+            },
+            boxShadow: {
+              soft: "0 4px 12px -2px rgba(0, 0, 0, 0.08)",
+              float: "0 8px 24px -4px rgba(0, 0, 0, 0.12)",
+            },
+          },
+        },
+      };
+    </script>
+    <!-- Custom CSS (Tooltips, Hover Effects, Scrollbar) -->
+    <style type="text/tailwindcss">
+      @layer utilities {
+        /* Tooltip for action icons (e.g., profile dropdown) */
+        .action-icon::after {
+          content: attr(title);
+          position: absolute;
+          bottom: 100%;
+          left: 50%;
+          transform: translateX(-50%);
+          background-color: theme("colors.surface.800");
+          color: white;
+          padding: 4px 8px;
+          border-radius: 4px;
+          font-size: 12px;
+          white-space: nowrap;
+          opacity: 0;
+          visibility: hidden;
+          transition: all 0.2s ease;
+          pointer-events: none;
+          z-index: 10;
+        }
+        /* Card hover effects */
+        .action-icon:hover::after {
+          opacity: 1;
+          visibility: visible;
+          bottom: calc(100% + 5px);
+        }
+
+        /* Quick action card hover */
+        .quick-action-card {
+          transition: all 0.2s ease;
+        }
+        .quick-action-card:hover {
+          border-color: #f4c542;
+          transform: translateY(-2px);
+        }
+
+        /* Announcement item hover */
+        .announcement-item:hover {
+          background-color: theme("colors.surface.50");
+        }
+
+        /* Custom scrollbar */
+        .announcement-container::-webkit-scrollbar {
+          width: 6px;
+        }
+        .announcement-container::-webkit-scrollbar-track {
+          background: theme("colors.surface.100");
+          border-radius: 3px;
+        }
+        .announcement-container::-webkit-scrollbar-thumb {
+          background: theme("colors.surface.300");
+          border-radius: 3px;
+        }
+      }
+    </style>
+  </head>
+  <body
+    class="font-sans bg-surface-50 text-surface-800 antialiased flex min-h-screen"
+  >
+    <!-- Sidebar Menu -->
+    <aside
+      class="w-64 bg-white border-r border-surface-200 py-6 px-4 flex-shrink-0 shadow-sm"
+    >
+      <div class="flex items-center gap-3 mb-8 px-3">
+        <span class="font-display font-bold text-lg tracking-tight"
+          >Instructor Portal</span
+        >
+      </div>
+      <nav class="space-y-1.5 px-2">
+        <!-- Active Tab (Dashboard) -->
+        <a
+          href="#"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary-50 text-primary-600 font-medium transition-colors"
+        >
+          <div
+            class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary-100"
+          >
+            <i class="fas fa-chart-line text-sm text-primary-600"></i>
+          </div>
+          <span>Dashboard</span>
+        </a>
+        <!-- Create Learning Module Page -->
+        <a
+          href="#"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-surface-600 font-medium hover:bg-surface-100 transition-colors group"
+        >
+          <div
+            class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-100 group-hover:bg-surface-200 transition-colors"
+          >
+            <i class="fas fa-book-open text-sm text-surface-500"></i>
+          </div>
+          <span>Create Learning Module</span>
+        </a>
+        <!-- Create Interactive Module Page -->
+        <a
+          href="#"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-surface-600 font-medium hover:bg-surface-100 transition-colors group"
+        >
+          <div
+            class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-100 group-hover:bg-surface-200 transition-colors"
+          >
+            <i class="fas fa-laptop-code text-sm text-surface-500"></i>
+          </div>
+          <span>Create Interactive Module</span>
+        </a>
+        <!-- Manage Modules Page -->
+        <a
+          href="#"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-surface-600 font-medium hover:bg-surface-100 transition-colors group"
+        >
+          <div
+            class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-100 group-hover:bg-surface-200 transition-colors"
+          >
+            <i class="fas fa-book text-sm text-surface-500"></i>
+          </div>
+          <span>Manage Modules</span>
+        </a>
+        <!-- Manage Learners Page -->
+        <a
+          href="#"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-surface-600 font-medium hover:bg-surface-100 transition-colors group"
+        >
+          <div
+            class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-100 group-hover:bg-surface-200 transition-colors"
+          >
+            <i class="fas fa-users text-sm text-surface-500"></i>
+          </div>
+          <span>Manage Learners</span>
+        </a>
+        <!-- Profile Settings Page -->
+        <a
+          href="#"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-surface-600 font-medium hover:bg-surface-100 transition-colors group"
+        >
+          <div
+            class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-100 group-hover:bg-surface-200 transition-colors"
+          >
+            <i class="fas fa-cog text-sm text-surface-500"></i>
+          </div>
+          <span>Profile Settings</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col min-h-screen overflow-hidden">
+      <!-- Header -->
+      <header
+        class="bg-white border-b border-surface-200 px-6 py-4 flex items-center justify-between"
+      >
+        <div>
+          <h1 class="font-display font-bold text-xl tracking-tight">
+            Instructor Dashboard
+          </h1>
+          <p class="text-sm text-surface-500 mt-1">
+            Welcome back, John! Here's what's happening today.
+          </p>
+        </div>
+
+        <!-- Profile Dropdown -->
+        <div class="relative z-30">
+          <button
+            class="flex items-center gap-2 group"
+            id="profileDropdownButton"
+          >
+            <div
+              class="w-9 h-9 rounded-full bg-surface-100 border-2 border-white shadow-sm overflow-hidden"
+            >
+              <img
+                src="https://randomuser.me/api/portraits/men/32.jpg"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <span class="font-medium text-surface-700">John D.</span>
+            <i
+              class="fas fa-chevron-down text-xs text-surface-400 group-hover:text-surface-600 transition-transform"
+              id="dropdownArrow"
+            ></i>
+          </button>
+
+          <div
+            class="absolute right-0 top-full mt-2 w-56 origin-top-right divide-y divide-surface-100 rounded-lg bg-white shadow-float ring-1 ring-surface-200 opacity-0 invisible transition-all duration-150 transform scale-95"
+            id="dropdownMenu"
+          >
+            <div class="px-4 py-3">
+              <p class="text-sm font-medium">John Doe</p>
+              <p class="text-xs text-surface-500 truncate">
+                instructor@learninsure.com
+              </p>
+            </div>
+            <div class="py-1.5">
+              <a
+                href="#"
+                class="flex items-center gap-2 px-4 py-2 text-sm text-surface-700 hover:bg-surface-50"
+              >
+                <i class="fas fa-cog w-4 text-center text-surface-400"></i>
+                Settings
+              </a>
+              <a
+                href="#"
+                class="flex items-center gap-2 px-4 py-2 text-sm text-surface-700 hover:bg-surface-50"
+              >
+                <i
+                  class="fas fa-sign-out-alt w-4 text-center text-surface-400"
+                ></i>
+                Sign out
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="flex-1 p-6 overflow-auto">
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+          <!-- Published Learning Modules -->
+          <div
+            class="quick-action-card bg-white p-5 rounded-xl border border-surface-200 shadow-soft"
+          >
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-medium text-surface-500">
+                Published Learning Modules
+              </h3>
+              <div
+                class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center text-green-600"
+              >
+                <i class="fas fa-book text-sm"></i>
+              </div>
+            </div>
+            <p class="text-2xl font-display font-bold text-surface-900 mt-2">
+              24
+            </p>
+            <p class="text-xs text-surface-500 mt-1">+3 this month</p>
+          </div>
+
+          <!-- Published Interactive Modules -->
+          <div
+            class="quick-action-card bg-white p-5 rounded-xl border border-surface-200 shadow-soft"
+          >
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-medium text-surface-500">
+                Published Interactive Modules
+              </h3>
+              <div
+                class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600"
+              >
+                <i class="fas fa-laptop-code text-sm"></i>
+              </div>
+            </div>
+            <p class="text-2xl font-display font-bold text-surface-900 mt-2">
+              15
+            </p>
+            <p class="text-xs text-surface-500 mt-1">+2 this month</p>
+          </div>
+
+          <!-- Rejected Learning Modules -->
+          <div
+            class="quick-action-card bg-white p-5 rounded-xl border border-surface-200 shadow-soft"
+          >
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-medium text-surface-500">
+                Rejected Learning Modules
+              </h3>
+              <div
+                class="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center text-red-600"
+              >
+                <i class="fas fa-times-circle text-sm"></i>
+              </div>
+            </div>
+            <p class="text-2xl font-display font-bold text-surface-900 mt-2">
+              5
+            </p>
+            <p class="text-xs text-surface-500 mt-1">1 pending review</p>
+          </div>
+
+          <!-- Rejected Interactive Modules -->
+          <div
+            class="quick-action-card bg-white p-5 rounded-xl border border-surface-200 shadow-soft"
+          >
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-medium text-surface-500">
+                Rejected Interactive Modules
+              </h3>
+              <div
+                class="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center text-red-600"
+              >
+                <i class="fas fa-laptop-medical text-sm"></i>
+              </div>
+            </div>
+            <p class="text-2xl font-display font-bold text-surface-900 mt-2">
+              3
+            </p>
+            <p class="text-xs text-surface-500 mt-1">0 pending review</p>
+          </div>
+
+          <!-- Active Learners Handled -->
+          <div
+            class="quick-action-card bg-white p-5 rounded-xl border border-surface-200 shadow-soft"
+          >
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-medium text-surface-500">
+                Active Learners Handled
+              </h3>
+              <div
+                class="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center text-purple-600"
+              >
+                <i class="fas fa-user-check text-sm"></i>
+              </div>
+            </div>
+            <p class="text-2xl font-display font-bold text-surface-900 mt-2">
+              142
+            </p>
+            <p class="text-xs text-surface-500 mt-1">+12 this week</p>
+          </div>
+
+          <!-- Learners Suspended -->
+          <div
+            class="quick-action-card bg-white p-5 rounded-xl border border-surface-200 shadow-soft"
+          >
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-medium text-surface-500">
+                Learners Suspended
+              </h3>
+              <div
+                class="w-10 h-10 rounded-lg bg-yellow-50 flex items-center justify-center text-yellow-600"
+              >
+                <i class="fas fa-user-slash text-sm"></i>
+              </div>
+            </div>
+            <p class="text-2xl font-display font-bold text-surface-900 mt-2">
+              8
+            </p>
+            <p class="text-xs text-surface-500 mt-1">2 pending review</p>
+          </div>
+        </div>
+
+        <!-- Two Column Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Announcements Section -->
+          <div
+            class="bg-white rounded-xl border border-surface-200 shadow-soft overflow-hidden"
+          >
+            <div class="px-6 py-4 border-b border-surface-200">
+              <h2 class="font-display font-bold text-lg">
+                System Announcements
+              </h2>
+            </div>
+            <div class="announcement-container max-h-96 overflow-y-auto p-2">
+              <!-- Announcement 1 -->
+              <div
+                class="announcement-item p-4 rounded-lg transition-colors cursor-pointer"
+              >
+                <div class="flex items-start gap-3">
+                  <div class="flex-shrink-0 mt-1">
+                    <div
+                      class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-600"
+                    >
+                      <i class="fas fa-bullhorn text-sm"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <h3 class="font-medium text-surface-900">
+                      System Maintenance
+                    </h3>
+                    <p class="text-sm text-surface-500 mt-1">
+                      Planned maintenance scheduled for June 15th from 2:00 AM
+                      to 4:00 AM. The system will be unavailable during this
+                      time.
+                    </p>
+                    <div class="flex items-center gap-2 mt-2">
+                      <span class="text-xs text-surface-400">Admin</span>
+                      <span class="text-xs text-surface-400">•</span>
+                      <span class="text-xs text-surface-400">2 days ago</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Announcement 2 -->
+              <div
+                class="announcement-item p-4 rounded-lg transition-colors cursor-pointer"
+              >
+                <div class="flex items-start gap-3">
+                  <div class="flex-shrink-0 mt-1">
+                    <div
+                      class="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center text-green-600"
+                    >
+                      <i class="fas fa-check-circle text-sm"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <h3 class="font-medium text-surface-900">
+                      New Features Available
+                    </h3>
+                    <p class="text-sm text-surface-500 mt-1">
+                      We've added new interactive module templates. Check them
+                      out when creating your next module!
+                    </p>
+                    <div class="flex items-center gap-2 mt-2">
+                      <span class="text-xs text-surface-400">Admin</span>
+                      <span class="text-xs text-surface-400">•</span>
+                      <span class="text-xs text-surface-400">1 week ago</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Announcement 3 -->
+              <div
+                class="announcement-item p-4 rounded-lg transition-colors cursor-pointer"
+              >
+                <div class="flex items-start gap-3">
+                  <div class="flex-shrink-0 mt-1">
+                    <div
+                      class="w-8 h-8 rounded-full bg-purple-50 flex items-center justify-center text-purple-600"
+                    >
+                      <i class="fas fa-graduation-cap text-sm"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <h3 class="font-medium text-surface-900">
+                      Instructor Training Session
+                    </h3>
+                    <p class="text-sm text-surface-500 mt-1">
+                      Join our monthly training session on June 20th to learn
+                      about best practices for creating engaging content.
+                    </p>
+                    <div class="flex items-center gap-2 mt-2">
+                      <span class="text-xs text-surface-400">Admin</span>
+                      <span class="text-xs text-surface-400">•</span>
+                      <span class="text-xs text-surface-400">2 weeks ago</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Announcement 4 -->
+              <div
+                class="announcement-item p-4 rounded-lg transition-colors cursor-pointer"
+              >
+                <div class="flex items-start gap-3">
+                  <div class="flex-shrink-0 mt-1">
+                    <div
+                      class="w-8 h-8 rounded-full bg-yellow-50 flex items-center justify-center text-yellow-600"
+                    >
+                      <i class="fas fa-exclamation-triangle text-sm"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <h3 class="font-medium text-surface-900">
+                      Submission Deadline
+                    </h3>
+                    <p class="text-sm text-surface-500 mt-1">
+                      Reminder: All modules for Q3 review must be submitted by
+                      June 30th to be included in the next release.
+                    </p>
+                    <div class="flex items-center gap-2 mt-2">
+                      <span class="text-xs text-surface-400">Admin</span>
+                      <span class="text-xs text-surface-400">•</span>
+                      <span class="text-xs text-surface-400">3 weeks ago</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Actions Section -->
+          <div
+            class="bg-white rounded-xl border border-surface-200 shadow-soft overflow-hidden"
+          >
+            <div class="px-6 py-4 border-b border-surface-200">
+              <h2 class="font-display font-bold text-lg">Quick Actions</h2>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
+              <!-- Create Learning Module -->
+              <div
+                class="quick-action-card bg-white p-4 rounded-xl border border-surface-200 shadow-soft cursor-pointer hover:shadow-md hover:border-status-draft"
+              >
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-10 h-10 rounded-lg bg-primary-50 flex items-center justify-center text-primary-600"
+                  >
+                    <i class="fas fa-book text-sm"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-sm font-medium text-surface-700">
+                      Create Learning Module
+                    </h3>
+                    <p class="text-xs text-surface-500 mt-1">
+                      Text-based with quizzes
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Create Interactive Module -->
+              <div
+                class="quick-action-card bg-white p-4 rounded-xl border border-surface-200 shadow-soft cursor-pointer hover:shadow-md hover:border-status-draft"
+              >
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600"
+                  >
+                    <i class="fas fa-laptop-code text-sm"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-sm font-medium text-surface-700">
+                      Create Interactive Module
+                    </h3>
+                    <p class="text-xs text-surface-500 mt-1">
+                      Scenario-based learning
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- View Reports -->
+              <div
+                class="quick-action-card bg-white p-4 rounded-xl border border-surface-200 shadow-soft cursor-pointer hover:shadow-md hover:border-status-draft"
+              >
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center text-green-600"
+                  >
+                    <i class="fas fa-chart-pie text-sm"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-sm font-medium text-surface-700">
+                      View Reports
+                    </h3>
+                    <p class="text-xs text-surface-500 mt-1">
+                      Learner progress analytics
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Manage Learners -->
+              <div
+                class="quick-action-card bg-white p-4 rounded-xl border border-surface-200 shadow-soft cursor-pointer hover:shadow-md hover:border-status-draft"
+              >
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center text-purple-600"
+                  >
+                    <i class="fas fa-users text-sm"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-sm font-medium text-surface-700">
+                      Manage Learners
+                    </h3>
+                    <p class="text-xs text-surface-500 mt-1">
+                      View and manage all learners
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Export Data -->
+              <div
+                class="quick-action-card bg-white p-4 rounded-xl border border-surface-200 shadow-soft cursor-pointer hover:shadow-md hover:border-status-draft"
+              >
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-10 h-10 rounded-lg bg-yellow-50 flex items-center justify-center text-yellow-600"
+                  >
+                    <i class="fas fa-file-export text-sm"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-sm font-medium text-surface-700">
+                      Export Data
+                    </h3>
+                    <p class="text-xs text-surface-500 mt-1">
+                      Learner progress and results
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Request Support -->
+              <div
+                class="quick-action-card bg-white p-4 rounded-xl border border-surface-200 shadow-soft cursor-pointer hover:shadow-md hover:border-status-draft"
+              >
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center text-red-600"
+                  >
+                    <i class="fas fa-life-ring text-sm"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-sm font-medium text-surface-700">
+                      Request Support
+                    </h3>
+                    <p class="text-xs text-surface-500 mt-1">
+                      Contact our support team
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Page Footer -->
+      <footer class="bg-white px-6 py-8 border-t border-surface-200">
+        <!-- Footer Columns -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-6">
+          <!-- Company Information Column -->
+          <div>
+            <div class="flex items-center gap-3 mb-4">
+              <img
+                src="../resources/image/learninsurelogo-footer.png"
+                alt="LearnInsure Logo"
+                class="w-10 h-10 object-contain"
+              />
+              <span class="font-display font-bold">LearnInsure</span>
+            </div>
+            <p class="text-sm text-surface-500 leading-relaxed">
+              LearnInsure is an eLearning platform designed for insurance
+              professionals to enhance their knowledge and skills through
+              interactive courses.
+            </p>
+          </div>
+
+          <!-- Get Help Column -->
+          <div>
+            <h4
+              class="text-sm font-display font-semibold text-surface-700 mb-3"
+            >
+              Get Help
+            </h4>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="#"
+                  class="text-sm text-surface-500 hover:text-primary-600 transition-colors"
+                  >Contact Us</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-sm text-surface-500 hover:text-primary-600 transition-colors"
+                  >FAQ</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-sm text-surface-500 hover:text-primary-600 transition-colors"
+                  >Support Center</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Get Started Column -->
+          <div>
+            <h4
+              class="text-sm font-display font-semibold text-surface-700 mb-3"
+            >
+              Get Started
+            </h4>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="#"
+                  class="text-sm text-surface-500 hover:text-primary-600 transition-colors"
+                  >Home</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-sm text-surface-500 hover:text-primary-600 transition-colors"
+                  >About Us</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-sm text-surface-500 hover:text-primary-600 transition-colors"
+                  >Explore Modules</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Partnered Agency Column -->
+          <div>
+            <h4
+              class="text-sm font-display font-semibold text-surface-700 mb-3"
+            >
+              Partnered Agency
+            </h4>
+            <div class="text-sm text-surface-500 space-y-1">
+              <p>123 Insurance Plaza</p>
+              <p>Makati City, Philippines</p>
+              <p>Phone: (+63) 917 777 1213</p>
+              <p>Email: sylabuco_associates@yahoo.com</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Copyright and Social Links -->
+        <div
+          class="pt-6 border-t border-surface-200 flex flex-col sm:flex-row justify-between items-center gap-4"
+        >
+          <p class="text-xs text-surface-500">
+            LearnInsure. ©2024 by LearnInsure. All rights reserved.
+          </p>
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      // Combined JavaScript functionality
+      document.addEventListener("DOMContentLoaded", function () {
+        // ===== DROPDOWN FUNCTIONALITY =====
+        const dropdownButton = document.getElementById("profileDropdownButton");
+        const dropdownMenu = document.getElementById("dropdownMenu");
+        const dropdownArrow = document.getElementById("dropdownArrow");
+
+        let isOpen = false;
+
+        if (dropdownButton) {
+          dropdownButton.addEventListener("click", function (e) {
+            e.stopPropagation();
+            isOpen = !isOpen;
+
+            if (isOpen) {
+              dropdownMenu.classList.remove(
+                "opacity-0",
+                "invisible",
+                "scale-95"
+              );
+              dropdownMenu.classList.add("opacity-100", "visible", "scale-100");
+              dropdownArrow.classList.add("rotate-180");
+            } else {
+              dropdownMenu.classList.remove(
+                "opacity-100",
+                "visible",
+                "scale-100"
+              );
+              dropdownMenu.classList.add("opacity-0", "invisible", "scale-95");
+              dropdownArrow.classList.remove("rotate-180");
+            }
+          });
+
+          document.addEventListener("click", function (e) {
+            if (
+              !dropdownButton.contains(e.target) &&
+              !dropdownMenu.contains(e.target)
+            ) {
+              dropdownMenu.classList.remove(
+                "opacity-100",
+                "visible",
+                "scale-100"
+              );
+              dropdownMenu.classList.add("opacity-0", "invisible", "scale-95");
+              dropdownArrow.classList.remove("rotate-180");
+              isOpen = false;
+            }
+          });
+        }
+
+        // ===== BUTTON MICRO-INTERACTIONS =====
+        document.querySelectorAll("button").forEach((btn) => {
+          btn.addEventListener("mousedown", () => {
+            btn.classList.add("scale-95");
+          });
+          btn.addEventListener("mouseup", () => {
+            btn.classList.remove("scale-95");
+          });
+          btn.addEventListener("mouseleave", () => {
+            btn.classList.remove("scale-95");
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LearnInsure - Profile Settings</title>
+    <!-- Fonts & Stylesheets -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Inter+Tight:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Tailwind Config (Custom Colors, Fonts, Shadows) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                50: "#f0fdf4",
+                100: "#dcfce7",
+                500: "#4aab4c",
+                600: "#3d8b40",
+              },
+              surface: {
+                50: "#f8fafc",
+                100: "#f1f5f9",
+                200: "#e2e8f0",
+                800: "#1e293b",
+              },
+            },
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+              display: ["Inter Tight", "sans-serif"],
+            },
+            boxShadow: {
+              soft: "0 4px 12px -2px rgba(0, 0, 0, 0.08)",
+              float: "0 8px 24px -4px rgba(0, 0, 0, 0.12)",
+            },
+          },
+        },
+      };
+    </script>
+    <style type="text/tailwindcss">
+      @layer utilities {
+        /* Profile photo upload */
+        .profile-photo-upload:hover .profile-photo-overlay {
+          opacity: 1;
+        }
+        .profile-photo-overlay {
+          transition: all 0.3s ease;
+        }
+
+        /* Character counter */
+        .character-counter {
+          transition: all 0.2s ease;
+        }
+        .character-counter.warning {
+          color: theme("colors.yellow.600");
+        }
+        .character-counter.error {
+          color: theme("colors.red.600");
+        }
+
+        /* Social link input */
+        .social-input-container:focus-within {
+          border-color: theme("colors.primary.500");
+          box-shadow: 0 0 0 2px theme("colors.primary.100");
+        }
+      }
+    </style>
+  </head>
+
+  <body
+    class="font-sans bg-surface-50 text-surface-800 antialiased flex min-h-screen"
+  >
+    <!-- Sidebar Menu -->
+    <aside
+      class="w-64 bg-white border-r border-surface-200 py-6 px-4 flex-shrink-0 shadow-sm"
+    >
+      <div class="flex items-center gap-3 mb-8 px-3">
+        <span class="font-display font-bold text-lg tracking-tight"
+          >Instructor Portal</span
+        >
+      </div>
+      <nav class="space-y-1.5 px-2">
+        <!-- Dashboard Page -->
+        <a
+          href="#"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-surface-600 font-medium hover:bg-surface-100 transition-colors group"
+        >
+          <div
+            class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-100 group-hover:bg-surface-200 transition-colors"
+          >
+            <i class="fas fa-chart-line text-sm sm text-surface-500"></i>
+          </div>
+          <span>Dashboard</span>
+        </a>
+        <!-- Create Learning Module Page -->
+        <a
+          href="#"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-surface-600 font-medium hover:bg-surface-100 transition-colors group"
+        >
+          <div
+            class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-100 group-hover:bg-surface-200 transition-colors"
+          >
+            <i class="fas fa-book-open text-sm text-surface-500"></i>
+          </div>
+          <span>Create Learning Module</span>
+        </a>
+        <!-- Create Interactive Module Page -->
+        <a
+          href="#"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-surface-600 font-medium hover:bg-surface-100 transition-colors group"
+        >
+          <div
+            class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-100 group-hover:bg-surface-200 transition-colors"
+          >
+            <i class="fas fa-laptop-code text-sm text-surface-500"></i>
+          </div>
+          <span>Create Interactive Module</span>
+        </a>
+        <!-- Manage Modules Page -->
+        <a
+          href="#"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-surface-600 font-medium hover:bg-surface-100 transition-colors group"
+        >
+          <div
+            class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-100 group-hover:bg-surface-200 transition-colors"
+          >
+            <i class="fas fa-book text-sm text-surface-500"></i>
+          </div>
+          <span>Manage Modules</span>
+        </a>
+        <!-- Manage Learner Page -->
+        <a
+          href="#"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-surface-600 font-medium hover:bg-surface-100 transition-colors group"
+        >
+          <div
+            class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-100 group-hover:bg-surface-200 transition-colors"
+          >
+            <i class="fas fa-users text-sm text-surface-500"></i>
+          </div>
+          <span>Manage Learners</span>
+        </a>
+        <!-- Active Tab (Profile Settings Page) -->
+        <a
+          href="#"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary-50 text-primary-600 font-medium transition-colors"
+        >
+          <div
+            class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary-100"
+          >
+            <i class="fas fa-cog text-sm text-surface-500"></i>
+          </div>
+          <span>Profile Settings</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col min-h-screen overflow-hidden">
+      <!-- Header -->
+      <header
+        class="bg-white border-b border-surface-200 px-6 py-4 flex items-center justify-between"
+      >
+        <div>
+          <h1 class="font-display font-bold text-xl tracking-tight">
+            Profile Settings
+          </h1>
+          <p class="text-sm text-surface-500 mt-1">
+            Manage your account information
+          </p>
+        </div>
+
+        <!-- Profile Dropdown -->
+        <div class="relative z-30">
+          <button
+            class="flex items-center gap-2 group"
+            id="profileDropdownButton"
+          >
+            <div
+              class="w-9 h-9 rounded-full bg-surface-100 border-2 border-white shadow-sm overflow-hidden"
+            >
+              <img
+                src="https://randomuser.me/api/portraits/men/32.jpg"
+                class="w-full h-full object-cover"
+                id="profileImage"
+              />
+            </div>
+            <span class="font-medium text-surface-700">John D.</span>
+            <i
+              class="fas fa-chevron-down text-xs text-surface-400 group-hover:text-surface-600 transition-transform"
+              id="dropdownArrow"
+            ></i>
+          </button>
+
+          <div
+            class="absolute right-0 top-full mt-2 w-56 origin-top-right divide-y divide-surface-100 rounded-lg bg-white shadow-float ring-1 ring-surface-200 opacity-0 invisible transition-all duration-150 transform scale-95"
+            id="dropdownMenu"
+          >
+            <div class="px-4 py-3">
+              <p class="text-sm font-medium">John Doe</p>
+              <p class="text-xs text-surface-500 truncate">
+                instructor@learninsure.com
+              </p>
+            </div>
+            <div class="py-1.5">
+              <a
+                href="#"
+                class="flex items-center gap-2 px-4 py-2 text-sm text-surface-700 hover:bg-surface-50"
+              >
+                <i class="fas fa-cog w-4 text-center text-surface-400"></i>
+                Settings
+              </a>
+              <a
+                href="#"
+                class="flex items-center gap-2 px-4 py-2 text-sm text-surface-700 hover:bg-surface-50"
+              >
+                <i
+                  class="fas fa-sign-out-alt w-4 text-center text-surface-400"
+                ></i>
+                Sign out
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Form Content -->
+      <main class="flex-1 p-6 overflow-auto">
+        <div class="max-w-4xl mx-auto">
+          <!-- Profile Card -->
+          <div
+            class="bg-white rounded-xl border border-surface-200 shadow-soft overflow-hidden"
+          >
+            <!-- Form Header -->
+            <div class="px-6 py-4 border-b border-surface-200">
+              <h2 class="font-display font-bold text-lg">
+                Personal Information
+              </h2>
+              <p class="text-sm text-surface-500 mt-1">
+                Update your profile details
+              </p>
+            </div>
+
+            <!-- Form Body -->
+            <form class="p-6 space-y-6">
+              <!-- Profile Photo -->
+              <div class="flex flex-col items-center">
+                <div class="relative profile-photo-upload mb-4">
+                  <div
+                    class="w-24 h-24 rounded-full bg-surface-100 border-4 border-white shadow-md overflow-hidden"
+                  >
+                    <img
+                      src="https://randomuser.me/api/portraits/men/32.jpg"
+                      class="w-full h-full object-cover"
+                      id="profilePhotoPreview"
+                    />
+                  </div>
+                  <div
+                    class="profile-photo-overlay absolute inset-0 rounded-full bg-black/50 opacity-0 flex items-center justify-center"
+                  >
+                    <label for="profilePhoto" class="cursor-pointer text-white">
+                      <i class="fas fa-camera text-xl"></i>
+                    </label>
+                    <input
+                      type="file"
+                      id="profilePhoto"
+                      name="profilePhoto"
+                      accept="image/*"
+                      class="hidden"
+                    />
+                  </div>
+                </div>
+                <p class="text-sm text-surface-500">Click on photo to change</p>
+              </div>
+
+              <!-- Name Fields -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label
+                    for="firstName"
+                    class="block text-sm font-medium text-surface-700 mb-1"
+                    >First Name *</label
+                  >
+                  <input
+                    type="text"
+                    id="firstName"
+                    name="firstName"
+                    class="w-full px-4 py-2.5 text-sm rounded-lg border border-surface-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none transition-all"
+                    placeholder="John"
+                    value="John"
+                    required
+                  />
+                </div>
+                <div>
+                  <label
+                    for="lastName"
+                    class="block text-sm font-medium text-surface-700 mb-1"
+                    >Last Name *</label
+                  >
+                  <input
+                    type="text"
+                    id="lastName"
+                    name="lastName"
+                    class="w-full px-4 py-2.5 text-sm rounded-lg border border-surface-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none transition-all"
+                    placeholder="Doe"
+                    value="Doe"
+                    required
+                  />
+                </div>
+              </div>
+
+              <!-- Username -->
+              <div>
+                <label
+                  for="username"
+                  class="block text-sm font-medium text-surface-700 mb-1"
+                  >Username *</label
+                >
+                <div class="relative">
+                  <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    class="w-full px-4 py-2.5 text-sm rounded-lg border border-surface-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none transition-all"
+                    placeholder="johndoe"
+                    value="johndoe"
+                    required
+                  />
+                  <div
+                    class="absolute right-3 top-1/2 transform -translate-y-1/2 text-surface-400"
+                  >
+                    <i class="fas fa-at"></i>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Social Links -->
+              <div>
+                <label class="block text-sm font-medium text-surface-700 mb-2"
+                  >Social Profiles</label
+                >
+                <div class="space-y-3">
+                  <!-- LinkedIn -->
+                  <div
+                    class="social-input-container flex items-center border border-surface-200 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-primary-100 focus-within:border-primary-500 transition-all"
+                  >
+                    <div class="px-3 py-2 bg-surface-100 text-surface-500">
+                      <i class="fab fa-linkedin-in"></i>
+                    </div>
+                    <input
+                      type="url"
+                      class="flex-1 px-3 py-2 text-sm outline-none"
+                      placeholder="https://linkedin.com/in/yourprofile"
+                      value="https://linkedin.com/in/johndoe"
+                    />
+                  </div>
+
+                  <!-- Twitter -->
+                  <div
+                    class="social-input-container flex items-center border border-surface-200 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-primary-100 focus-within:border-primary-500 transition-all"
+                  >
+                    <div class="px-3 py-2 bg-surface-100 text-surface-500">
+                      <i class="fab fa-twitter"></i>
+                    </div>
+                    <input
+                      type="url"
+                      class="flex-1 px-3 py-2 text-sm outline-none"
+                      placeholder="https://twitter.com/yourhandle"
+                      value="https://twitter.com/johndoe"
+                    />
+                  </div>
+
+                  <!-- Add More Button -->
+                  <button
+                    type="button"
+                    class="flex items-center gap-2 text-sm text-primary-600 hover:text-primary-700 font-medium mt-2"
+                  >
+                    <i class="fas fa-plus"></i>
+                    Add another social profile
+                  </button>
+                </div>
+              </div>
+
+              <!-- Instructor Description -->
+              <div>
+                <label
+                  for="instructorDescription"
+                  class="block text-sm font-medium text-surface-700 mb-1"
+                  >Instructor Description *</label
+                >
+                <div class="relative">
+                  <textarea
+                    id="instructorDescription"
+                    name="instructorDescription"
+                    rows="5"
+                    maxlength="1000"
+                    class="w-full px-4 py-2.5 text-sm rounded-lg border border-surface-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none transition-all"
+                    placeholder="Tell learners about your expertise and teaching approach..."
+                    required
+                  >
+Insurance professional with 10+ years experience specializing in risk assessment and underwriting. Passionate about creating engaging learning experiences that bridge theory and practice.</textarea
+                  >
+                  <div
+                    class="absolute right-3 bottom-2.5 text-xs text-surface-400"
+                  >
+                    <span id="descriptionCounter">200</span>/1000 characters
+                  </div>
+                </div>
+                <p class="mt-1 text-xs text-surface-500">
+                  This appears on your instructor profile (200-300 words
+                  recommended)
+                </p>
+              </div>
+
+              <!-- Change Password Section -->
+              <div class="pt-4 border-t border-surface-200 mt-6">
+                <h3 class="font-display font-bold text-lg mb-4">
+                  Change Password
+                </h3>
+
+                <div class="space-y-4">
+                  <div>
+                    <label
+                      for="currentPassword"
+                      class="block text-sm font-medium text-surface-700 mb-1"
+                      >Current Password *</label
+                    >
+                    <div class="relative">
+                      <input
+                        type="password"
+                        id="currentPassword"
+                        name="currentPassword"
+                        class="w-full px-4 py-2.5 text-sm rounded-lg border border-surface-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none transition-all"
+                        placeholder="Enter your current password"
+                      />
+                      <button
+                        type="button"
+                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-surface-400 hover:text-surface-600"
+                        onclick="togglePasswordVisibility('currentPassword', this)"
+                      >
+                        <i class="fas fa-eye"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label
+                        for="newPassword"
+                        class="block text-sm font-medium text-surface-700 mb-1"
+                        >New Password *</label
+                      >
+                      <div class="relative">
+                        <input
+                          type="password"
+                          id="newPassword"
+                          name="newPassword"
+                          class="w-full px-4 py-2.5 text-sm rounded-lg border border-surface-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none transition-all"
+                          placeholder="Create new password"
+                        />
+                        <button
+                          type="button"
+                          class="absolute right-3 top-1/2 transform -translate-y-1/2 text-surface-400 hover:text-surface-600"
+                          onclick="togglePasswordVisibility('newPassword', this)"
+                        >
+                          <i class="fas fa-eye"></i>
+                        </button>
+                      </div>
+                      <div class="mt-2">
+                        <div class="flex items-center gap-2 mb-1">
+                          <div
+                            id="strengthIndicator1"
+                            class="w-1/4 h-1 rounded-full bg-surface-200"
+                          ></div>
+                          <div
+                            id="strengthIndicator2"
+                            class="w-1/4 h-1 rounded-full bg-surface-200"
+                          ></div>
+                          <div
+                            id="strengthIndicator3"
+                            class="w-1/4 h-1 rounded-full bg-surface-200"
+                          ></div>
+                          <div
+                            id="strengthIndicator4"
+                            class="w-1/4 h-1 rounded-full bg-surface-200"
+                          ></div>
+                          <span
+                            id="strengthText"
+                            class="text-xs text-surface-500 ml-2"
+                            >Weak</span
+                          >
+                        </div>
+                        <p class="text-xs text-surface-500">
+                          Use 8+ characters with a mix of letters, numbers &
+                          symbols
+                        </p>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label
+                        for="confirmPassword"
+                        class="block text-sm font-medium text-surface-700 mb-1"
+                        >Confirm Password *</label
+                      >
+                      <div class="relative">
+                        <input
+                          type="password"
+                          id="confirmPassword"
+                          name="confirmPassword"
+                          class="w-full px-4 py-2.5 text-sm rounded-lg border border-surface-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none transition-all"
+                          placeholder="Confirm new password"
+                        />
+                        <button
+                          type="button"
+                          class="absolute right-3 top-1/2 transform -translate-y-1/2 text-surface-400 hover:text-surface-600"
+                          onclick="togglePasswordVisibility('confirmPassword', this)"
+                        >
+                          <i class="fas fa-eye"></i>
+                        </button>
+                      </div>
+                      <p
+                        id="passwordMatch"
+                        class="mt-1 text-xs text-surface-500 hidden"
+                      >
+                        <i class="fas fa-check-circle text-green-500"></i>
+                        Passwords match
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Form Actions -->
+              <div
+                class="pt-4 flex flex-col-reverse sm:flex-row justify-end gap-3"
+              >
+                <button
+                  type="button"
+                  class="px-5 py-2.5 rounded-lg border border-surface-200 bg-white text-surface-700 font-medium hover:bg-surface-50 transition-colors"
+                >
+                  Discard Changes
+                </button>
+                <button
+                  type="submit"
+                  class="px-5 py-2.5 rounded-lg bg-primary-500 text-white font-medium hover:bg-primary-600 transition-colors flex items-center justify-center gap-2"
+                >
+                  <i class="fas fa-save"></i>
+                  Save Profile
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </main>
+
+      <!-- Page Footer -->
+      <footer class="bg-white px-6 py-8 border-t border-surface-200">
+        <!-- Footer Columns -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-6">
+          <!-- Company Information Column -->
+          <div>
+            <div class="flex items-center gap-3 mb-4">
+              <img
+                src="../resources/image/learninsurelogo-footer.png"
+                alt="LearnInsure Logo"
+                class="w-10 h-10 object-contain"
+              />
+              <span class="font-display font-bold">LearnInsure</span>
+            </div>
+            <p class="text-sm text-surface-500 leading-relaxed">
+              LearnInsure is an eLearning platform designed for insurance
+              professionals to enhance their knowledge and skills through
+              interactive courses.
+            </p>
+          </div>
+
+          <!-- Get Help Column -->
+          <div>
+            <h4
+              class="text-sm font-display font-semibold text-surface-700 mb-3"
+            >
+              Get Help
+            </h4>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="#"
+                  class="text-sm text-surface-500 hover:text-primary-600 transition-colors"
+                  >Contact Us</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-sm text-surface-500 hover:text-primary-600 transition-colors"
+                  >FAQ</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-sm text-surface-500 hover:text-primary-600 transition-colors"
+                  >Support Center</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Get Started Column -->
+          <div>
+            <h4
+              class="text-sm font-display font-semibold text-surface-700 mb-3"
+            >
+              Get Started
+            </h4>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="#"
+                  class="text-sm text-surface-500 hover:text-primary-600 transition-colors"
+                  >Home</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-sm text-surface-500 hover:text-primary-600 transition-colors"
+                  >About Us</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-sm text-surface-500 hover:text-primary-600 transition-colors"
+                  >Explore Modules</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Partnered Agency Column -->
+          <div>
+            <h4
+              class="text-sm font-display font-semibold text-surface-700 mb-3"
+            >
+              Partnered Agency
+            </h4>
+            <div class="text-sm text-surface-500 space-y-1">
+              <p>123 Insurance Plaza</p>
+              <p>Makati City, Philippines</p>
+              <p>Phone: (+63) 917 777 1213</p>
+              <p>Email: sylabuco_associates@yahoo.com</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Copyright and Social Links -->
+        <div
+          class="pt-6 border-t border-surface-200 flex flex-col sm:flex-row justify-between items-center gap-4"
+        >
+          <p class="text-xs text-surface-500">
+            LearnInsure. ©2024 by LearnInsure. All rights reserved.
+          </p>
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Character counter for description
+        const descInput = document.getElementById("instructorDescription");
+        const descCounter = document.getElementById("descriptionCounter");
+
+        descInput.addEventListener("input", () => {
+          descCounter.textContent = descInput.value.length;
+        });
+
+        // Profile photo upload preview
+        const profilePhotoInput = document.getElementById("profilePhoto");
+        const profilePhotoPreview = document.getElementById(
+          "profilePhotoPreview"
+        );
+        const profileImage = document.getElementById("profileImage");
+
+        profilePhotoInput.addEventListener("change", function (e) {
+          if (e.target.files.length > 0) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function (event) {
+              profilePhotoPreview.src = event.target.result;
+              profileImage.src = event.target.result;
+            };
+
+            reader.readAsDataURL(file);
+          }
+        });
+
+        // Password strength indicator
+        const newPasswordInput = document.getElementById("newPassword");
+        const confirmPasswordInput = document.getElementById("confirmPassword");
+
+        newPasswordInput.addEventListener("input", function () {
+          checkPasswordStrength(this.value);
+        });
+
+        confirmPasswordInput.addEventListener("input", function () {
+          const matchIndicator = document.getElementById("passwordMatch");
+          if (this.value && this.value === newPasswordInput.value) {
+            matchIndicator.classList.remove("hidden");
+          } else {
+            matchIndicator.classList.add("hidden");
+          }
+        });
+
+        // Profile dropdown functionality
+        const dropdownButton = document.getElementById("profileDropdownButton");
+        const dropdownMenu = document.getElementById("dropdownMenu");
+        const dropdownArrow = document.getElementById("dropdownArrow");
+
+        let isOpen = false;
+
+        if (dropdownButton) {
+          dropdownButton.addEventListener("click", function (e) {
+            e.stopPropagation();
+            isOpen = !isOpen;
+
+            if (isOpen) {
+              dropdownMenu.classList.remove(
+                "opacity-0",
+                "invisible",
+                "scale-95"
+              );
+              dropdownMenu.classList.add("opacity-100", "visible", "scale-100");
+              dropdownArrow.classList.add("rotate-180");
+            } else {
+              dropdownMenu.classList.remove(
+                "opacity-100",
+                "visible",
+                "scale-100"
+              );
+              dropdownMenu.classList.add("opacity-0", "invisible", "scale-95");
+              dropdownArrow.classList.remove("rotate-180");
+            }
+          });
+
+          document.addEventListener("click", function (e) {
+            if (
+              !dropdownButton.contains(e.target) &&
+              !dropdownMenu.contains(e.target)
+            ) {
+              dropdownMenu.classList.remove(
+                "opacity-100",
+                "visible",
+                "scale-100"
+              );
+              dropdownMenu.classList.add("opacity-0", "invisible", "scale-95");
+              dropdownArrow.classList.remove("rotate-180");
+              isOpen = false;
+            }
+          });
+        }
+      });
+
+      function togglePasswordVisibility(inputId, button) {
+        const input = document.getElementById(inputId);
+        if (input.type === "password") {
+          input.type = "text";
+          button.innerHTML = '<i class="fas fa-eye-slash"></i>';
+        } else {
+          input.type = "password";
+          button.innerHTML = '<i class="fas fa-eye"></i>';
+        }
+      }
+    </script>
+  </body>
+</html>
