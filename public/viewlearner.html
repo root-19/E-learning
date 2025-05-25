@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LearnInsure - Learner Details</title>
+  
+  <!-- Fonts & Stylesheets -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Inter+Tight:wght@100..900&display=swap" rel="stylesheet" />
+  
+  <!-- Tailwind Config (Custom Colors, Fonts, Shadows) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Custom color palette and fonts -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: "#f0fdf4",
+              100: "#dcfce7",
+              500: "#4aab4c",
+              600: "#3d8b40",
+            },
+            surface: {
+              50: "#f8fafc",
+              100: "#f1f5f9",
+              200: "#e2e8f0",
+              800: "#1e293b",
+            },
+            status: {
+              active: "#4AAB4C",
+              inactive: "#DC3545",
+              draft: "#F4C542",
+              restricted: "#FF9800",
+            },
+          },
+          fontFamily: {
+            sans: ["Inter", "sans-serif"],
+            display: ["Inter Tight", "sans-serif"],
+          },
+          boxShadow: {
+            soft: "0 4px 12px -2px rgba(0, 0, 0, 0.08)",
+            float: "0 8px 24px -4px rgba(0, 0, 0, 0.12)",
+          },
+        },
+      },
+    };
+  </script>
+  
+  <!-- Custom styles -->
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .progress-bar {
+        transition: width 0.6s ease;
+      }
+      
+      .course-card:hover {
+        transform: translateY(-2px);
+        box-shadow: theme('boxShadow.float');
+      }
+      
+      .tab-active {
+        border-bottom: 2px solid theme('colors.primary.500');
+        color: theme('colors.primary.600');
+        font-weight: 500;
+      }
+
+      .action-btn {
+        transition: all 0.2s ease;
+      }
+      .action-btn:hover {
+        transform: translateY(-1px);
+      }
+
+      .filter-active {
+        background-color: theme('colors.primary.500');
+        color: white;
+      }
+    }
+  </style>
+</head>
+
+<body class="font-sans bg-surface-50 text-surface-800 antialiased flex min-h-screen">
+   <!-- Sidebar Menu -->
+    <aside
+      class="w-64 bg-white border-r border-surface-200 py-6 px-4 flex-shrink-0 shadow-sm"
+    >
+      <div class="flex items-center gap-3 mb-8 px-3">
+        <span class="font-display font-bold text-lg tracking-tight"
+          >Instructor Portal</span
+        >
+      </div>
+      <nav class="space-y-1.5 px-2">
+        <!-- Dashboard Page -->
+        <a
+          href="#"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-surface-600 font-medium hover:bg-surface-100 transition-colors group"
+        >
+          <div
+            class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-100 group-hover:bg-surface-200 transition-colors"
+          >
+            <i class="fas fa-chart-line text-sm sm text-surface-500"></i>
+          </div>
+          <span>Dashboard</span>
+        </a>
+        <!-- Create Learning Module Page -->
+        <a
+          href="#"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-surface-600 font-medium hover:bg-surface-100 transition-colors group"
+        >
+          <div
+            class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-100 group-hover:bg-surface-200 transition-colors"
+          >
+            <i class="fas fa-book-open text-sm text-surface-500"></i>
+          </div>
+          <span>Create Learning Module</span>
+        </a>
+        <!-- Create Interactive Module Page -->
+        <a
+          href="#"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-surface-600 font-medium hover:bg-surface-100 transition-colors group"
+        >
+          <div
+            class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-100 group-hover:bg-surface-200 transition-colors"
+          >
+            <i class="fas fa-laptop-code text-sm text-surface-500"></i>
+          </div>
+          <span>Create Interactive Module</span>
+        </a>
+        <!-- Manage Modules Page -->
+        <a
+          href="#"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-surface-600 font-medium hover:bg-surface-100 transition-colors group"
+        >
+          <div
+            class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-100 group-hover:bg-surface-200 transition-colors"
+          >
+            <i class="fas fa-book text-sm text-surface-500"></i>
+          </div>
+          <span>Manage Modules</span>
+        </a>
+        <!-- Active Tab (Manage Learner Page) -->
+        <a
+          href="#"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary-50 text-primary-600 font-medium transition-colors"
+        >
+          <div
+            class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary-100"
+          >
+            <i class="fas fa-users text-sm text-surface-500"></i>
+          </div>
+          <span>Manage Learners</span>
+        </a>
+        <!-- Profile Settings Page -->
+        <a
+          href="#"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-surface-600 font-medium hover:bg-surface-100 transition-colors group"
+        >
+          <div
+            class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-100 group-hover:bg-surface-200 transition-colors"
+          >
+            <i class="fas fa-cog text-sm text-surface-500"></i>
+          </div>
+          <span>Profile Settings</span>
+        </a>
+      </nav>
+    </aside>
+
+  <div class="flex-1 flex flex-col min-h-screen overflow-hidden">
+  <!-- Page Header -->
+  <header class="bg-white border-b border-surface-200 px-6 py-4 flex items-center justify-between">
+    <div>
+      <h1 class="font-display font-bold text-xl tracking-tight">Learner Details</h1>
+      <p class="text-sm text-surface-500 mt-1">View and manage learner progress</p>
+    </div>
+
+    <!-- User Profile Dropdown -->
+    <div class="relative z-30">
+      <button class="flex items-center gap-2 group" id="profileDropdownButton">
+        <div class="w-9 h-9 rounded-full bg-surface-100 border-2 border-white shadow-sm overflow-hidden">
+          <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-full h-full object-cover" />
+        </div>
+        <span class="font-medium text-surface-700">John D.</span>
+        <i class="fas fa-chevron-down text-xs text-surface-400 group-hover:text-surface-600 transition-transform" id="dropdownArrow"></i>
+      </button>
+
+      <!-- Dropdown Menu -->
+      <div class="absolute right-0 top-full mt-2 w-56 origin-top-right divide-y divide-surface-100 rounded-lg bg-white shadow-float ring-1 ring-surface-200 opacity-0 invisible transition-all duration-150 transform scale-95" id="dropdownMenu">
+        <div class="px-4 py-3">
+          <p class="text-sm font-medium">John Doe</p>
+          <p class="text-xs text-surface-500 truncate">instructor@learninsure.com</p>
+        </div>
+        <div class="py-1.5">
+          <a href="#" class="flex items-center gap-2 px-4 py-2 text-sm text-surface-700 hover:bg-surface-50">
+            <i class="fas fa-cog w-4 text-center text-surface-400"></i>
+            Settings
+          </a>
+          <a href="#" class="flex items-center gap-2 px-4 py-2 text-sm text-surface-700 hover:bg-surface-50">
+            <i class="fas fa-sign-out-alt w-4 text-center text-surface-400"></i>
+            Sign out
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 p-6 overflow-auto">
+  <!-- Learner Profile Card -->
+  <div class="bg-white rounded-xl border border-surface-200 shadow-soft overflow-hidden mb-6">
+    <div class="p-6 flex flex-col md:flex-row items-start md:items-center gap-6">
+      <div class="flex-shrink-0">
+        <div class="w-20 h-20 rounded-full bg-surface-100 border-4 border-white shadow-sm overflow-hidden">
+          <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-full h-full object-cover" />
+        </div>
+      </div>
+      
+      <div class="flex-1 min-w-0">
+        <h2 class="font-display font-bold text-2xl tracking-tight truncate">Sarah Johnson</h2>
+        <p class="text-surface-500">sarah.j@example.com</p>
+        
+        <div class="flex flex-wrap gap-4 mt-3">
+          <div>
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-status-active/10 text-status-active">
+              Active
+            </span>
+          </div>
+          <div class="text-sm text-surface-600">
+            <i class="fas fa-calendar-alt mr-1 text-surface-400"></i>
+            Joined: May 15, 2023
+          </div>
+          <div class="text-sm text-surface-600">
+            <i class="fas fa-clock mr-1 text-surface-400"></i>
+            Last active: 2 hours ago
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+    <!-- Course Navigation Tabs -->
+  <div class="border-b border-surface-200 mb-6">
+    <nav class="-mb-px flex space-x-8">
+      <a href="#" class="tab-active whitespace-nowrap py-4 px-1 text-sm font-medium">
+        Enrolled Courses
+      </a>
+      <a href="#" class="whitespace-nowrap py-4 px-1 text-sm font-medium text-surface-500 hover:text-surface-700 hover:border-surface-300">
+        Activity Log
+      </a>
+      <!-- Other tabs -->
+    </nav>
+  </div>
+
+  <!-- Course Filters -->
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+    <div class="flex flex-wrap gap-2">
+      <button class="filter-btn px-3 py-1.5 rounded-full border border-surface-200 text-sm font-medium filter-active" data-filter="all">
+        All Courses
+      </button>
+      <button class="filter-btn px-3 py-1.5 rounded-full border border-surface-200 text-sm font-medium" data-filter="alphabetical">
+        <i class="fas fa-sort-alpha-down mr-1"></i> Alphabetical
+      </button>
+      <button class="filter-btn px-3 py-1.5 rounded-full border border-surface-200 text-sm font-medium" data-filter="in-progress">
+        <i class="fas fa-spinner mr-1"></i> In Progress
+      </button>
+      <button class="filter-btn px-3 py-1.5 rounded-full border border-surface-200 text-sm font-medium" data-filter="completed">
+        <i class="fas fa-check-circle mr-1"></i> Completed
+      </button>
+      <button class="filter-btn px-3 py-1.5 rounded-full border border-surface-200 text-sm font-medium" data-filter="restricted">
+        <i class="fas fa-lock mr-1"></i> Restricted
+      </button>
+    </div>
+    
+    <div class="relative w-full sm:w-64">
+      <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-surface-400"></i>
+      <input type="text" placeholder="Search courses..." class="w-full pl-10 pr-4 py-1.5 text-sm rounded-full border border-surface-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none transition-all">
+    </div>
+  </div>
+
+    <!-- Enrolled Courses List -->
+  <div class="mb-8">
+    <h3 class="font-display font-bold text-lg mb-4">Enrolled Courses (5)</h3>
+    
+    <div class="grid grid-cols-1 gap-4">
+      <!-- Example Course Card (In Progress) -->
+      <div class="course-card bg-white rounded-xl border border-surface-200 shadow-soft p-5 transition-all" data-status="in-progress" data-progress="67">
+        <div class="flex flex-col md:flex-row md:items-center gap-4">
+          <!-- Course Image -->
+          <div class="flex-shrink-0 w-24 h-24 rounded-lg bg-surface-100 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" class="w-full h-full object-cover" />
+          </div>
+          
+          <!-- Course Details -->
+          <div class="flex-1 min-w-0">
+            <h4 class="font-medium text-lg truncate">Insurance Fundamentals</h4>
+            <p class="text-sm text-surface-500 mb-2">Learning Module • 12 Lessons</p>
+            
+            <div class="flex items-center gap-4 mb-3">
+              <div class="flex items-center gap-1 text-sm text-surface-600">
+                <i class="fas fa-check-circle text-green-500"></i>
+                <span>8/12 lessons completed</span>
+              </div>
+              <div class="flex items-center gap-1 text-sm text-surface-600">
+                <i class="fas fa-clock text-yellow-500"></i>
+                <span>Last activity: 1 day ago</span>
+              </div>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div class="w-full bg-surface-200 rounded-full h-2.5">
+              <div class="progress-bar bg-primary-500 h-2.5 rounded-full" style="width: 67%"></div>
+            </div>
+            <div class="flex justify-between items-center mt-1">
+              <span class="text-xs font-medium text-surface-600">67% complete</span>
+              <span class="text-xs text-surface-500">Started: Jun 5, 2023</span>
+            </div>
+          </div>
+          
+          <!-- Action Buttons -->
+          <div class="flex-shrink-0 flex flex-col sm:flex-row gap-2">
+            <button class="action-btn px-3 py-1.5 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 text-sm font-medium">
+              <i class="fas fa-eye mr-1"></i> Details
+            </button>
+            <button class="action-btn px-3 py-1.5 rounded-lg bg-yellow-50 text-yellow-600 hover:bg-yellow-100 text-sm font-medium">
+              <i class="fas fa-lock mr-1"></i> Restrict
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Additional course cards would go here -->
+ <!-- Course 2 (Completed) -->
+  <div class="course-card bg-white rounded-xl border border-surface-200 shadow-soft p-5 transition-all" 
+       data-status="completed" data-progress="100">
+    <div class="flex flex-col md:flex-row md:items-center gap-4">
+      <div class="flex-shrink-0 w-24 h-24 rounded-lg bg-surface-100 overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" class="w-full h-full object-cover" />
+      </div>
+      <div class="flex-1 min-w-0">
+        <h4 class="font-medium text-lg truncate">Advanced Risk Management</h4>
+        <p class="text-sm text-surface-500 mb-2">Learning Module • 10 Lessons</p>
+        <div class="flex items-center gap-4 mb-3">
+          <div class="flex items-center gap-1 text-sm text-surface-600">
+            <i class="fas fa-check-circle text-green-500"></i>
+            <span>10/10 lessons completed</span>
+          </div>
+          <div class="flex items-center gap-1 text-sm text-surface-600">
+            <i class="fas fa-award text-purple-500"></i>
+            <span>Certificate earned</span>
+          </div>
+        </div>
+        <div class="w-full bg-surface-200 rounded-full h-2.5">
+          <div class="progress-bar bg-primary-500 h-2.5 rounded-full" style="width: 100%"></div>
+        </div>
+        <div class="flex justify-between items-center mt-1">
+          <span class="text-xs font-medium text-surface-600">100% complete</span>
+          <span class="text-xs text-surface-500">Completed: May 20, 2023</span>
+        </div>
+      </div>
+      <div class="flex-shrink-0 flex flex-col sm:flex-row gap-2">
+        <button class="action-btn px-3 py-1.5 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 text-sm font-medium">
+          <i class="fas fa-eye mr-1"></i> Details
+        </button>
+        <button class="action-btn px-3 py-1.5 rounded-lg bg-gray-50 text-gray-600 hover:bg-gray-100 text-sm font-medium">
+          <i class="fas fa-certificate mr-1"></i> View Certificate
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Course 3 (Restricted) -->
+  <div class="course-card bg-white rounded-xl border border-surface-200 shadow-soft p-5 transition-all" 
+       data-status="restricted" data-progress="30">
+    <div class="flex flex-col md:flex-row md:items-center gap-4">
+      <div class="flex-shrink-0 w-24 h-24 rounded-lg bg-surface-100 overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" class="w-full h-full object-cover" />
+      </div>
+      <div class="flex-1 min-w-0">
+        <h4 class="font-medium text-lg truncate">Claims Processing</h4>
+        <p class="text-sm text-surface-500 mb-2">Learning Module • 8 Lessons</p>
+        <div class="flex items-center gap-4 mb-3">
+          <div class="flex items-center gap-1 text-sm text-status-restricted">
+            <i class="fas fa-lock"></i>
+            <span>Access restricted</span>
+          </div>
+          <div class="flex items-center gap-1 text-sm text-surface-600">
+            <i class="fas fa-check-circle text-green-500"></i>
+            <span>3/8 lessons completed</span>
+          </div>
+        </div>
+        <div class="w-full bg-surface-200 rounded-full h-2.5">
+          <div class="progress-bar bg-status-restricted h-2.5 rounded-full" style="width: 30%"></div>
+        </div>
+        <div class="flex justify-between items-center mt-1">
+          <span class="text-xs font-medium text-status-restricted">30% complete (Locked)</span>
+          <span class="text-xs text-surface-500">Last accessed: Apr 10, 2023</span>
+        </div>
+      </div>
+      <div class="flex-shrink-0 flex flex-col sm:flex-row gap-2">
+        <button class="action-btn px-3 py-1.5 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 text-sm font-medium">
+          <i class="fas fa-eye mr-1"></i> Details
+        </button>
+        <button class="action-btn px-3 py-1.5 rounded-lg bg-green-50 text-green-600 hover:bg-green-100 text-sm font-medium">
+          <i class="fas fa-unlock mr-1"></i> Unlock
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Pagination -->
+<div class="flex justify-between items-center mt-6">
+  <div class="text-sm text-surface-500">
+    Showing <span class="font-medium">1-3</span> of <span class="font-medium">5</span> courses
+  </div>
+  <div class="flex gap-2">
+    <button class="pagination-btn px-3 py-1.5 rounded-lg border border-surface-200 bg-white text-surface-700 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    <button class="pagination-btn px-3 py-1.5 rounded-lg border border-surface-200 bg-primary-500 text-white font-medium">
+      1
+    </button>
+    <button class="pagination-btn px-3 py-1.5 rounded-lg border border-surface-200 bg-white text-surface-700 hover:bg-surface-50">
+      2
+    </button>
+    <button class="pagination-btn px-3 py-1.5 rounded-lg border border-surface-200 bg-white text-surface-700 hover:bg-surface-50">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+  </div>
+</div>
+</main>
+
+      <!-- Page Footer -->
+      <footer class="bg-white px-6 py-8 border-t border-surface-200">
+        <!-- Footer Columns -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-6">
+          <!-- Company Information Column -->
+          <div>
+            <div class="flex items-center gap-3 mb-4">
+              <img
+                src="../resources/image/learninsurelogo-footer.png"
+                alt="LearnInsure Logo"
+                class="w-10 h-10 object-contain"
+              />
+              <span class="font-display font-bold">LearnInsure</span>
+            </div>
+            <p class="text-sm text-surface-500 leading-relaxed">
+              LearnInsure is an eLearning platform designed for insurance
+              professionals to enhance their knowledge and skills through
+              interactive courses.
+            </p>
+          </div>
+
+          <!-- Get Help Column -->
+          <div>
+            <h4
+              class="text-sm font-display font-semibold text-surface-700 mb-3"
+            >
+              Get Help
+            </h4>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="#"
+                  class="text-sm text-surface-500 hover:text-primary-600 transition-colors"
+                  >Contact Us</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-sm text-surface-500 hover:text-primary-600 transition-colors"
+                  >FAQ</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-sm text-surface-500 hover:text-primary-600 transition-colors"
+                  >Support Center</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Get Started Column -->
+          <div>
+            <h4
+              class="text-sm font-display font-semibold text-surface-700 mb-3"
+            >
+              Get Started
+            </h4>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="#"
+                  class="text-sm text-surface-500 hover:text-primary-600 transition-colors"
+                  >Home</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-sm text-surface-500 hover:text-primary-600 transition-colors"
+                  >About Us</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-sm text-surface-500 hover:text-primary-600 transition-colors"
+                  >Explore Modules</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Partnered Agency Column -->
+          <div>
+            <h4
+              class="text-sm font-display font-semibold text-surface-700 mb-3"
+            >
+              Partnered Agency
+            </h4>
+            <div class="text-sm text-surface-500 space-y-1">
+              <p>123 Insurance Plaza</p>
+              <p>Makati City, Philippines</p>
+              <p>Phone: (+63) 917 777 1213</p>
+              <p>Email: sylabuco_associates@yahoo.com</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Copyright and Social Links -->
+        <div
+          class="pt-6 border-t border-surface-200 flex flex-col sm:flex-row justify-between items-center gap-4"
+        >
+          <p class="text-xs text-surface-500">
+            LearnInsure. ©2024 by LearnInsure. All rights reserved.
+          </p>
+        </div>
+      </footer>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // ===== 1. Profile Dropdown =====
+    const dropdownButton = document.getElementById("profileDropdownButton");
+    if (dropdownButton) {
+      dropdownButton.addEventListener("click", function(e) {
+        e.stopPropagation();
+        const menu = document.getElementById("dropdownMenu");
+        const arrow = document.getElementById("dropdownArrow");
+        
+        menu.classList.toggle("opacity-0");
+        menu.classList.toggle("invisible");
+        menu.classList.toggle("scale-95");
+        menu.classList.toggle("opacity-100");
+        menu.classList.toggle("visible");
+        menu.classList.toggle("scale-100");
+        arrow.classList.toggle("rotate-180");
+      });
+
+      // Close dropdown when clicking outside
+      document.addEventListener("click", function(e) {
+        const menu = document.getElementById("dropdownMenu");
+        if (!dropdownButton.contains(e.target)) {
+          menu.classList.add("opacity-0", "invisible", "scale-95");
+          menu.classList.remove("opacity-100", "visible", "scale-100");
+          document.getElementById("dropdownArrow").classList.remove("rotate-180");
+        }
+      });
+    }
+
+    // ===== 2. Course Filtering =====
+    const courseCards = document.querySelectorAll('.course-card');
+    const filterButtons = document.querySelectorAll('.filter-btn');
+
+    // Initialize filters
+    setupCourseFilters();
+
+    function setupCourseFilters() {
+      filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          // Update active button styles
+          filterButtons.forEach(btn => {
+            btn.classList.remove('filter-active', 'bg-primary-500', 'text-white');
+          });
+          this.classList.add('filter-active', 'bg-primary-500', 'text-white');
+          
+          const filterType = this.dataset.filter;
+          
+          // Filter courses
+          courseCards.forEach(card => {
+            const status = card.dataset.status;
+            const progress = parseInt(card.dataset.progress);
+            let shouldShow = false;
+            
+            if (filterType === 'all') shouldShow = true;
+            else if (filterType === 'completed') shouldShow = status === 'completed';
+            else if (filterType === 'in-progress') shouldShow = status === 'in-progress' && progress < 100;
+            else if (filterType === 'restricted') shouldShow = status === 'restricted';
+            
+            card.style.display = shouldShow ? 'block' : 'none';
+          });
+        });
+      });
+    }
+  });
+</script>
+</body>
+</html>
+

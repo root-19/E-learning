@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <!-- Basic page setup -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LearnInsure - Create Interactive Module</title>
+  
+  <!-- Load fonts and icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Inter+Tight:wght@100..900&display=swap" rel="stylesheet" />
+  
+  <!-- Load Tailwind CSS (design system) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script>
+  // Custom design settings for the whole app
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          // Primary green colors (buttons, active states)
+          primary: {
+            50: "#f0fdf4",  // Very light green
+            100: "#dcfce7", // Light green
+            500: "#4aab4c", // Main green
+            600: "#3d8b40", // Dark green
+          },
+          // Gray colors (backgrounds, text)
+          surface: {
+            50: "#f8fafc",  // Lightest gray
+            100: "#f1f5f9", // Light gray
+            200: "#e2e8f0", // Medium light gray
+            800: "#1e293b", // Dark gray
+          },
+          // Status colors (red, yellow, green)
+          status: {
+            active: "#4AAB4C",  // Green
+            inactive: "#DC3545", // Red
+            draft: "#F4C542",   // Yellow
+          },
+        },
+        // Font families
+        fontFamily: {
+          sans: ["Inter", "sans-serif"],        // Main text
+          display: ["Inter Tight", "sans-serif"], // Headings
+        },
+        // Shadow effects
+        boxShadow: {
+          soft: "0 4px 12px -2px rgba(0, 0, 0, 0.08)",  // Subtle shadow
+          float: "0 8px 24px -4px rgba(0, 0, 0, 0.12)", // Deeper shadow
+        },
+      },
+    },
+  };
+</script>
+
+<style type="text/tailwindcss">
+  /* Special effects that aren't built into Tailwind */
+  @layer utilities {
+    /* File upload area changes color when hovered or focused */
+    .file-upload-container:hover .file-upload-label {
+      border-color: theme("colors.primary.500"); /* Green border */
+    }
+    .file-upload-input:focus + .file-upload-label {
+      border-color: theme("colors.primary.500");
+      box-shadow: 0 0 0 2px theme("colors.primary.100"); /* Light green glow */
+    }
+    
+    /* Dragging files over upload area */
+    .file-upload-label.dragging {
+      border-color: theme("colors.primary.500");
+      background-color: theme("colors.primary.50"); /* Very light green */
+    }
+
+    /* Image preview lifts slightly on hover */
+    .image-preview-container {
+      transition: all 0.3s ease;
+    }
+    .image-preview-container:hover {
+      transform: translateY(-2px); /* Moves up slightly */
+    }
+
+    /* Sidebar menu items - active state */
+    .sidebar-item.active {
+      background-color: theme("colors.primary.50"); /* Light green */
+      color: theme("colors.primary.600"); /* Dark green text */
+    }
+    .sidebar-item.active .icon-container {
+      background-color: theme("colors.primary.100"); /* Medium green */
+    }
+    .sidebar-item.active .icon-container i {
+      color: theme("colors.primary.600"); /* Dark green icon */
+    }
+  }
+</style>
+
+<body class="font-sans bg-surface-50 text-surface-800 antialiased flex min-h-screen">
+  <!-- Left sidebar navigation -->
+<!-- Left Sidebar Navigation -->
+<aside class="w-64 bg-white border-r border-surface-200 py-6 px-4 flex-shrink-0 shadow-sm">
+  <!-- Logo/Title Area -->
+  <div class="flex items-center gap-3 mb-8 px-3">
+    <span class="font-display font-bold text-lg tracking-tight">Instructor Portal</span>
+  </div>
+
+  <!-- Navigation Menu -->
+  <nav class="space-y-1.5 px-2">
+    <!-- Dashboard Link -->
+    <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-surface-600 font-medium hover:bg-surface-100 transition-colors group sidebar-item">
+      <div class="icon-container w-8 h-8 flex items-center justify-center rounded-lg bg-surface-100 group-hover:bg-surface-200 transition-colors">
+        <i class="fas fa-chart-line text-sm text-surface-500"></i>
+      </div>
+      <span>Dashboard</span>
+    </a>
+
+    <!-- Create Learning Module Link -->
+    <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-surface-600 font-medium hover:bg-surface-100 transition-colors group sidebar-item">
+      <div class="icon-container w-8 h-8 flex items-center justify-center rounded-lg bg-surface-100 group-hover:bg-surface-200 transition-colors">
+        <i class="fas fa-book-open text-sm text-surface-500"></i>
+      </div>
+      <span>Create Learning Module</span>
+    </a>
+
+    <!-- Active Link - Create Interactive Module -->
+    <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary-50 text-primary-600 font-medium transition-colors group sidebar-item active">
+      <div class="icon-container w-8 h-8 flex items-center justify-center rounded-lg bg-primary-100">
+        <i class="fas fa-laptop-code text-sm text-primary-600"></i>
+      </div>
+      <span>Create Interactive Module</span>
+    </a>
+
+    <!-- Manage Modules Link -->
+    <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-surface-600 font-medium hover:bg-surface-100 transition-colors group sidebar-item">
+      <div class="icon-container w-8 h-8 flex items-center justify-center rounded-lg bg-surface-100 group-hover:bg-surface-200 transition-colors">
+        <i class="fas fa-book text-sm text-surface-500"></i>
+      </div>
+      <span>Manage Modules</span>
+    </a>
+
+    <!-- Manage Learners Link -->
+    <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-surface-600 font-medium hover:bg-surface-100 transition-colors group sidebar-item">
+      <div class="icon-container w-8 h-8 flex items-center justify-center rounded-lg bg-surface-100 group-hover:bg-surface-200 transition-colors">
+        <i class="fas fa-users text-sm text-surface-500"></i>
+      </div>
+      <span>Manage Learners</span>
+    </a>
+
+    <!-- Profile Settings Link -->
+    <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-surface-600 font-medium hover:bg-surface-100 transition-colors group sidebar-item">
+      <div class="icon-container w-8 h-8 flex items-center justify-center rounded-lg bg-surface-100 group-hover:bg-surface-200 transition-colors">
+        <i class="fas fa-cog text-sm text-surface-500"></i>
+      </div>
+      <span>Profile Settings</span>
+    </a>
+  </nav>
+</aside>
+
+<!-- Right side main content -->
+<div class="flex-1 flex flex-col min-h-screen overflow-hidden">
+  <!-- Top header -->
+  <header class="bg-white border-b border-surface-200 px-6 py-4 flex items-center justify-between">
+    <!-- Page title -->
+    <div>
+      <h1 class="font-display font-bold text-xl tracking-tight">Create Interactive Module</h1>
+      <p class="text-sm text-surface-500 mt-1">Build scenario-based learning experiences</p>
+    </div>
+    
+    <!-- User profile dropdown -->
+    <div class="relative z-30">
+      <button class="flex items-center gap-2 group" id="profileDropdownButton">
+        <div class="w-9 h-9 rounded-full bg-surface-100 border-2 border-white shadow-sm overflow-hidden">
+          <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-full h-full object-cover" />
+        </div>
+        <span class="font-medium text-surface-700">John D.</span>
+        <i class="fas fa-chevron-down text-xs text-surface-400 group-hover:text-surface-600 transition-transform" id="dropdownArrow"></i>
+      </button>
+      
+      <!-- Dropdown menu (hidden by default) -->
+      <div class="absolute right-0 top-full mt-2 w-56 origin-top-right divide-y divide-surface-100 rounded-lg bg-white shadow-float ring-1 ring-surface-200 opacity-0 invisible transition-all duration-150 transform scale-95" id="dropdownMenu">
+        <!-- User info -->
+        <div class="px-4 py-3">
+          <p class="text-sm font-medium">John Doe</p>
+          <p class="text-xs text-surface-500 truncate">instructor@learninsure.com</p>
+        </div>
+        <!-- Menu options -->
+        <div class="py-1.5">
+          <a href="#" class="flex items-center gap-2 px-4 py-2 text-sm text-surface-700 hover:bg-surface-50">
+            <i class="fas fa-cog w-4 text-center text-surface-400"></i>
+            Settings
+          </a>
+          <a href="#" class="flex items-center gap-2 px-4 py-2 text-sm text-surface-700 hover:bg-surface-50">
+            <i class="fas fa-sign-out-alt w-4 text-center text-surface-400"></i>
+            Sign out
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main form content -->
+<main class="flex-1 p-6 overflow-auto">
+  <div class="max-w-4xl mx-auto">
+    <!-- Form card -->
+    <div class="bg-white rounded-xl border border-surface-200 shadow-soft overflow-hidden">
+      <!-- Form header -->
+      <div class="px-6 py-4 border-b border-surface-200">
+        <h2 class="font-display font-bold text-lg">Module Details</h2>
+        <p class="text-sm text-surface-500 mt-1">
+          Fill in the basic information for your interactive module
+        </p>
+      </div>
+      
+      <!-- Form fields -->
+      <form class="p-6 space-y-6">
+        <!-- Course title field -->
+        <div>
+          <label for="courseTitle" class="block text-sm font-medium text-surface-700 mb-1">
+            Course Title *
+          </label>
+          <div class="relative">
+            <input
+              type="text"
+              id="courseTitle"
+              name="courseTitle"
+              maxlength="100"
+              class="w-full px-4 py-2.5 text-sm rounded-lg border border-surface-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none transition-all"
+              placeholder="e.g. Advanced Insurance Underwriting Scenarios"
+              required
+            />
+            <!-- Character counter -->
+            <div class="absolute right-3 bottom-2.5 text-xs text-surface-400">
+              <span id="titleCounter">0</span>/100
+            </div>
+          </div>
+          <p class="mt-1 text-xs text-surface-500">
+            Keep it concise but descriptive (3-7 words recommended)
+          </p>
+        </div>
+        
+        <!-- Course description field -->
+        <div>
+          <label for="courseDescription" class="block text-sm font-medium text-surface-700 mb-1">
+            Course Description *
+          </label>
+          <div class="relative">
+            <textarea
+              id="courseDescription"
+              name="courseDescription"
+              rows="4"
+              maxlength="500"
+              class="w-full px-4 py-2.5 text-sm rounded-lg border border-surface-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-100 outline-none transition-all"
+              placeholder="Describe what learners will experience in this scenario-based module..."
+              required
+            ></textarea>
+            <!-- Character counter -->
+            <div class="absolute right-3 bottom-2.5 text-xs text-surface-400">
+              <span id="descriptionCounter">0</span>/500
+            </div>
+          </div>
+          <p class="mt-1 text-xs text-surface-500">
+            Explain the learning objectives and scenario context
+          </p>
+        </div>
+
+        <!-- Banner image upload -->
+<div>
+  <label class="block text-sm font-medium text-surface-700 mb-1">
+    Course Banner Image
+  </label>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <!-- Upload area -->
+    <div class="file-upload-container">
+      <input
+        type="file"
+        id="bannerImage"
+        name="bannerImage"
+        accept="image/*"
+        class="hidden file-upload-input"
+      />
+      <label
+        for="bannerImage"
+        class="file-upload-label h-full flex flex-col items-center justify-center p-6 border-2 border-dashed border-surface-200 rounded-xl cursor-pointer transition-all hover:bg-surface-50"
+      >
+        <div class="w-12 h-12 mb-3 rounded-full bg-surface-100 flex items-center justify-center text-surface-400">
+          <i class="fas fa-image text-xl"></i>
+        </div>
+        <p class="text-sm font-medium text-surface-700 mb-1">
+          Upload Banner Image
+        </p>
+        <p class="text-xs text-surface-500 text-center">
+          Recommended size: 1200×400px (JPG or PNG)
+        </p>
+      </label>
+    </div>
+    
+    <!-- Preview area (hidden until image is uploaded) -->
+    <div class="image-preview-container hidden" id="imagePreviewContainer">
+      <div class="h-full bg-surface-100 rounded-xl overflow-hidden relative group">
+        <img
+          id="imagePreview"
+          class="w-full h-full object-cover"
+          src=""
+          alt="Banner preview"
+        />
+        <!-- Remove button (appears on hover) -->
+        <button
+          type="button"
+          onclick="removeImage()"
+          class="absolute top-2 right-2 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-red-500 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
+          title="Remove image"
+        >
+          <i class="fas fa-times text-sm"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PowerPoint upload -->
+<div>
+  <label class="block text-sm font-medium text-surface-700 mb-1">
+    Interactive PowerPoint File *
+  </label>
+  <div class="file-upload-container">
+    <input
+      type="file"
+      id="powerpointFile"
+      name="powerpointFile"
+      accept=".pptx,.ppt"
+      class="hidden file-upload-input"
+      required
+    />
+    <label
+      for="powerpointFile"
+      class="file-upload-label flex flex-col items-center justify-center p-8 border-2 border-dashed border-surface-200 rounded-xl cursor-pointer transition-all hover:bg-surface-50"
+    >
+      <div class="w-16 h-16 mb-4 rounded-full bg-blue-50 flex items-center justify-center text-blue-500">
+        <i class="fas fa-file-powerpoint text-2xl"></i>
+      </div>
+      <p class="text-sm font-medium text-surface-700 mb-1">
+        Upload PowerPoint File
+      </p>
+      <p class="text-xs text-surface-500 mb-3">
+        PPTX or PPT format (max 50MB)
+      </p>
+      <button
+        type="button"
+        class="px-4 py-2 bg-surface-100 hover:bg-surface-200 rounded-lg text-sm font-medium text-surface-700 transition-colors"
+      >
+        Select File
+      </button>
+    </label>
+  </div>
+  
+  <!-- File info (shown after upload) -->
+  <div id="fileInfo" class="mt-2 hidden">
+    <div class="flex items-center gap-3 p-3 bg-surface-50 rounded-lg">
+      <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
+        <i class="fas fa-file-powerpoint"></i>
+      </div>
+      <div class="flex-1 min-w-0">
+        <p class="text-sm font-medium text-surface-900 truncate" id="fileName"></p>
+        <p class="text-xs text-surface-500" id="fileSize"></p>
+      </div>
+      <button
+        type="button"
+        onclick="removeFile()"
+        class="w-8 h-8 rounded-full flex items-center justify-center text-surface-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+        title="Remove file"
+      >
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+  <p class="mt-2 text-xs text-surface-500">
+    <strong>Note:</strong> This PowerPoint will be converted to an interactive scenario.
+  </p>
+</div>
+
+<!-- Form buttons -->
+<div class="pt-4 flex flex-col-reverse sm:flex-row justify-end gap-3">
+  <button
+    type="button"
+    class="px-5 py-2.5 rounded-lg border border-surface-200 bg-white text-surface-700 font-medium hover:bg-surface-50 transition-colors"
+  >
+    Cancel
+  </button>
+  <button
+    type="submit"
+    class="px-5 py-2.5 rounded-lg bg-primary-500 text-white font-medium hover:bg-primary-600 transition-colors flex items-center justify-center gap-2"
+  >
+    <i class="fas fa-save"></i>
+    Save & Continue
+  </button>
+</div>
+</form>
+</div>
+
+<!-- Help card -->
+<div class="bg-white rounded-xl border border-surface-200 shadow-soft overflow-hidden mt-6">
+  <div class="px-6 py-4 border-b border-surface-200 flex items-center justify-between">
+    <h2 class="font-display font-bold text-lg">Creating Effective Interactive Modules</h2>
+    <div class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
+      <i class="fas fa-lightbulb"></i>
+    </div>
+  </div>
+  <div class="p-6">
+    <div class="prose prose-sm text-surface-600">
+      <h3 class="text-surface-800">PowerPoint Tips:</h3>
+      <ul>
+        <li>Create a clear narrative flow with decision points</li>
+        <li>Use hyperlinks between slides to create branching paths</li>
+        <li>Mark correct/incorrect answer slides in the title</li>
+        <li>Keep scenarios realistic to your learners' work</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+</main>
+
+      <!-- Page Footer -->
+      <footer class="bg-white px-6 py-8 border-t border-surface-200">
+        <!-- Footer Columns -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-6">
+          <!-- Company Information Column -->
+          <div>
+            <div class="flex items-center gap-3 mb-4">
+              <img
+                src="../resources/image/learninsurelogo-footer.png"
+                alt="LearnInsure Logo"
+                class="w-10 h-10 object-contain"
+              />
+              <span class="font-display font-bold">LearnInsure</span>
+            </div>
+            <p class="text-sm text-surface-500 leading-relaxed">
+              LearnInsure is an eLearning platform designed for insurance
+              professionals to enhance their knowledge and skills through
+              interactive courses.
+            </p>
+          </div>
+
+          <!-- Get Help Column -->
+          <div>
+            <h4
+              class="text-sm font-display font-semibold text-surface-700 mb-3"
+            >
+              Get Help
+            </h4>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="#"
+                  class="text-sm text-surface-500 hover:text-primary-600 transition-colors"
+                  >Contact Us</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-sm text-surface-500 hover:text-primary-600 transition-colors"
+                  >FAQ</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-sm text-surface-500 hover:text-primary-600 transition-colors"
+                  >Support Center</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Get Started Column -->
+          <div>
+            <h4
+              class="text-sm font-display font-semibold text-surface-700 mb-3"
+            >
+              Get Started
+            </h4>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="#"
+                  class="text-sm text-surface-500 hover:text-primary-600 transition-colors"
+                  >Home</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-sm text-surface-500 hover:text-primary-600 transition-colors"
+                  >About Us</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-sm text-surface-500 hover:text-primary-600 transition-colors"
+                  >Explore Modules</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Partnered Agency Column -->
+          <div>
+            <h4
+              class="text-sm font-display font-semibold text-surface-700 mb-3"
+            >
+              Partnered Agency
+            </h4>
+            <div class="text-sm text-surface-500 space-y-1">
+              <p>123 Insurance Plaza</p>
+              <p>Makati City, Philippines</p>
+              <p>Phone: (+63) 917 777 1213</p>
+              <p>Email: sylabuco_associates@yahoo.com</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Copyright and Social Links -->
+        <div
+          class="pt-6 border-t border-surface-200 flex flex-col sm:flex-row justify-between items-center gap-4"
+        >
+          <p class="text-xs text-surface-500">
+            LearnInsure. ©2024 by LearnInsure. All rights reserved.
+          </p>
+        </div>
+      </footer>
+
+<script>
+  // Wait until page is fully loaded
+  document.addEventListener("DOMContentLoaded", function () {
+    
+    // CHARACTER COUNTERS
+    // For course title
+    const titleInput = document.getElementById("courseTitle");
+    const titleCounter = document.getElementById("titleCounter");
+    titleInput.addEventListener("input", () => {
+      titleCounter.textContent = titleInput.value.length;
+    });
+    
+    // For course description
+    const descInput = document.getElementById("courseDescription");
+    const descCounter = document.getElementById("descriptionCounter");
+    descInput.addEventListener("input", () => {
+      descCounter.textContent = descInput.value.length;
+    });
+
+    // IMAGE UPLOAD PREVIEW
+    const bannerImageInput = document.getElementById("bannerImage");
+    const imagePreview = document.getElementById("imagePreview");
+    const imagePreviewContainer = document.getElementById("imagePreviewContainer");
+    
+    bannerImageInput.addEventListener("change", function (e) {
+      if (e.target.files.length > 0) {
+        const reader = new FileReader();
+        reader.onload = function (event) {
+          imagePreview.src = event.target.result;
+          imagePreviewContainer.classList.remove("hidden");
+          document.querySelector(".file-upload-label").classList.add("hidden");
+        };
+        reader.readAsDataURL(e.target.files[0]);
+      }
+    });
+
+    // POWERPOINT FILE UPLOAD
+    const powerpointInput = document.getElementById("powerpointFile");
+    const fileInfo = document.getElementById("fileInfo");
+    const fileName = document.getElementById("fileName");
+    const fileSize = document.getElementById("fileSize");
+    
+    powerpointInput.addEventListener("change", function (e) {
+      if (e.target.files.length > 0) {
+        const file = e.target.files[0];
+        fileName.textContent = file.name;
+        fileSize.textContent = formatFileSize(file.size);
+        fileInfo.classList.remove("hidden");
+        document.querySelector(".file-upload-label").style.display = "none";
+      }
+    });
+
+    // DRAG AND DROP FUNCTIONALITY
+    const fileUploadLabels = document.querySelectorAll(".file-upload-label");
+    
+    fileUploadLabels.forEach((label) => {
+      // Prevent default drag behaviors
+      ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+        label.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        });
+      });
+      
+      // Highlight when dragging over
+      ["dragenter", "dragover"].forEach((eventName) => {
+        label.addEventListener(eventName, () => {
+          label.classList.add("dragging");
+        });
+      });
+      
+      // Remove highlight when leaving
+      ["dragleave", "drop"].forEach((eventName) => {
+        label.addEventListener(eventName, () => {
+          label.classList.remove("dragging");
+        });
+      });
+      
+      // Handle dropped files
+      label.addEventListener("drop", (e) => {
+        const files = e.dataTransfer.files;
+        const input = document.getElementById(label.htmlFor);
+        if (input && files.length) {
+          input.files = files;
+          const event = new Event("change");
+          input.dispatchEvent(event);
+        }
+      });
+    });
+
+    // PROFILE DROPDOWN TOGGLE
+    const dropdownButton = document.getElementById("profileDropdownButton");
+    const dropdownMenu = document.getElementById("dropdownMenu");
+    const dropdownArrow = document.getElementById("dropdownArrow");
+    let isOpen = false;
+    
+    if (dropdownButton) {
+      dropdownButton.addEventListener("click", function (e) {
+        e.stopPropagation();
+        isOpen = !isOpen;
+        
+        if (isOpen) {
+          // Show dropdown
+          dropdownMenu.classList.remove("opacity-0", "invisible", "scale-95");
+          dropdownMenu.classList.add("opacity-100", "visible", "scale-100");
+          dropdownArrow.classList.add("rotate-180");
+        } else {
+          // Hide dropdown
+          dropdownMenu.classList.remove("opacity-100", "visible", "scale-100");
+          dropdownMenu.classList.add("opacity-0", "invisible", "scale-95");
+          dropdownArrow.classList.remove("rotate-180");
+        }
+      });
+      
+      // Close dropdown when clicking elsewhere
+      document.addEventListener("click", function (e) {
+        if (!dropdownButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
+          dropdownMenu.classList.remove("opacity-100", "visible", "scale-100");
+          dropdownMenu.classList.add("opacity-0", "invisible", "scale-95");
+          dropdownArrow.classList.remove("rotate-180");
+          isOpen = false;
+        }
+      });
+    }
+
+    // Helper function to format file size (e.g. "2.5 MB")
+    function formatFileSize(bytes) {
+      if (bytes === 0) return "0 Bytes";
+      const sizes = ["Bytes", "KB", "MB", "GB"];
+      const i = Math.floor(Math.log(bytes) / Math.log(1024));
+      return (bytes / Math.pow(1024, i)).toFixed(1) + " " + sizes[i];
+    }
+  });
+
+  // Remove uploaded image
+  function removeImage() {
+    document.getElementById("bannerImage").value = "";
+    document.getElementById("imagePreviewContainer").classList.add("hidden");
+    document.querySelector(".file-upload-label").classList.remove("hidden");
+  }
+
+  // Remove uploaded file
+  function removeFile() {
+    document.getElementById("powerpointFile").value = "";
+    document.getElementById("fileInfo").classList.add("hidden");
+    document.querySelector('.file-upload-label[for="powerpointFile"]').style.display = "flex";
+  }
+</script>
+</body>
+</html>
