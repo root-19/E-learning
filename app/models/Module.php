@@ -21,35 +21,13 @@ class Module {
         }
     }
 
-    public function getAllCourses($page = 1, $limit = 5) {
+    public function getAllCourses() {
         try {
-            $offset = ($page - 1) * $limit;
-            
-            // Get total count for pagination
-            $countStmt = $this->conn->query("SELECT COUNT(*) FROM courses WHERE status != 'deleted'");
-            $total = $countStmt->fetchColumn();
-            
-            // Get paginated results with chapter count
-            $stmt = $this->conn->prepare("
-                SELECT c.*, 
-                       (SELECT COUNT(*) FROM chapters WHERE course_id = c.id) as chapter_count
-                FROM courses c
-                WHERE c.status != 'deleted' 
-                ORDER BY c.id DESC 
-                LIMIT :limit OFFSET :offset
-            ");
-            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-            $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-            $stmt->execute();
-            
-            return [
-                'courses' => $stmt->fetchAll(PDO::FETCH_ASSOC),
-                'total' => $total,
-                'total_pages' => ceil($total / $limit)
-            ];
+            $stmt = $this->conn->query("SELECT * FROM courses WHERE status != 'deleted' ORDER BY id DESC");
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             error_log("Error fetching courses: " . $e->getMessage());
-            return ['courses' => [], 'total' => 0, 'total_pages' => 0];
+            return [];
         }
     }
 

@@ -27,14 +27,10 @@ $routes = [
     '/dashboard' => ['view', 'dashboard', true, 'user'],
     '/my_learning' => ['view', 'my_learning', true, 'user'],
     '/about' => ['view', 'about', true, 'user'],
-
     '/contact' => ['view', 'contact', true, 'user'],
-    '/edit-profile' => ['view', 'edit-profile', true, 'user'],
-    '/announcement' => ['view', 'announcement', true, 'user'],
     '/enroll' => [EnrollmentController::class, 'enroll', true, 'user'],
     '/course-view/{id}' => ['view', 'course-view', true, 'user'],
     '/chapter/{id}' => ['view', 'chapter-view', true, 'user'],
-
     '/submit-quiz' => [QuizController::class, 'submitQuiz', true, 'user'],
 
     //Routes for instructor 
