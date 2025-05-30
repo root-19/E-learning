@@ -21,7 +21,7 @@ try {
                e.is_completed,
                e.enrollment_date as enrolled_date
         FROM courses c
-        LEFT JOIN enrollments e ON c.id = e.course_id AND e.user_id = ?
+        INNER JOIN enrollments e ON c.id = e.course_id AND e.user_id = ?
         WHERE c.status = 'active' 
         AND c.is_rejected = 0
         ORDER BY c.id DESC
@@ -58,7 +58,7 @@ try {
 <body class="bg-gray-50">
     <div class="container mx-auto px-4 py-8 mt-20">
         <div class="flex justify-between items-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-800">Available Courses</h1>
+            <h1 class="text-3xl font-bold text-gray-800">My Enrolled Courses</h1>
             <div class="flex gap-4">
                 <div class="relative">
                     <input type="text" id="searchInput" placeholder="Search courses..." 
@@ -74,7 +74,7 @@ try {
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="courseGrid">
-            <?php foreach ($courses as $course): 
+            <?php foreach ($enrolled_courses as $course): 
                 // Skip rejected courses
                 if ($course['is_rejected'] == 1) {
                     continue;
@@ -88,8 +88,7 @@ try {
                         break;
                     }
                 }
-                $isEnrolled = isset($enrolled_courses_map[$course['id']]);
-                $progress = $isEnrolled ? $enrolled_courses_map[$course['id']] : null;
+                $progress = $course;
             ?>
             <div class="course-card bg-white rounded-xl shadow-md overflow-hidden border border-gray-200" 
                  data-course-type="<?= $courseType ?>">
@@ -119,44 +118,33 @@ try {
                             <i class="fas fa-exclamation-circle"></i>
                             This course is currently inactive and not available for enrollment.
                         </div>
-                    <?php elseif ($isEnrolled): ?>
-                        <?php if ($progress['is_completed']): ?>
-                            <div class="mb-4">
-                                <div class="flex justify-between text-sm text-gray-600 mb-1">
-                                    <span>Course Completed!</span>
-                                    <span><?= number_format($progress['completion_percentage'], 1) ?>%</span>
-                                </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2">
-                                    <div class="bg-green-600 h-2 rounded-full" style="width: 100%"></div>
-                                </div>
+                    <?php elseif ($progress['is_completed']): ?>
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm text-gray-600 mb-1">
+                                <span>Course Completed!</span>
+                                <span><?= number_format($progress['completion_percentage'], 1) ?>%</span>
                             </div>
-                        <?php else: ?>
-                            <div class="mb-4">
-                                <div class="flex justify-between text-sm text-gray-600 mb-1">
-                                    <span>Progress</span>
-                                    <span><?= number_format($progress['completion_percentage'], 1) ?>%</span>
-                                </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2">
-                                    <div class="bg-blue-600 h-2 rounded-full" style="width: <?= $progress['completion_percentage'] ?>%"></div>
-                                </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-green-600 h-2 rounded-full" style="width: 100%"></div>
                             </div>
-                        <?php endif; ?>
-                        
-                        <a href="/course-view/<?= $course['id'] ?>" 
-                           class="w-full bg-[#4B793E] text-white py-2 px-4 rounded-lg hover:bg-[#3d6232] transition-colors flex items-center justify-center gap-2">
-                            <i class="fas fa-book-reader"></i>
-                            <span>Continue Learning</span>
-                        </a>
+                        </div>
                     <?php else: ?>
-                        <form action="/enroll" method="POST" class="w-full">
-                            <input type="hidden" name="course_id" value="<?= $course['id'] ?>">
-                            <button type="submit" 
-                                    class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
-                                <i class="fas fa-user-plus"></i>
-                                <span>Enroll Now</span>
-                            </button>
-                        </form>
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm text-gray-600 mb-1">
+                                <span>Progress</span>
+                                <span><?= number_format($progress['completion_percentage'], 1) ?>%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-blue-600 h-2 rounded-full" style="width: <?= $progress['completion_percentage'] ?>%"></div>
+                            </div>
+                        </div>
                     <?php endif; ?>
+                    
+                    <a href="/course-view/<?= $course['id'] ?>" 
+                       class="w-full bg-[#4B793E] text-white py-2 px-4 rounded-lg hover:bg-[#3d6232] transition-colors flex items-center justify-center gap-2">
+                        <i class="fas fa-book-reader"></i>
+                        <span>Continue Learning</span>
+                    </a>
                 </div>
             </div>
             <?php endforeach; ?>

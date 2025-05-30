@@ -83,6 +83,11 @@
                     <i class="fas fa-user"></i>
                     <span>My Profile</span>
                 </a>
+                <a href="/instructor/students" class="nav-link flex items-center space-x-3 py-3 px-4 rounded-lg hover:bg-white/10">
+                    <i class="fas fa-user"></i>
+                    <span>My Students</span>
+                </a>
+                
                 
                 <a href="/instructor/module" class="nav-link flex items-center space-x-3 py-3 px-4 rounded-lg hover:bg-white/10">
                     <i class="fas fa-book"></i>
@@ -99,10 +104,10 @@
                     <span>Interactive Management</span>
                 </a>
                 
-                <a href="/instructor/learning-modules" class="nav-link flex items-center space-x-3 py-3 px-4 rounded-lg hover:bg-white/10">
+                <!-- <a href="/instructor/learning-modules" class="nav-link flex items-center space-x-3 py-3 px-4 rounded-lg hover:bg-white/10">
                     <i class="fas fa-book-open"></i>
                     <span>Learning Modules</span>
-                </a>
+                </a> -->
                 
                 <a href="/instructor/announcements" class="nav-link flex items-center space-x-3 py-3 px-4 rounded-lg hover:bg-white/10">
                     <i class="fas fa-bullhorn"></i>

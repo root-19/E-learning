@@ -36,11 +36,11 @@
 
     <!-- Navigation Links -->
     <nav class="space-x-6 text-lg font-medium hidden sm:block">
-      <a href="#home" class="hover:text-yellow-400">Home</a>
-      <a href="#explore" class="hover:text-yellow-400">Explore</a>
+      <a href="home" class="hover:text-yellow-400">Home</a>
+      <a href="explore" class="hover:text-yellow-400">Explore</a>
       <a href="my_learning" class="hover:text-yellow-400">My Learning</a>
-      <a href="#about" class="hover:text-yellow-400">About Us</a>
-      <a href="#contact" class="hover:text-yellow-400">Contact</a>
+      <a href="about" class="hover:text-yellow-400">About Us</a>
+      <a href="contact" class="hover:text-yellow-400">Contact</a>
     </nav>
 
     <!-- User Dropdown -->

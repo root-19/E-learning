@@ -29,7 +29,7 @@ class AuthController {
                     } elseif ($userData['role'] === 'instructor') {
                         header('Location: /instructor/dashboard');
                     } else {
-                        header('Location: /dashboard'); // Default user role
+                        header('Location: /home'); // Default user role
                     }
                     exit();
                 } else {

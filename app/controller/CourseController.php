@@ -28,6 +28,7 @@ class CourseController {
      * @return array|false
      * @throws \Exception
      */
+    
     private function getCourseById(int $courseId) {
         $stmt = $this->db->prepare("SELECT * FROM courses WHERE id = ?");
         $stmt->execute([$courseId]);
