@@ -36,13 +36,11 @@
 
     <!-- Navigation Links -->
     <nav class="space-x-6 text-lg font-medium hidden sm:block">
-      <a href="#home" class="hover:text-yellow-400">Home</a>
-      <a href="#explore" class="hover:text-yellow-400">Explore</a>
+      <a href="home" class="hover:text-yellow-400">Home</a>
+      <a href="explore" class="hover:text-yellow-400">Explore</a>
       <a href="my_learning" class="hover:text-yellow-400">My Learning</a>
-      <a href="#about" class="hover:text-yellow-400">About Us</a>
+      <a href="about" class="hover:text-yellow-400">About Us</a>
       <a href="contact" class="hover:text-yellow-400">Contact</a>
-      <a href="announcement" class="hover:text-yellow-400">announcement</a>
-
     </nav>
 
     <!-- User Dropdown -->
@@ -52,7 +50,7 @@
       </button>
       <!-- Dropdown Menu -->
       <div id="userDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white text-black rounded-md shadow-lg z-50">
-        <a href="edit-profile" class="block px-4 py-2 hover:bg-gray-200">Edit Profile</a>
+        <a href="edit-profile.php" class="block px-4 py-2 hover:bg-gray-200">Edit Profile</a>
         <a href="/logout" class="block px-4 py-2 hover:bg-gray-200">Logout</a>
       </div>
     </div>

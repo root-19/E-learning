@@ -83,6 +83,7 @@ include 'layout/header.php';
                 <th class="px-6 py-4">Title</th>
                 <th class="px-6 py-4">Description</th>
                 <th class="px-6 py-4">Type</th>
+                <th class="px-6 py-4">Chapters</th>
                 <th class="px-6 py-4 text-center">Actions</th>
             </tr>
         </thead>
@@ -92,6 +93,7 @@ include 'layout/header.php';
                     $hasInteractiveChapters = false;
                     $hasTraditionalChapters = false;
                     $chapters = $controller->getChaptersForCourse($course['id']);
+                    $chapterCount = count($chapters);
                     foreach ($chapters as $chapter) {
                         if ($chapter['type'] === 'interactive') {
                             $hasInteractiveChapters = true;
@@ -116,6 +118,14 @@ include 'layout/header.php';
                             <?= $courseType === 'interactive' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700' ?>">
                             <?= ucfirst($courseType) ?>
                         </span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-2">
+                            <span class="text-gray-700"><?= $chapterCount ?> chapters</span>
+                            <!-- <button onclick="viewChapters(<?= $course['id'] ?>)" class="text-blue-500 hover:text-blue-700 transition" title="View Chapters">
+                                <i class="fas fa-list"></i>
+                            </button> -->
+                        </div>
                     </td>
                     <td class="px-6 py-4 text-center">
                         <div class="flex items-center justify-center gap-3">
@@ -229,6 +239,11 @@ function deleteCourse(id) {
         // Implement delete functionality
         console.log('Delete course:', id);
     }
+}
+
+function viewChapters(courseId) {
+    // Redirect to the chapters page for this course
+    window.location.href = `/instructor/chapters?course_id=${courseId}`;
 }
 
 // Image preview functionality

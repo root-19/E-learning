@@ -24,17 +24,15 @@ $routes = [
     '/forget-password' => [AuthController::class, 'forgetPassword', false],
 
     // Routes accessible to 'user'
-    '/dashboard' => ['view', 'dashboard', true, 'user'],
+    '/home' => ['view', 'home', true, 'user'],
     '/my_learning' => ['view', 'my_learning', true, 'user'],
-    '/about' => ['view', 'about', true, 'user'],
+    '/explore' => ['view', 'explore', true, 'user'],
 
+    '/about' => ['view', 'about', true, 'user'],
     '/contact' => ['view', 'contact', true, 'user'],
-    '/edit-profile' => ['view', 'edit-profile', true, 'user'],
-    '/announcement' => ['view', 'announcement', true, 'user'],
     '/enroll' => [EnrollmentController::class, 'enroll', true, 'user'],
     '/course-view/{id}' => ['view', 'course-view', true, 'user'],
     '/chapter/{id}' => ['view', 'chapter-view', true, 'user'],
-
     '/submit-quiz' => [QuizController::class, 'submitQuiz', true, 'user'],
 
     //Routes for instructor 
@@ -45,6 +43,8 @@ $routes = [
     '/instructor/learning-modules' => ['view', 'learning_modules', true, 'instructor'],
     '/instructor/announcements' => ['view', 'instructor/announcements', true, 'instructor'],
     '/instructor/profile' => ['view', 'instructor/profile', true, 'instructor'],
+    '/instructor/students' => ['view', 'instructor/students', true, 'instructor'],
+
     '/instructor/notifications' => ['view', 'instructor/notifications', true, 'instructor'],
 
     // Routes accessible to 'admin'
