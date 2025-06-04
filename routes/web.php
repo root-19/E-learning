@@ -27,6 +27,8 @@ $routes = [
     '/home' => ['view', 'home', true, 'user'],
     '/my_learning' => ['view', 'my_learning', true, 'user'],
     '/explore' => ['view', 'explore', true, 'user'],
+    '/edit_profile' => ['view', 'edit_profile', true, 'user'],
+
 
     '/about' => ['view', 'about', true, 'user'],
     '/contact' => ['view', 'contact', true, 'user'],
