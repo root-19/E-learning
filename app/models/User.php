@@ -87,4 +87,39 @@ class User {
         return $stmt->execute([$bio, $imageName, $id]);
     }
     
+    public function updateStatus($userId, $status) {
+        $db = Database::connect();
+        $query = "UPDATE users SET status = ? WHERE id = ?";
+        $stmt = $db->prepare($query);
+        return $stmt->execute([$status, $userId]);
+    }
+
+    public function delete($userId) {
+        $db = Database::connect();
+        
+        // Start transaction
+        $db->beginTransaction();
+        
+        try {
+            // Delete user's enrollments first
+            $stmt = $db->prepare("DELETE FROM enrollments WHERE user_id = ?");
+            $stmt->execute([$userId]);
+            
+            // Delete user's quiz attempts
+            $stmt = $db->prepare("DELETE FROM quiz_attempts WHERE user_id = ?");
+            $stmt->execute([$userId]);
+            
+            // Finally delete the user
+            $stmt = $db->prepare("DELETE FROM users WHERE id = ?");
+            $stmt->execute([$userId]);
+            
+            // Commit transaction
+            $db->commit();
+            return true;
+        } catch (\Exception $e) {
+            // Rollback transaction on error
+            $db->rollBack();
+            return false;
+        }
+    }
 }

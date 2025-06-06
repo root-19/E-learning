@@ -75,39 +75,33 @@
         <div class="w-64 bg-custom-green text-white p-6 custom-shadow">
             <nav class="mt-8 space-y-2">
                 <a href="/instructor/dashboard" class="nav-link flex items-center space-x-3 py-3 px-4 rounded-lg hover:bg-white/10">
-                    <i class="fas fa-home"></i>
+                    <i class="fas fa-chart-line"></i>
                     <span>Dashboard</span>
                 </a>
 
                 <a href="/instructor/profile" class="nav-link flex items-center space-x-3 py-3 px-4 rounded-lg hover:bg-white/10">
-                    <i class="fas fa-user"></i>
+                    <i class="fas fa-user-circle"></i>
                     <span>My Profile</span>
                 </a>
                 <a href="/instructor/students" class="nav-link flex items-center space-x-3 py-3 px-4 rounded-lg hover:bg-white/10">
-                    <i class="fas fa-user"></i>
+                    <i class="fas fa-users"></i>
                     <span>My Students</span>
                 </a>
                 
-                
                 <a href="/instructor/module" class="nav-link flex items-center space-x-3 py-3 px-4 rounded-lg hover:bg-white/10">
-                    <i class="fas fa-book"></i>
+                    <i class="fas fa-graduation-cap"></i>
                     <span>Course Management</span>
                 </a>
                 
                 <a href="/instructor/chapter" class="nav-link flex items-center space-x-3 py-3 px-4 rounded-lg hover:bg-white/10">
-                    <i class="fas fa-file-alt"></i>
+                    <i class="fas fa-book-open"></i>
                     <span>Content Management</span>
                 </a>
                 
                 <a href="/instructor/interactive_chapter" class="nav-link flex items-center space-x-3 py-3 px-4 rounded-lg hover:bg-white/10">
-                    <i class="fas fa-puzzle-piece"></i>
+                    <i class="fas fa-gamepad"></i>
                     <span>Interactive Management</span>
                 </a>
-                
-                <!-- <a href="/instructor/learning-modules" class="nav-link flex items-center space-x-3 py-3 px-4 rounded-lg hover:bg-white/10">
-                    <i class="fas fa-book-open"></i>
-                    <span>Learning Modules</span>
-                </a> -->
                 
                 <a href="/instructor/announcements" class="nav-link flex items-center space-x-3 py-3 px-4 rounded-lg hover:bg-white/10">
                     <i class="fas fa-bullhorn"></i>
@@ -129,11 +123,7 @@
                         </span>
                     <?php endif; ?>
                 </a>
-                
-                <a href="/admin/users" class="nav-link flex items-center space-x-3 py-3 px-4 rounded-lg hover:bg-white/10">
-                    <i class="fas fa-users"></i>
-                    <span>User Management</span>
-                </a>
+            
             </nav>
         </div>
 

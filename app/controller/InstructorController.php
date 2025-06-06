@@ -1,6 +1,13 @@
 <?php
+namespace root_dev\Controller;
+
 require_once __DIR__ . '/../models/User.php';
+require_once __DIR__ . '/../../config/database.php';
+
 use root_dev\Models\User;
+use PDO;
+use PDOException;
+
 class InstructorController {
     public function registerInstructor() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -53,6 +60,80 @@ class InstructorController {
                 $_SESSION['error'] = "Error registering instructor.";
                 return false;
             }
+        }
+    }
+
+    public function toggleStatus($instructorId) {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            echo json_encode(['success' => false, 'message' => 'Method not allowed']);
+            return;
+        }
+
+        // Get the new status from the request body
+        $data = json_decode(file_get_contents('php://input'), true);
+        $newStatus = $data['status'] ?? null;
+
+        if (!in_array($newStatus, ['active', 'inactive'])) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'Invalid status']);
+            return;
+        }
+
+        try {
+            $db = \Database::connect();
+            $stmt = $db->prepare("UPDATE users SET status = ? WHERE id = ? AND role = 'instructor'");
+            $result = $stmt->execute([$newStatus, $instructorId]);
+
+            if ($result) {
+                echo json_encode(['success' => true, 'message' => 'Status updated successfully']);
+            } else {
+                http_response_code(500);
+                echo json_encode(['success' => false, 'message' => 'Failed to update status']);
+            }
+        } catch (PDOException $e) {
+            http_response_code(500);
+            echo json_encode(['success' => false, 'message' => 'Database error']);
+            error_log("Error updating instructor status: " . $e->getMessage());
+        }
+    }
+
+    public function deleteInstructor($instructorId) {
+        if ($_SERVER['REQUEST_METHOD'] !== 'DELETE') {
+            http_response_code(405);
+            echo json_encode(['success' => false, 'message' => 'Method not allowed']);
+            return;
+        }
+
+        try {
+            $db = \Database::connect();
+            
+            // Start transaction
+            $db->beginTransaction();
+
+            // Delete instructor's courses
+            $stmt = $db->prepare("DELETE FROM courses WHERE instructor_id = ?");
+            $stmt->execute([$instructorId]);
+
+            // Delete instructor
+            $stmt = $db->prepare("DELETE FROM users WHERE id = ? AND role = 'instructor'");
+            $result = $stmt->execute([$instructorId]);
+
+            if ($result) {
+                $db->commit();
+                echo json_encode(['success' => true, 'message' => 'Instructor deleted successfully']);
+            } else {
+                $db->rollBack();
+                http_response_code(500);
+                echo json_encode(['success' => false, 'message' => 'Failed to delete instructor']);
+            }
+        } catch (PDOException $e) {
+            if ($db->inTransaction()) {
+                $db->rollBack();
+            }
+            http_response_code(500);
+            echo json_encode(['success' => false, 'message' => 'Database error']);
+            error_log("Error deleting instructor: " . $e->getMessage());
         }
     }
 }

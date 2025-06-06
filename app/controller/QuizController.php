@@ -27,16 +27,16 @@ class QuizController {
             $this->conn->beginTransaction();
 
             // Get correct answers
-            $stmt = $this->conn->prepare("SELECT id, correct_answer FROM quizzes WHERE chapter_id = ?");
+            $stmt = $this->conn->prepare("SELECT id, correct_answer, quiz_type FROM quizzes WHERE chapter_id = ?");
             $stmt->execute([$chapter_id]);
-            $correct_answers = $stmt->fetchAll(\PDO::FETCH_KEY_PAIR);
+            $quizzes = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-            if (empty($correct_answers)) {
+            if (empty($quizzes)) {
                 throw new \Exception('No quizzes found for this chapter');
             }
 
             // Calculate score
-            $total_questions = count($correct_answers);
+            $total_questions = count($quizzes);
             $correct_count = 0;
 
             // Record each answer
@@ -45,10 +45,34 @@ class QuizController {
                 VALUES (?, ?, ?, ?)
             ");
 
-            foreach ($answers as $quiz_id => $selected_answer) {
-                if (!isset($correct_answers[$quiz_id])) continue;
+            foreach ($quizzes as $quiz) {
+                $quiz_id = $quiz['id'];
+                $selected_answer = $answers[$quiz_id] ?? null;
+                
+                if ($selected_answer === null) continue;
 
-                $is_correct = $selected_answer === $correct_answers[$quiz_id];
+                $is_correct = false;
+                
+                // Handle different quiz types
+                switch ($quiz['quiz_type']) {
+                    case 'fill_blank':
+                        // For fill in the blank, do case-insensitive comparison
+                        $is_correct = strtolower(trim($selected_answer)) === strtolower(trim($quiz['correct_answer']));
+                        break;
+                        
+                    case 'true_false':
+                        // For true/false, convert to uppercase for storage and comparison
+                        $selected_answer = strtoupper($selected_answer);
+                        $is_correct = $selected_answer === strtoupper($quiz['correct_answer']);
+                        break;
+                        
+                    default: // multiple choice
+                        // For multiple choice, convert to uppercase for storage
+                        $selected_answer = strtoupper($selected_answer);
+                        $is_correct = $selected_answer === strtoupper($quiz['correct_answer']);
+                        break;
+                }
+
                 if ($is_correct) $correct_count++;
 
                 $insert_attempt->execute([
@@ -59,13 +83,14 @@ class QuizController {
                 ]);
             }
 
-            $score = ($correct_count / $total_questions) * 100;
+            // Remove percentage calculation and just use raw score
+            $score = $correct_count;
 
             $this->conn->commit();
 
             echo json_encode([
                 'success' => true,
-                'score' => round($score, 1),
+                'score' => $score,
                 'correct' => $correct_count,
                 'total' => $total_questions
             ]);

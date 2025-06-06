@@ -25,13 +25,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $file_extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
             $allowed_image_types = ['jpg', 'jpeg', 'png', 'gif'];
             $allowed_video_types = ['mp4', 'webm', 'ogg'];
+            $allowed_document_types = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'zip', 'rar'];
             
             if (in_array($file_extension, $allowed_image_types)) {
                 $media_type = 'image';
             } elseif (in_array($file_extension, $allowed_video_types)) {
                 $media_type = 'video';
+            } elseif (in_array($file_extension, $allowed_document_types)) {
+                $media_type = $file_extension; // Use the file extension as the media type
             } else {
-                echo "<script>alert('Invalid file type. Please upload an image or video.');</script>";
+                echo "<script>alert('Invalid file type. Please upload an image, video, or document (PDF, Word, Excel, PowerPoint, etc.).');</script>";
                 exit;
             }
             
@@ -138,12 +141,12 @@ include 'layout/header.php';
             <div>
                 <label class="block mb-2 font-semibold text-gray-700">Media Upload</label>
                 <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                    <input type="file" name="media_file" id="media_file" class="hidden" accept="image/*,video/*">
+                    <input type="file" name="media_file" id="media_file" class="hidden" accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip,.rar">
                     <label for="media_file" class="cursor-pointer">
                         <div class="flex flex-col items-center">
                             <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-2"></i>
-                            <span class="text-gray-600">Click to upload image or video</span>
-                            <span class="text-sm text-gray-500 mt-1">Supported formats: JPG, PNG, GIF, MP4, WebM, OGG</span>
+                            <span class="text-gray-600">Click to upload media or documents</span>
+                            <span class="text-sm text-gray-500 mt-1">Supported formats: Images (JPG, PNG, GIF), Videos (MP4, WebM, OGG), Documents (PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, ZIP, RAR)</span>
                         </div>
                     </label>
                     <div id="file-preview" class="file-upload-preview mt-4"></div>
@@ -194,6 +197,14 @@ include 'layout/header.php';
                         preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
                     } else if (file.type.startsWith('video/')) {
                         preview.innerHTML = `<video src="${e.target.result}" controls></video>`;
+                    } else {
+                        // For documents, show a file icon and name
+                        const fileIcon = getFileIcon(file.name);
+                        preview.innerHTML = `
+                            <div class="flex items-center justify-center p-4 bg-gray-100 rounded-lg">
+                                <i class="${fileIcon} text-4xl text-gray-600 mr-3"></i>
+                                <span class="text-gray-700">${file.name}</span>
+                            </div>`;
                     }
                 }
                 reader.readAsDataURL(file);
@@ -202,6 +213,24 @@ include 'layout/header.php';
                 preview.innerHTML = '';
             }
         });
+
+        // Function to get appropriate file icon
+        function getFileIcon(filename) {
+            const extension = filename.split('.').pop().toLowerCase();
+            const iconMap = {
+                'pdf': 'fas fa-file-pdf',
+                'doc': 'fas fa-file-word',
+                'docx': 'fas fa-file-word',
+                'xls': 'fas fa-file-excel',
+                'xlsx': 'fas fa-file-excel',
+                'ppt': 'fas fa-file-powerpoint',
+                'pptx': 'fas fa-file-powerpoint',
+                'txt': 'fas fa-file-alt',
+                'zip': 'fas fa-file-archive',
+                'rar': 'fas fa-file-archive'
+            };
+            return iconMap[extension] || 'fas fa-file';
+        }
     </script>
 </body>
 </html>
