@@ -157,7 +157,7 @@ try {
             <div class="p-8">
                 <!-- Media Section -->
                 <?php if ($chapter['media_type'] !== 'none' && $chapter['media_path']): ?>
-                    <div class="mb-8">
+                    <div class="mb-6">
                         <?php if ($chapter['media_type'] === 'image'): ?>
                             <img src="/<?= htmlspecialchars($chapter['media_path']) ?>" 
                                  alt="<?= htmlspecialchars($chapter['media_caption'] ?? '') ?>"
@@ -167,6 +167,47 @@ try {
                                 <source src="/<?= htmlspecialchars($chapter['media_path']) ?>" type="video/mp4">
                                 Your browser does not support the video tag.
                             </video>
+                        <?php elseif ($chapter['media_type'] === 'pdf'): ?>
+                            <div class="w-full h-[600px] rounded-lg shadow-md">
+                                <iframe 
+                                    src="/<?= htmlspecialchars($chapter['media_path']) ?>" 
+                                    width="100%" 
+                                    height="100%" 
+                                    frameborder="0">
+                                </iframe>
+                            </div>
+                        <?php elseif (in_array($chapter['media_type'], ['ppt', 'pptx'])): ?>
+                            <div class="w-full h-[600px] rounded-lg shadow-md">
+                                <iframe 
+                                    src="https://view.officeapps.live.com/op/embed.aspx?src=<?= urlencode($_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/' . $chapter['media_path']) ?>" 
+                                    width="100%" 
+                                    height="100%" 
+                                    frameborder="0">
+                                </iframe>
+                            </div>
+                        <?php elseif (in_array($chapter['media_type'], ['doc', 'docx', 'xls', 'xlsx'])): ?>
+                            <div class="w-full h-[600px] rounded-lg shadow-md">
+                                <iframe 
+                                    src="https://view.officeapps.live.com/op/embed.aspx?src=<?= urlencode($_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/' . $chapter['media_path']) ?>" 
+                                    width="100%" 
+                                    height="100%" 
+                                    frameborder="0">
+                                </iframe>
+                            </div>
+                        <?php elseif (in_array($chapter['media_type'], ['txt', 'zip', 'rar'])): ?>
+                            <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-file text-2xl text-gray-600"></i>
+                                    <div>
+                                        <p class="font-medium text-gray-800"><?= htmlspecialchars($chapter['media_caption'] ?? 'Download File') ?></p>
+                                        <a href="/<?= htmlspecialchars($chapter['media_path']) ?>" 
+                                           class="text-sm text-blue-600 hover:text-blue-800"
+                                           download>
+                                            Download <?= strtoupper($chapter['media_type']) ?> file
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
                         <?php endif; ?>
                         <?php if ($chapter['media_caption']): ?>
                             <p class="text-sm text-gray-600 mt-2 text-center italic">
@@ -192,20 +233,49 @@ try {
                                         Question <?= $index + 1 ?>: <?= htmlspecialchars($quiz['question']) ?>
                                     </h3>
                                     <div class="space-y-3">
-                                        <?php 
-                                        $options = [
-                                            'a' => $quiz['option_a'],
-                                            'b' => $quiz['option_b'],
-                                            'c' => $quiz['option_c'],
-                                            'd' => $quiz['option_d']
-                                        ];
-                                        foreach ($options as $key => $option): ?>
-                                            <label class="quiz-option flex items-center space-x-3 p-4 rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer transition-colors">
-                                                <input type="radio" name="quiz_<?= $quiz['id'] ?>" value="<?= $key ?>" 
-                                                       class="h-4 w-4 text-[#4B793E] focus:ring-[#4B793E]">
-                                                <span class="text-gray-700"><?= htmlspecialchars($option) ?></span>
-                                            </label>
-                                        <?php endforeach; ?>
+                                        <?php if ($quiz['quiz_type'] === 'fill_blank'): ?>
+                                            <div class="flex items-center space-x-3 p-4 rounded-lg border border-gray-200">
+                                                <input type="text" name="quiz_<?= $quiz['id'] ?>" 
+                                                       class="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-[#4B793E]"
+                                                       placeholder="Type your answer here">
+                                            </div>
+                                        <?php elseif ($quiz['quiz_type'] === 'true_false'): ?>
+                                            <?php 
+                                            $options = [
+                                                'a' => $quiz['option_a'],
+                                                'b' => $quiz['option_b']
+                                            ];
+                                            foreach ($options as $key => $option): 
+                                                if (!empty($option)): // Only show options that have data
+                                            ?>
+                                                <label class="quiz-option flex items-center space-x-3 p-4 rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer transition-colors">
+                                                    <input type="radio" name="quiz_<?= $quiz['id'] ?>" value="<?= $key ?>" 
+                                                           class="h-4 w-4 text-[#4B793E] focus:ring-[#4B793E]">
+                                                    <span class="text-gray-700"><?= htmlspecialchars($option) ?></span>
+                                                </label>
+                                            <?php 
+                                                endif;
+                                            endforeach; 
+                                            ?>
+                                        <?php else: // multiple choice
+                                            $options = [
+                                                'a' => $quiz['option_a'],
+                                                'b' => $quiz['option_b'],
+                                                'c' => $quiz['option_c'],
+                                                'd' => $quiz['option_d']
+                                            ];
+                                            foreach ($options as $key => $option): 
+                                                if (!empty($option)): // Only show options that have data
+                                            ?>
+                                                <label class="quiz-option flex items-center space-x-3 p-4 rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer transition-colors">
+                                                    <input type="radio" name="quiz_<?= $quiz['id'] ?>" value="<?= $key ?>" 
+                                                           class="h-4 w-4 text-[#4B793E] focus:ring-[#4B793E]">
+                                                    <span class="text-gray-700"><?= htmlspecialchars($option) ?></span>
+                                                </label>
+                                            <?php 
+                                                endif;
+                                            endforeach; 
+                                        endif; ?>
                                     </div>
                                 </div>
                             <?php endforeach; ?>
@@ -249,9 +319,13 @@ try {
             
             // Collect answers
             const answers = {};
-            this.querySelectorAll('input[type="radio"]:checked').forEach(input => {
+            this.querySelectorAll('input[type="radio"], input[type="text"]').forEach(input => {
                 const quizId = input.name.split('_')[1];
-                answers[quizId] = input.value;
+                if (input.type === 'radio' && input.checked) {
+                    answers[quizId] = input.value;
+                } else if (input.type === 'text' && input.value.trim() !== '') {
+                    answers[quizId] = input.value.trim();
+                }
             });
 
             // Check if all questions are answered
@@ -292,5 +366,13 @@ try {
             });
         });
     </script>
+
+    <pre>
+    media_type: <?= htmlspecialchars($chapter['media_type']) ?>
+
+    media_path: <?= htmlspecialchars($chapter['media_path']) ?>
+
+    iframe src: https://view.officeapps.live.com/op/embed.aspx?src=<?= urlencode($_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/' . $chapter['media_path']) ?>
+    </pre>
 </body>
 </html> 

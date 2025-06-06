@@ -101,19 +101,6 @@ try {
                         <?= ucfirst($courseType) ?>
                     </span>
                     <?php if ($course['status'] === 'inactive'): ?>
-                        <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                            <span class="text-white font-semibold px-4 py-2 rounded-full bg-red-500">
-                                Course Inactive
-                            </span>
-                        </div>
-                    <?php endif; ?>
-                </div>
-                
-                <div class="p-6">
-                    <h3 class="text-xl font-bold text-gray-800 mb-2"><?= htmlspecialchars($course['course_title']) ?></h3>
-                    <p class="text-gray-600 mb-4"><?= htmlspecialchars($course['description']) ?></p>
-                    
-                    <?php if ($course['status'] === 'inactive'): ?>
                         <div class="text-red-500 mb-4">
                             <i class="fas fa-exclamation-circle"></i>
                             This course is currently inactive and not available for enrollment.
@@ -122,7 +109,7 @@ try {
                         <div class="mb-4">
                             <div class="flex justify-between text-sm text-gray-600 mb-1">
                                 <span>Course Completed!</span>
-                                <span><?= number_format($progress['completion_percentage'], 1) ?>%</span>
+                                <span>100%</span>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-2">
                                 <div class="bg-green-600 h-2 rounded-full" style="width: 100%"></div>
@@ -132,10 +119,10 @@ try {
                         <div class="mb-4">
                             <div class="flex justify-between text-sm text-gray-600 mb-1">
                                 <span>Progress</span>
-                                <span><?= number_format($progress['completion_percentage'], 1) ?>%</span>
+                                <span><?= min(number_format($progress['completion_percentage'], 1), 100) ?>%</span>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div class="bg-blue-600 h-2 rounded-full" style="width: <?= $progress['completion_percentage'] ?>%"></div>
+                                <div class="bg-green-600 h-2 rounded-full" style="width: <?= min($progress['completion_percentage'], 100) ?>%"></div>
                             </div>
                         </div>
                     <?php endif; ?>

@@ -102,27 +102,27 @@
   <!-- Mobile Menu -->
   <div id="mobile-menu" class="hidden md:hidden bg-[#3A683A] px-4 py-2">
     <div class="flex flex-col space-y-3">
-      <a href="#home" class="relative text-white font-medium px-3 py-2 hover:text-[#F4C542] transition-colors
+      <a href="home" class="relative text-white font-medium px-3 py-2 hover:text-[#F4C542] transition-colors
           after:content-[''] after:absolute after:left-3 after:bottom-2 after:w-0 after:h-[2px]
           after:bg-[#F4C542] hover:after:w-[calc(100%-1.5rem)] after:transition-all after:duration-300" data-section="home">
         <i class="fas fa-home mr-3"></i> Home
       </a>
-      <a href="#explore" class="relative text-white font-medium px-3 py-2 hover:text-[#F4C542] transition-colors
+      <a href="explore" class="relative text-white font-medium px-3 py-2 hover:text-[#F4C542] transition-colors
           after:content-[''] after:absolute after:left-3 after:bottom-2 after:w-0 after:h-[2px]
           after:bg-[#F4C542] hover:after:w-[calc(100%-1.5rem)] after:transition-all after:duration-300" data-section="explore">
         <i class="fas fa-compass mr-3"></i> Explore
       </a>
-      <a href="#learning" class="relative text-white font-medium px-3 py-2 hover:text-[#F4C542] transition-colors
+      <a href="learning" class="relative text-white font-medium px-3 py-2 hover:text-[#F4C542] transition-colors
           after:content-[''] after:absolute after:left-3 after:bottom-2 after:w-0 after:h-[2px]
           after:bg-[#F4C542] hover:after:w-[calc(100%-1.5rem)] after:transition-all after:duration-300" data-section="learning">
         <i class="fas fa-book-open mr-3"></i> My Learning
       </a>
-      <a href="#about" class="relative text-white font-medium px-3 py-2 hover:text-[#F4C542] transition-colors
+      <a href="about" class="relative text-white font-medium px-3 py-2 hover:text-[#F4C542] transition-colors
           after:content-[''] after:absolute after:left-3 after:bottom-2 after:w-0 after:h-[2px]
           after:bg-[#F4C542] hover:after:w-[calc(100%-1.5rem)] after:transition-all after:duration-300" data-section="about">
         <i class="fas fa-info-circle mr-3"></i> About Us
       </a>
-      <a href="#contact" class="relative text-white font-medium px-3 py-2 hover:text-[#F4C542] transition-colors
+      <a href="contact" class="relative text-white font-medium px-3 py-2 hover:text-[#F4C542] transition-colors
           after:content-[''] after:absolute after:left-3 after:bottom-2 after:w-0 after:h-[2px]
           after:bg-[#F4C542] hover:after:w-[calc(100%-1.5rem)] after:transition-all after:duration-300" data-section="contact">
         <i class="fas fa-envelope mr-3"></i> Contact

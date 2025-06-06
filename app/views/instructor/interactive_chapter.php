@@ -11,30 +11,64 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $quizzes = $_POST['quizzes'] ?? [];  // array of quizzes
     
     if ($course_id && $chapter_title && !empty($quizzes)) {   
-        // Insert the chapter first
-        $insertChapter = $conn->prepare("INSERT INTO chapters (course_id, chapter_title) VALUES (:course_id, :chapter_title)");
-        $insertChapter->bindParam(':course_id', $course_id);
-        $insertChapter->bindParam(':chapter_title', $chapter_title);
-        $insertChapter->execute();
-        $chapter_id = $conn->lastInsertId(); // get inserted chapter id
+        try {
+            // Insert the chapter first
+            $insertChapter = $conn->prepare("INSERT INTO chapters (course_id, chapter_title) VALUES (:course_id, :chapter_title)");
+            $insertChapter->bindParam(':course_id', $course_id);
+            $insertChapter->bindParam(':chapter_title', $chapter_title);
+            $insertChapter->execute();
+            $chapter_id = $conn->lastInsertId(); // get inserted chapter id
 
-        // Insert quizzes
-        $insertQuiz = $conn->prepare("INSERT INTO quizzes (chapter_id, question, option_a, option_b, option_c, option_d, correct_answer) VALUES (:chapter_id, :question, :option_a, :option_b, :option_c, :option_d, :correct_answer)");
+            // Insert quizzes
+            $insertQuiz = $conn->prepare("INSERT INTO quizzes (chapter_id, question, option_a, option_b, option_c, option_d, correct_answer, quiz_type) VALUES (:chapter_id, :question, :option_a, :option_b, :option_c, :option_d, :correct_answer, :quiz_type)");
 
-        foreach ($quizzes as $quiz) {
-            $insertQuiz->execute([
-                ':chapter_id' => $chapter_id,
-                ':question' => $quiz['question'],
-                ':option_a' => $quiz['option_a'],
-                ':option_b' => $quiz['option_b'],
-                ':option_c' => $quiz['option_c'],
-                ':option_d' => $quiz['option_d'],
-                ':correct_answer' => $quiz['correct_answer']
-            ]);
+            foreach ($quizzes as $quiz) {
+                $quizType = $quiz['quiz_type'];
+                $params = [
+                    ':chapter_id' => $chapter_id,
+                    ':question' => $quiz['question'],
+                    ':quiz_type' => $quizType,
+                    ':correct_answer' => $quiz['correct_answer']
+                ];
+
+                // Handle options based on quiz type
+                switch($quizType) {
+                    case 'multiple_choice':
+                        $params[':option_a'] = $quiz['option_a'];
+                        $params[':option_b'] = $quiz['option_b'];
+                        $params[':option_c'] = $quiz['option_c'];
+                        $params[':option_d'] = $quiz['option_d'];
+                        break;
+                        
+                    case 'true_false':
+                        $params[':option_a'] = 'True';
+                        $params[':option_b'] = 'False';
+                        $params[':option_c'] = '';  // Empty string instead of null
+                        $params[':option_d'] = '';  // Empty string instead of null
+                        break;
+                        
+                    case 'fill_blank':
+                        $params[':option_a'] = '';  // Empty string instead of null
+                        $params[':option_b'] = '';  // Empty string instead of null
+                        $params[':option_c'] = '';  // Empty string instead of null
+                        $params[':option_d'] = '';  // Empty string instead of null
+                        break;
+                }
+
+                // Debug information
+                error_log('Quiz Type: ' . $quizType . ' | Correct Answer: ' . $quiz['correct_answer']);
+                error_log("Quiz Type: " . $quizType);
+                error_log("Params: " . print_r($params, true));
+
+                $insertQuiz->execute($params);
+            }
+            
+            echo "<script>alert('Chapter and Quizzes Added Successfully!');</script>";         
+            exit;
+        } catch(PDOException $e) {
+            error_log("Database Error: " . $e->getMessage());
+            echo "<script>alert('Error: " . addslashes($e->getMessage()) . "');</script>";
         }
-        
-        echo "<script>alert('Chapter and Quizzes Added Successfully!');</script>";         
-        exit;     
     } else {         
         echo "<script>alert('Please complete all fields and add at least one quiz.');</script>";     
     } 
@@ -112,12 +146,18 @@ include 'layout/header.php';
             const form = event.target;
             const formData = new FormData(form);
             
+            // Debug: Log form data
+            for (let pair of formData.entries()) {
+                console.log(pair[0] + ': ' + pair[1]);
+            }
+            
             fetch(form.action, {
                 method: 'POST',
                 body: formData
             })
             .then(response => response.text())
             .then(data => {
+                console.log('Server response:', data); // Debug log
                 if (data.includes('Successfully')) {
                     Swal.fire({
                         title: 'Success!',
@@ -126,7 +166,14 @@ include 'layout/header.php';
                         confirmButtonText: 'OK'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            window.location.href = 'add_chapter_quiz.php';
+                            // Reset the form
+                            form.reset();
+                            // Clear all quizzes
+                            const quizzesSection = document.getElementById('quizzes-section');
+                            quizzesSection.innerHTML = '';
+                            quizCount = 0;
+                            // Scroll to top
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
                         }
                     });
                 } else {
@@ -139,6 +186,7 @@ include 'layout/header.php';
                 }
             })
             .catch(error => {
+                console.error('Error:', error); // Debug log
                 Swal.fire({
                     title: 'Error!',
                     text: 'Something went wrong. Please try again.',
@@ -161,10 +209,18 @@ include 'layout/header.php';
                     </div>
                     <h3 class="font-bold text-lg mb-4 text-gray-800 flex items-center gap-2"><i class='fa-solid fa-question'></i> Quiz #${quizCount}</h3>
                     <div class="mb-3">
+                        <label class="block text-sm font-semibold mb-1">Quiz Type</label>
+                        <select name="quizzes[${quizCount}][quiz_type]" class="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-400" required onchange="handleQuizTypeChange(${quizCount}, this.value)">
+                            <option value="multiple_choice">Multiple Choice</option>
+                            <option value="true_false">True/False</option>
+                            <option value="fill_blank">Fill in the Blank</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
                         <label class="block text-sm font-semibold mb-1">Question</label>
                         <input type="text" name="quizzes[${quizCount}][question]" class="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-400" required>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div id="options-${quizCount}" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-semibold mb-1">Option A</label>
                             <input type="text" name="quizzes[${quizCount}][option_a]" class="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-400" required>
@@ -183,8 +239,10 @@ include 'layout/header.php';
                         </div>
                     </div>
                     <div class="mt-3">
-                        <label class="block text-sm font-semibold mb-1">Correct Answer <span class='text-xs'>(A, B, C, or D)</span></label>
-                        <input type="text" name="quizzes[${quizCount}][correct_answer]" maxlength="1" class="w-full border border-gray-300 p-3 rounded-lg uppercase focus:ring-2 focus:ring-blue-400" pattern="[A-D]" required>
+                        <label class="block text-sm font-semibold mb-1">Correct Answer</label>
+                        <div id="correct-answer-${quizCount}">
+                            <input type="text" name="quizzes[${quizCount}][correct_answer]" class="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-400" required>
+                        </div>
                     </div>
                 </div>
             `;
@@ -201,6 +259,64 @@ include 'layout/header.php';
             if (quizDiv) {
                 quizDiv.classList.add('fade-out');
                 setTimeout(() => quizDiv.remove(), 400);
+            }
+        }
+
+        function handleQuizTypeChange(quizId, type) {
+            const optionsDiv = document.getElementById(`options-${quizId}`);
+            const correctAnswerDiv = document.getElementById(`correct-answer-${quizId}`);
+            
+            switch(type) {
+                case 'multiple_choice':
+                    optionsDiv.innerHTML = `
+                        <div>
+                            <label class="block text-sm font-semibold mb-1">Option A</label>
+                            <input type="text" name="quizzes[${quizId}][option_a]" class="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-400" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-1">Option B</label>
+                            <input type="text" name="quizzes[${quizId}][option_b]" class="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-400" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-1">Option C</label>
+                            <input type="text" name="quizzes[${quizId}][option_c]" class="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-400" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-1">Option D</label>
+                            <input type="text" name="quizzes[${quizId}][option_d]" class="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-400" required>
+                        </div>
+                    `;
+                    correctAnswerDiv.innerHTML = `
+                        <input type="text" name="quizzes[${quizId}][correct_answer]" class="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-400" required placeholder="Enter the correct answer">
+                    `;
+                    break;
+                    
+                case 'true_false':
+                    optionsDiv.innerHTML = `
+                        <div>
+                            <label class="block text-sm font-semibold mb-1">True</label>
+                            <input type="text" name="quizzes[${quizId}][option_a]" value="True" class="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-400" readonly>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-1">False</label>
+                            <input type="text" name="quizzes[${quizId}][option_b]" value="False" class="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-400" readonly>
+                        </div>
+                    `;
+                    correctAnswerDiv.innerHTML = `
+                        <select name="quizzes[${quizId}][correct_answer]" class="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-400" required>
+                            <option value="">Select correct answer</option>
+                            <option value="True">True</option>
+                            <option value="False">False</option>
+                        </select>
+                    `;
+                    break;
+                    
+                case 'fill_blank':
+                    optionsDiv.innerHTML = ''; // No options for fill in the blank
+                    correctAnswerDiv.innerHTML = `
+                        <input type="text" name="quizzes[${quizId}][correct_answer]" class="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-400" required placeholder="Enter the correct answer text">
+                    `;
+                    break;
             }
         }
     </script>

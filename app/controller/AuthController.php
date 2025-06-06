@@ -116,4 +116,46 @@ class AuthController {
             require_once __DIR__ . '/../../public/forget-password.php';
         }
     }
+
+    public function toggleUserStatus($userId) {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            echo json_encode(['success' => false, 'message' => 'Method not allowed']);
+            return;
+        }
+
+        // Get the new status from the request body
+        $data = json_decode(file_get_contents('php://input'), true);
+        $newStatus = $data['status'] ?? null;
+
+        if (!in_array($newStatus, ['active', 'inactive'])) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'Invalid status']);
+            return;
+        }
+
+        $user = new User();
+        if ($user->updateStatus($userId, $newStatus)) {
+            echo json_encode(['success' => true]);
+        } else {
+            http_response_code(500);
+            echo json_encode(['success' => false, 'message' => 'Failed to update user status']);
+        }
+    }
+
+    public function deleteUser($userId) {
+        if ($_SERVER['REQUEST_METHOD'] !== 'DELETE') {
+            http_response_code(405);
+            echo json_encode(['success' => false, 'message' => 'Method not allowed']);
+            return;
+        }
+
+        $user = new User();
+        if ($user->delete($userId)) {
+            echo json_encode(['success' => true]);
+        } else {
+            http_response_code(500);
+            echo json_encode(['success' => false, 'message' => 'Failed to delete user']);
+        }
+    }
 }

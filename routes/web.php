@@ -6,6 +6,7 @@ use root_dev\Controller\EnrollmentController;
 use root_dev\Controller\QuizController;
 use root_dev\Controller\CourseController;
 use root_dev\Controller\NotificationController;
+use root_dev\Controller\InstructorController;
 
 require_once __DIR__ . '/../core/Controller.php';
 require_once __DIR__ . '/../app/models/User.php';
@@ -14,6 +15,7 @@ require_once __DIR__ . '/../app/controller/EnrollmentController.php';
 require_once __DIR__ . '/../app/controller/QuizController.php';
 require_once __DIR__ . '/../app/controller/CourseController.php';
 require_once __DIR__ . '/../app/controller/NotificationController.php';
+require_once __DIR__ . '/../app/controller/InstructorController.php';
 
 // Define routes as [handler_type, action, is_protected, required_role] 
 $routes = [
@@ -27,6 +29,8 @@ $routes = [
     '/home' => ['view', 'home', true, 'user'],
     '/my_learning' => ['view', 'my_learning', true, 'user'],
     '/explore' => ['view', 'explore', true, 'user'],
+    '/edit_profile' => ['view', 'edit_profile', true, 'user'],
+
 
     '/about' => ['view', 'about', true, 'user'],
     '/contact' => ['view', 'contact', true, 'user'],
@@ -54,12 +58,20 @@ $routes = [
     '/admin/course' => ['view', 'admin/course', true, 'admin'],
     '/admin/course/view/{id}' => ['view', 'admin/course-view', true, 'admin'],
     '/admin/announcement' => ['view', 'admin/announcement', true, 'admin'],
+    '/admin/user_table' => ['view', 'admin/user_table', true, 'admin'],
+    '/admin/instructor_table' => ['view', 'admin/instructor_table', true, 'admin'],
+
+
     '/my-learning' => ['view', 'my_learning', true],
     
     // API Routes
     '/api/course/toggle-status/{id}' => [CourseController::class, 'toggleStatus', true, 'admin'],
     '/api/course/reject/{id}' => [CourseController::class, 'rejectCourse', true, 'admin'],
     '/api/notifications/mark-read' => [NotificationController::class, 'markNotificationsAsRead', true, 'instructor'],
+    '/api/instructor/toggle-status/{id}' => [InstructorController::class, 'toggleStatus', true, 'admin'],
+    '/api/instructor/delete/{id}' => [InstructorController::class, 'deleteInstructor', true, 'admin'],
+    '/api/user/toggle-status/{id}' => [AuthController::class, 'toggleUserStatus', true, 'admin'],
+    '/api/user/delete/{id}' => [AuthController::class, 'deleteUser', true, 'admin'],
 ];
 
 // Get the current path

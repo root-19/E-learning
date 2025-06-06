@@ -16,81 +16,99 @@ include 'layout/side-header.php';
     <title>Course Management - InsureLearn</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-   
+    <style>
+        .hover-scale {
+            transition: transform 0.2s ease-in-out;
+        }
+        .hover-scale:hover {
+            transform: scale(1.02);
+        }
+        .table-container {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+        .action-button {
+            transition: all 0.2s ease-in-out;
+        }
+        .action-button:hover {
+            transform: translateY(-1px);
+        }
+    </style>
 </head>
 <body class="bg-gray-50">
     <div class="container mx-auto px-4 py-8 mt-20">
         <!-- Header Section -->
         <div class="flex justify-between items-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-800">Course Management</h1>
-            <a href="/admin/course/create" 
-               class="bg-[#4B793E] text-white px-4 py-2 rounded-lg hover:bg-[#3d6232] transition-colors flex items-center gap-2">
-                <i class="fas fa-plus"></i>
-                Add New Course
-            </a>
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800">Course Management</h1>
+                <p class="text-gray-600 mt-1">Manage and monitor all your courses in one place</p>
+            </div>
         </div>
 
         <!-- Course List -->
-        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden hover-scale">
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course Image</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">rejected</th>
-
-
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Course Image</th>
+                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Title</th>
+                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Description</th>
+                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Rejected</th>
+                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         <?php foreach ($courses as $course): ?>
-                            <tr>
+                            <tr class="hover:bg-gray-50 transition-colors">
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <img src="/<?= htmlspecialchars($course['course_image']) ?>" 
                                          alt="<?= htmlspecialchars($course['course_title']) ?>"
-                                         class="h-16 w-24 object-cover rounded">
+                                         class="h-20 w-32 object-cover rounded-lg shadow-sm">
                                 </td>
                                 <td class="px-6 py-4">
-                                    <div class="text-sm font-medium text-gray-900">
+                                    <div class="text-sm font-semibold text-gray-900">
                                         <?= htmlspecialchars($course['course_title']) ?>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <div class="text-sm text-gray-500 max-w-md truncate">
+                                    <div class="text-sm text-gray-600 max-w-md truncate">
                                         <?= htmlspecialchars($course['description']) ?>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                    <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
                                         <?= $course['status'] === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' ?>">
                                         <?= ucfirst($course['status']) ?>
                                     </span>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <div class="text-sm text-gray-500 max-w-md truncate">
+                                    <div class="text-sm text-gray-600">
                                         <?= htmlspecialchars($course['is_rejected']) ?>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <div class="flex items-center gap-2">
+                                    <div class="flex items-center gap-3">
                                         <a href="/admin/course/view/<?= $course['id'] ?>" 
-                                           class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition-colors text-sm">
+                                           class="action-button bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm flex items-center gap-1">
+                                            <i class="fas fa-eye"></i>
                                             View
                                         </a>
                                         <button onclick="toggleCourseStatus(<?= $course['id'] ?>, '<?= $course['status'] ?>')" 
-                                                class="<?= $course['status'] === 'active' ? 'bg-green-500 hover:bg-green-600' : 'bg-yellow-500 hover:bg-yellow-600' ?> text-white px-3 py-1 rounded transition-colors text-sm">
+                                                class="action-button <?= $course['status'] === 'active' ? 'bg-green-500 hover:bg-green-600' : 'bg-yellow-500 hover:bg-yellow-600' ?> text-white px-4 py-2 rounded-lg transition-colors text-sm flex items-center gap-1">
+                                            <i class="fas <?= $course['status'] === 'active' ? 'fa-pause' : 'fa-play' ?>"></i>
                                             <?= $course['status'] === 'active' ? 'Deactivate' : 'Activate' ?>
                                         </button>
                                         <button onclick="rejectCourse(<?= $course['id'] ?>)" 
-                                                class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition-colors text-sm">
+                                                class="action-button bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors text-sm flex items-center gap-1">
+                                            <i class="fas fa-ban"></i>
                                             Reject
                                         </button>
                                         <button onclick="deleteCourse(<?= $course['id'] ?>)" 
-                                                class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition-colors text-sm">
+                                                class="action-button bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors text-sm flex items-center gap-1">
+                                            <i class="fas fa-trash"></i>
                                             Delete
                                         </button>
                                     </div>

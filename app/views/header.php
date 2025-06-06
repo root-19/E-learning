@@ -50,7 +50,7 @@
       </button>
       <!-- Dropdown Menu -->
       <div id="userDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white text-black rounded-md shadow-lg z-50">
-        <a href="edit-profile.php" class="block px-4 py-2 hover:bg-gray-200">Edit Profile</a>
+        <a href="edit_profile" class="block px-4 py-2 hover:bg-gray-200">Edit Profile</a>
         <a href="/logout" class="block px-4 py-2 hover:bg-gray-200">Logout</a>
       </div>
     </div>
