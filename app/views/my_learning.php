@@ -105,24 +105,14 @@ try {
                             <i class="fas fa-exclamation-circle"></i>
                             This course is currently inactive and not available for enrollment.
                         </div>
-                    <?php elseif ($progress['is_completed']): ?>
-                        <div class="mb-4">
-                            <div class="flex justify-between text-sm text-gray-600 mb-1">
-                                <span>Course Completed!</span>
-                                <span>100%</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div class="bg-green-600 h-2 rounded-full" style="width: 100%"></div>
-                            </div>
-                        </div>
                     <?php else: ?>
                         <div class="mb-4">
                             <div class="flex justify-between text-sm text-gray-600 mb-1">
-                                <span>Progress</span>
-                                <span><?= min(number_format($progress['completion_percentage'], 1), 100) ?>%</span>
+                                <span><?= $progress['is_completed'] ? 'Course Completed!' : 'Progress' ?></span>
+                                <span><?= $progress['is_completed'] ? '100' : min(number_format($progress['completion_percentage'], 1), 100) ?>%</span>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div class="bg-green-600 h-2 rounded-full" style="width: <?= min($progress['completion_percentage'], 100) ?>%"></div>
+                                <div class="bg-green-600 h-2 rounded-full" style="width: <?= $progress['is_completed'] ? '100' : min($progress['completion_percentage'], 100) ?>%"></div>
                             </div>
                         </div>
                     <?php endif; ?>

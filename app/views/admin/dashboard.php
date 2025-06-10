@@ -4,12 +4,12 @@ require_once __DIR__ . '/../../../config/database.php';
 $db = Database::connect();
 
 // Count instructors
-$stmtInstructor = $db->prepare("SELECT COUNT(*) FROM users WHERE role = 'instructor'");
+$stmtInstructor = $db->prepare("SELECT COUNT(*) FROM users WHERE role = 'instructor' AND status = 'active'");
 $stmtInstructor->execute();
 $instructorCount = $stmtInstructor->fetchColumn();
 
 // Count learners
-$stmtLearner = $db->prepare("SELECT COUNT(*) FROM users WHERE role = 'user'");
+$stmtLearner = $db->prepare("SELECT COUNT(*) FROM users WHERE role = 'user' AND status = 'active'");
 $stmtLearner->execute();
 $learnerCount = $stmtLearner->fetchColumn();
 
