@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../controller/EnrollmentController.php';
+// namespace App\Controllers;
+use root_dev\Controller\EnrollmentController;
 
 // Get chapter ID from URL
 $chapter_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -37,7 +39,7 @@ try {
     }
 
     // Update progress for this chapter
-    $enrollmentController = new \root_dev\Controller\EnrollmentController();
+    $enrollmentController = new EnrollmentController();
     $enrollmentController->updateProgress($user_id, $chapter['course_id'], $chapter_id);
 
     // Get quizzes for this chapter
@@ -176,19 +178,55 @@ try {
                                     frameborder="0">
                                 </iframe>
                             </div>
-                        <?php elseif (in_array($chapter['media_type'], ['ppt', 'pptx'])): ?>
+                        <?php elseif ($chapter['media_type'] === 'pptx'): ?>
+                            <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 text-center">
+                                <i class="fas fa-file-powerpoint text-4xl text-orange-600 mb-2"></i>
+                                <p class="font-medium text-gray-800 mb-2">
+                                    PowerPoint (.pptx) file available for download.
+                                </p>
+                                <a href="/<?= htmlspecialchars($chapter['media_path']) ?>" 
+                                   class="inline-block px-6 py-2 bg-[#4B793E] text-white rounded-lg hover:bg-[#3d6232] transition"
+                                   download>
+                                    Download PPTX
+                                </a>
+                                <?php if ($chapter['media_caption']): ?>
+                                    <p class="text-sm text-gray-600 mt-2 italic">
+                                        <?= htmlspecialchars($chapter['media_caption']) ?>
+                                    </p>
+                                <?php endif; ?>
+                            </div>
+                        <?php elseif ($chapter['media_type'] === 'ppt'): ?>
                             <div class="w-full h-[600px] rounded-lg shadow-md">
                                 <iframe 
-                                    src="https://view.officeapps.live.com/op/embed.aspx?src=<?= urlencode($_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/' . $chapter['media_path']) ?>" 
+                                    src="https://view.officeapps.live.com/op/embed.aspx?src=<?= urlencode((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' . $chapter['media_path']) ?>" 
                                     width="100%" 
                                     height="100%" 
                                     frameborder="0">
                                 </iframe>
                             </div>
-                        <?php elseif (in_array($chapter['media_type'], ['doc', 'docx', 'xls', 'xlsx'])): ?>
+                        <?php elseif (in_array($chapter['media_type'], ['doc', 'docx'])): ?>
+                            <div id="docx-container" class="prose max-w-none p-4 rounded-lg border border-gray-200" style="background: #000; color: #fff;"></div>
+                            <script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
+                            <script>
+                            function renderDocx(url) {
+                                fetch(url)
+                                    .then(response => response.blob())
+                                    .then(blob => blob.arrayBuffer())
+                                    .then(arrayBuffer => mammoth.convertToHtml({arrayBuffer: arrayBuffer}))
+                                    .then(displayResult)
+                                    .catch(function(error) {
+                                        document.getElementById('docx-container').innerHTML = '<p class="text-red-600">Failed to load document.</p>';
+                                    });
+                            }
+                            function displayResult(result) {
+                                document.getElementById('docx-container').innerHTML = result.value;
+                            }
+                            renderDocx('<?= '/' . htmlspecialchars($chapter['media_path']) ?>');
+                            </script>
+                        <?php elseif (in_array($chapter['media_type'], ['xls', 'xlsx'])): ?>
                             <div class="w-full h-[600px] rounded-lg shadow-md">
                                 <iframe 
-                                    src="https://view.officeapps.live.com/op/embed.aspx?src=<?= urlencode($_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/' . $chapter['media_path']) ?>" 
+                                    src="https://view.officeapps.live.com/op/embed.aspx?src=<?= urlencode((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' . $chapter['media_path']) ?>" 
                                     width="100%" 
                                     height="100%" 
                                     frameborder="0">
@@ -208,11 +246,6 @@ try {
                                     </div>
                                 </div>
                             </div>
-                        <?php endif; ?>
-                        <?php if ($chapter['media_caption']): ?>
-                            <p class="text-sm text-gray-600 mt-2 text-center italic">
-                                <?= htmlspecialchars($chapter['media_caption']) ?>
-                            </p>
                         <?php endif; ?>
                     </div>
                 <?php endif; ?>
@@ -372,7 +405,7 @@ try {
 
     media_path: <?= htmlspecialchars($chapter['media_path']) ?>
 
-    iframe src: https://view.officeapps.live.com/op/embed.aspx?src=<?= urlencode($_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/' . $chapter['media_path']) ?>
+    iframe src: https://view.officeapps.live.com/op/embed.aspx?src=<?= urlencode((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' . $chapter['media_path']) ?>
     </pre>
 </body>
 </html> 

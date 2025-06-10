@@ -1,7 +1,7 @@
 <?php
 // Include the InstructorController
 require_once __DIR__ . '/../../controller/InstructorController.php';
-// use root_dev\Controller\InstructorController;
+use root_dev\Controller\InstructorController;
 
 // Initialize the instructorController variable outside of POST check
 $instructorController = new InstructorController();

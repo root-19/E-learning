@@ -71,7 +71,7 @@ include 'layout/header.php';
             <div class="bg-white p-6 rounded-xl shadow-lg">
                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Interactive Presentation</h2>
                 <iframe 
-                    src="https://view.officeapps.live.com/op/embed.aspx?src=<?= urlencode($_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/' . $course['ppt_path']) ?>" 
+                    src="https://view.officeapps.live.com/op/embed.aspx?src=<?= urlencode((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' . $course['ppt_path']) ?>" 
                     class="ppt-container"
                     frameborder="0">
                 </iframe>

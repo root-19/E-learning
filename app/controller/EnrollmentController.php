@@ -76,13 +76,29 @@ class EnrollmentController {
             // Start transaction
             $this->conn->beginTransaction();
 
-            // Update chapter progress
+            // First check if this chapter progress already exists
             $stmt = $this->conn->prepare("
-                UPDATE course_progress 
-                SET is_completed = TRUE, last_accessed = CURRENT_TIMESTAMP
+                SELECT id FROM course_progress 
                 WHERE user_id = ? AND course_id = ? AND chapter_id = ?
             ");
             $stmt->execute([$user_id, $course_id, $chapter_id]);
+            
+            if (!$stmt->fetch()) {
+                // If no progress record exists, create one
+                $stmt = $this->conn->prepare("
+                    INSERT INTO course_progress (user_id, course_id, chapter_id, is_completed, last_accessed)
+                    VALUES (?, ?, ?, TRUE, CURRENT_TIMESTAMP)
+                ");
+                $stmt->execute([$user_id, $course_id, $chapter_id]);
+            } else {
+                // Update existing progress
+                $stmt = $this->conn->prepare("
+                    UPDATE course_progress 
+                    SET is_completed = TRUE, last_accessed = CURRENT_TIMESTAMP
+                    WHERE user_id = ? AND course_id = ? AND chapter_id = ?
+                ");
+                $stmt->execute([$user_id, $course_id, $chapter_id]);
+            }
 
             // Calculate new completion percentage
             $stmt = $this->conn->prepare("

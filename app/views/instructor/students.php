@@ -71,19 +71,26 @@ try {
                 <div class="flex gap-4">
                     <div class="relative">
                         <input type="text" 
+                               id="studentSearch"
                                placeholder="Search students..." 
-                               class="pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+                               class="pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-100 w-64">
                         <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <!-- Search suggestions dropdown -->
+                        <div id="searchSuggestions" class="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg hidden">
+                            <div class="max-h-60 overflow-y-auto">
+                                <!-- Suggestions will be populated here -->
+                            </div>
+                        </div>
                     </div>
                     
-                    <select class="border border-gray-200 rounded-lg px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+                    <!-- <select class="border border-gray-200 rounded-lg px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
                         <option value="">All Courses</option>
                         <?php foreach ($enrolled_students as $student): ?>
                             <option value="<?= htmlspecialchars($student['course_id']) ?>">
                                 <?= htmlspecialchars($student['course_title']) ?>
                             </option>
                         <?php endforeach; ?>
-                    </select>
+                    </select> -->
                 </div>
             </div>
 
@@ -134,10 +141,10 @@ try {
                                     <div class="flex items-center">
                                         <div class="w-full bg-gray-200 rounded-full h-2.5 mr-2">
                                             <div class="bg-blue-600 h-2.5 rounded-full" 
-                                                 style="width: <?= $student['completion_percentage'] ?>%"></div>
+                                                 style="width: <?= min($student['completion_percentage'], 100) ?>%"></div>
                                         </div>
                                         <span class="text-sm text-gray-600">
-                                            <?= number_format($student['completion_percentage'], 1) ?>%
+                                            <?= number_format(min($student['completion_percentage'], 100), 1) ?>%
                                         </span>
                                     </div>
                                     <div class="text-xs text-gray-500 mt-1">
@@ -170,37 +177,141 @@ try {
     </div>
 
     <script>
-        // Add search functionality
-        document.querySelector('input[type="text"]').addEventListener('input', function(e) {
-            const searchTerm = e.target.value.toLowerCase();
-            const rows = document.querySelectorAll('tbody tr');
+        // Store all student data for suggestions
+        const studentData = Array.from(document.querySelectorAll('tbody tr')).map(row => ({
+            name: row.querySelector('td:first-child .text-gray-900').textContent,
+            email: row.querySelector('td:first-child .text-gray-500').textContent,
+            course: row.querySelector('td:nth-child(2)').textContent
+        }));
+
+        const searchInput = document.getElementById('studentSearch');
+        const suggestionsDiv = document.getElementById('searchSuggestions');
+        let selectedIndex = -1;
+
+        // Function to show suggestions
+        function showSuggestions(searchTerm) {
+            if (!searchTerm.trim()) {
+                suggestionsDiv.classList.add('hidden');
+                return;
+            }
+
+            const matches = studentData.filter(student => 
+                student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                student.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                student.course.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+
+            if (matches.length > 0) {
+                const suggestionsHTML = matches.map((student, index) => `
+                    <div class="suggestion-item px-4 py-2 hover:bg-gray-100 cursor-pointer ${index === selectedIndex ? 'bg-gray-100' : ''}"
+                         data-index="${index}">
+                        <div class="font-medium">${student.name}</div>
+                        <div class="text-sm text-gray-500">${student.email}</div>
+                        <div class="text-sm text-gray-600">${student.course}</div>
+                    </div>
+                `).join('');
+
+                suggestionsDiv.querySelector('.max-h-60').innerHTML = suggestionsHTML;
+                suggestionsDiv.classList.remove('hidden');
+            } else {
+                suggestionsDiv.classList.add('hidden');
+            }
+        }
+
+        // Handle input changes
+        searchInput.addEventListener('input', function(e) {
+            const searchTerm = e.target.value;
+            selectedIndex = -1;
+            showSuggestions(searchTerm);
             
+            // Filter table rows
+            const rows = document.querySelectorAll('tbody tr');
             rows.forEach(row => {
-                const studentName = row.querySelector('td:first-child').textContent.toLowerCase();
+                const studentName = row.querySelector('td:first-child .text-gray-900').textContent.toLowerCase();
+                const studentEmail = row.querySelector('td:first-child .text-gray-500').textContent.toLowerCase();
                 const courseName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
                 
-                if (studentName.includes(searchTerm) || courseName.includes(searchTerm)) {
+                if (studentName.includes(searchTerm.toLowerCase()) || 
+                    studentEmail.includes(searchTerm.toLowerCase()) || 
+                    courseName.includes(searchTerm.toLowerCase())) {
                     row.style.display = '';
                 } else {
                     row.style.display = 'none';
                 }
             });
+
+            // Show message if no results found
+            const visibleRows = document.querySelectorAll('tbody tr:not([style*="display: none"])');
+            const noResultsMessage = document.getElementById('no-results-message');
+            
+            if (visibleRows.length === 0 && searchTerm !== '') {
+                if (!noResultsMessage) {
+                    const message = document.createElement('tr');
+                    message.id = 'no-results-message';
+                    message.innerHTML = `
+                        <td colspan="5" class="px-6 py-4 text-center text-gray-500">
+                            No students found matching "${searchTerm}"
+                        </td>
+                    `;
+                    document.querySelector('tbody').appendChild(message);
+                }
+            } else if (noResultsMessage) {
+                noResultsMessage.remove();
+            }
         });
 
-        // Add course filter functionality
-        document.querySelector('select').addEventListener('change', function(e) {
-            const selectedCourse = e.target.value;
-            const rows = document.querySelectorAll('tbody tr');
+        // Handle keyboard navigation
+        searchInput.addEventListener('keydown', function(e) {
+            const suggestions = suggestionsDiv.querySelectorAll('.suggestion-item');
             
-            rows.forEach(row => {
-                const courseId = row.querySelector('td:nth-child(2)').getAttribute('data-course-id');
-                
-                if (!selectedCourse || courseId === selectedCourse) {
-                    row.style.display = '';
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                selectedIndex = Math.min(selectedIndex + 1, suggestions.length - 1);
+                updateSelectedSuggestion();
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                selectedIndex = Math.max(selectedIndex - 1, -1);
+                updateSelectedSuggestion();
+            } else if (e.key === 'Enter' && selectedIndex >= 0) {
+                e.preventDefault();
+                const selectedSuggestion = suggestions[selectedIndex];
+                if (selectedSuggestion) {
+                    searchInput.value = selectedSuggestion.querySelector('div').textContent;
+                    suggestionsDiv.classList.add('hidden');
+                    searchInput.dispatchEvent(new Event('input'));
+                }
+            } else if (e.key === 'Escape') {
+                suggestionsDiv.classList.add('hidden');
+            }
+        });
+
+        function updateSelectedSuggestion() {
+            const suggestions = suggestionsDiv.querySelectorAll('.suggestion-item');
+            suggestions.forEach((suggestion, index) => {
+                if (index === selectedIndex) {
+                    suggestion.classList.add('bg-gray-100');
                 } else {
-                    row.style.display = 'none';
+                    suggestion.classList.remove('bg-gray-100');
                 }
             });
+        }
+
+        // Handle suggestion clicks
+        suggestionsDiv.addEventListener('click', function(e) {
+            const suggestionItem = e.target.closest('.suggestion-item');
+            if (suggestionItem) {
+                const studentName = suggestionItem.querySelector('div').textContent;
+                searchInput.value = studentName;
+                suggestionsDiv.classList.add('hidden');
+                searchInput.dispatchEvent(new Event('input'));
+            }
+        });
+
+        // Close suggestions when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!searchInput.contains(e.target) && !suggestionsDiv.contains(e.target)) {
+                suggestionsDiv.classList.add('hidden');
+            }
         });
     </script>
 </body>
