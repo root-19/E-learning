@@ -1,0 +1,174 @@
+<?php include 'header.php'; ?>
+<br>
+<br>
+<br>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Inter Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+      }
+    </style>
+
+    <!-- Font Awesome CDN (No Kit Needed) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body class="bg-white text-gray-900">
+    <!-- Main Contact Section -->
+    <main class="px-6 py-12 bg-[#fdfdf9]">
+      <!-- <h2 class="text-3xl font-bold text-center mb-8">Contact Us</h2> -->
+
+      <div
+        class="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 bg-[#FAFAFA] border border-green-200 p-8 rounded-lg shadow-lg"
+      >
+        <!-- Contact Form -->
+        <form
+          action="https://formsubmit.co/siybauco_associates@yahoo.com"
+          method="POST"
+          class="space-y-4"
+        >
+          <input
+            type="hidden"
+            name="_subject"
+            value="New Contact Form Submission"
+          />
+          <input
+            type="hidden"
+            name="_next"
+            value="https://siybaucoinsurance.com/thanks.html"
+          />
+
+          <div>
+            <label class="block font-medium mb-1">Full Name *</label>
+            <input
+              type="text"
+              name="name"
+              required
+              placeholder="Your Name"
+              class="w-full border border-green-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F4C542] focus:border-[#F4C542]"
+            />
+          </div>
+          <div>
+            <label class="block font-medium mb-1">Email Address *</label>
+            <input
+              type="email"
+              name="email"
+              required
+              pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
+              placeholder="your.email@example.com"
+              class="w-full border border-green-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F4C542] focus:border-[#F4C542]"
+            />
+          </div>
+          <div>
+            <label class="block font-medium mb-1">Subject *</label>
+            <input
+              type="text"
+              name="subject"
+              required
+              placeholder="How can we help?"
+              class="w-full border border-green-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F4C542] focus:border-[#F4C542]"
+            />
+          </div>
+          <div>
+            <label class="block font-medium mb-1">Your Message *</label>
+            <textarea
+              name="message"
+              required
+              placeholder="Please write your message here..."
+              class="w-full border border-green-300 px-4 py-2 rounded-lg h-32 resize-none focus:outline-none focus:ring-2 focus:ring-[#F4C542] focus:border-[#F4C542]"
+            ></textarea>
+          </div>
+          <button
+            type="submit"
+            class="bg-[#F4C542] hover:bg-[#e0b03d] text-white font-bold px-6 py-3 rounded-lg shadow-md transition-transform hover:scale-105 w-full"
+          >
+            Send Message
+          </button>
+        </form>
+
+        <!-- Contact Info -->
+        <div>
+          <h3 class="text-xl font-semibold mb-3">
+            Siybauco And Associates Insurance Agency, Inc.
+          </h3>
+          <p class="mb-2">
+            <i class="fas fa-map-marker-alt text-green-600 mr-2"></i>
+            23 Florida Street, Brgy. Wack-Wack, Mandaluyong, Metro Manila
+          </p>
+          <p class="mb-2">55 Rizal Avenue, Brgy. Bayambang, Pangasinan</p>
+          <p class="mb-2">
+            <i class="fas fa-phone-alt text-green-600 mr-2"></i>
+            (+63) 917 777 1213
+          </p>
+          <p class="mb-6">
+            <i class="fas fa-envelope text-green-600 mr-2"></i>
+            <a
+              href="mailto:siybauco_associates@yahoo.com"
+              class="text-green-600 hover:underline"
+              >siybauco_associates@yahoo.com</a
+            >
+          </p>
+
+          <!-- Social Links -->
+          <div class="mb-6">
+            <p class="font-medium mb-3 text-gray-700">Connect with us:</p>
+            <div class="flex space-x-3">
+              <!-- LinkedIn -->
+              <a
+                href="https://ph.linkedin.com/in/siybauco-insurance-613007301"
+                class="w-8 h-8 flex items-center justify-center bg-[#0077B5] rounded-full hover:bg-[#006097] transition-colors"
+                aria-label="LinkedIn"
+              >
+                <i class="fab fa-linkedin-in text-white text-sm"></i>
+              </a>
+
+              <!-- Facebook -->
+              <a
+                href="https://www.facebook.com/siybauco.ph/"
+                class="w-8 h-8 flex items-center justify-center bg-[#4267B2] rounded-full hover:bg-[#365899] transition-colors"
+                aria-label="Facebook"
+              >
+                <i class="fab fa-facebook-f text-white text-sm"></i>
+              </a>
+
+              <!-- Instagram -->
+              <a
+                href="https://www.instagram.com/siybaucoinsurance/"
+                class="w-8 h-8 flex items-center justify-center bg-gradient-to-r from-[#833AB4] via-[#C13584] to-[#E1306C] rounded-full hover:opacity-90 transition-opacity"
+                aria-label="Instagram"
+              >
+                <i class="fab fa-instagram text-white text-sm"></i>
+              </a>
+
+              <!-- Website -->
+              <a
+                href="https://siybaucoinsurance.com/"
+                class="w-8 h-8 flex items-center justify-center bg-[#F4C542] rounded-full hover:bg-[#e0b03d] transition-colors"
+                aria-label="Website"
+              >
+                <i class="fas fa-globe text-white text-sm"></i>
+              </a>
+            </div>
+          </div>
+          <!-- Interactive Map -->
+          <iframe
+            class="w-full h-64 rounded-lg border-0 shadow-md"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1930.6930889422465!2d121.04304731613898!3d14.59153572017454!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397c8720d390a2d%3A0xd3e2b43bc65df938!2s23%20Florida%20St%2C%20Mandaluyong%2C%201550%20Metro%20Manila!5e0!3m2!1sen!2sph!4v1715840000000!5m2!1sen!2sph"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

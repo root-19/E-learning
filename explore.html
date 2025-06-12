@@ -1,0 +1,452 @@
+Try AI directly in your favorite apps … Use Gemini to generate drafts and refine content, plus get Gemini Advanced with access to Google’s next-gen AI for ₱1,100.00 ₱550.00 for 2 months
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> LearnInsure | Explore Page </title>
+    <link rel="stylesheet" href="explore-page.css"><!-- Link to external CSS file -->
+</head>
+<body>
+
+    <header>
+    <!---------- HEADER/NAVIGATION BAR SECTION ---------->
+    <div class="header-wrapper">
+            <!-- Left: Logo and Brand -->
+            <div class="header-left">
+                <img src="./assets/learninsure-logo.png" alt="InsureLearn Logo" class="logo-image" />
+                <span class="navbar-brand">InsureLearn</span>
+            </div>
+        
+            <!-- Center: Navigation Links -->
+            <nav class="header-center">
+                <ul class="navbar-nav">
+                <li><a class="nav-link" href="#">Home</a></li>
+                <li><a class="nav-link active" href="#">Explore</a></li>
+                <li><a class="nav-link" href="#">My Learning</a></li>
+                <li><a class="nav-link" href="#">About Us</a></li>
+                <li><a class="nav-link" href="#">Contacts</a></li>
+                </ul>
+            </nav>
+        
+            <!-- Right: Profile Icon and Login -->
+            <div class="header-right">
+                <div class="profile-icon-container">
+                <img src="./assets/profile-icon.png" alt="Profile Icon" class="profile-icon" />
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">Dashboard</a>
+                    <a href="#" class="dropdown-item">Settings</a>
+                    <a href="#" class="dropdown-item">Logout</a>
+                </div>
+                </div>
+                <a href="#" class="login-link">Login</a>
+            </div>
+        </div>
+    </header>
+
+    <!---------- EXPLORE HEADER ---------->
+    <section class="explore-header">
+        <h2> Delve Into All Of Our Offered Learning Resources! </h2>
+        <br>
+        <div class="search-container">
+            <input type="text" placeholder="Finding Something? Type the title in the search box..." class="search-bar">
+        </div>
+
+        <div class="categories">
+            <button class="category-btn"> <a href = "../Explore-Main/Explore_Main.html"> All Offered Resources </a> </button>
+            <button class="category-btn"> <a href = "../Explore_modules/Explore_modules.html"> Learning Modules </a> </button>
+            <button class="category-btn"> <a href = "../Explore_scblearning/Explore_scblearning.html"> Scenario Based Learning Activities </a> </button>
+        </div>
+    </section>
+
+    <!---------- COURSE CARD: RECOMMENDED ---------->
+    <div class="container">
+        <h3> Recommended For You </h3>
+        <div class="card-container">
+            <div class="card"> 
+                <div class="card-image">
+                    <img src="./assets/courseimg/courseimg1.jpg" alt="Course" />
+                </div>
+                <div class="card-content">
+                    <h3 class="course-title">Fundamental Concepts of Insurance</h3>
+                    <p class="course-type">
+                        <span class="credit-badge">Learning Module</span> • Jane Doe <!-- Jane Doe is the instructor based on the instructor ID in the database-->
+                    </p>
+                    <p class="course-status enrolled">ENROLLED</p> <!-- status is not yet on the database just make it placeholder-->
+                </div>
+            </div>
+
+            <div class="card"> 
+                <div class="card-image">
+                    <img src="./assets/courseimg/courseimg2.jpg" alt="Course" />
+                </div>
+                <div class="card-content">
+                    <h3 class="course-title">Become a skilled and proficient Financial Advisor</h3>
+                    <p class="course-type">
+                        <span class="credit-badge">Learning Module</span> • John Doe <!-- John Doe is the instructor based on the instructor ID in the database-->
+                    </p>
+                    <p class="course-status not-enrolled">NOT YET ENROLLED</p> <!-- status is not yet on the database just make it placeholder-->
+                </div>
+            </div>
+
+            <div class="card"> 
+                <div class="card-image">
+                    <img src="./assets/courseimg/courseimg3.jpg" alt="Course" />
+                </div>
+                <div class="card-content">
+                    <h3 class="course-title">Mastering the Insurance Sales Process</h3>
+                    <p class="course-type">
+                        <span class="credit-badge">Learning Module</span> • John Doe <!-- John Doe is the instructor based on the instructor ID in the database-->
+                    </p>
+                    <p class="course-status enrolled">ENROLLED</p> <!-- status is not yet on the database just make it placeholder-->
+                </div>
+            </div>
+
+            <div class="card"> 
+                <div class="card-image">
+                    <img src="./assets/courseimg/courseimg4.jpg" alt="Course" />
+                </div>
+                <div class="card-content">
+                    <h3 class="course-title">Negotiation Skills in Insurance Advisory</h3>
+                    <p class="course-type">
+                        <span class="credit-badge">Learning Module</span> • Jane Doe <!-- Jane Doe is the instructor based on the instructor ID in the database-->
+                    </p>
+                    </p>
+                    <p class="course-status not-enrolled">NOT YET ENROLLED</p> <!-- status is not yet on the database just make it placeholder-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+<style>
+    Try AI directly in your favorite apps … Use Gemini to generate drafts and refine content, plus get Gemini Advanced with access to Google’s next-gen AI for ₱1,100.00 ₱550.00 for 2 months
+/* ====================== BASE STYLES ===================== */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #FAFAFA;
+    color: #333333;
+  }
+  
+  /* ====================== HEADER STYLES ===================== */
+  
+  header {
+    background-color: #4B793E;
+    padding: 10px 30px;
+    box-shadow: 0 2px 4px #080D07;
+  }
+  
+  .header-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  /* Left Section: Logo and Brand */
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .logo-image {
+    width: 45px;
+    height: 45px;
+  }
+  
+  .navbar-brand {
+    color: #FFFFFF;
+    font-family: 'Times New Roman', sans-serif;
+    font-weight: bold;
+    font-size: 20px;
+  }
+  
+  /* Center Section: Nav Menu */
+  .header-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .navbar-nav {
+    display: flex;
+    list-style: none;
+    gap: 25px;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .navbar-nav .nav-link {
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 18px;
+    text-decoration: none;
+    position: relative;
+    padding: 8px 0;
+  }
+  
+  .navbar-nav .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #F4C542;
+    transition: width 0.3s ease;
+  }
+  
+  .navbar-nav .nav-link:hover::after,
+  .navbar-nav .nav-link.active::after {
+    width: 100%;
+  }
+  
+  .navbar-nav .nav-link:hover,
+  .navbar-nav .nav-link.active {
+    color: #F4C542;
+  }
+  
+  /* Right Section: Profile & Login */
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .profile-icon-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .profile-icon {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .dropdown-menu {
+    position: absolute;
+    top: 45px;
+    right: 0;
+    background: #FFFFFF;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 180px;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    visibility: hidden;
+    overflow: hidden;
+    z-index: 99;
+  }
+  
+  .profile-icon-container:hover .dropdown-menu,
+  .dropdown-menu.active {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+  }
+  
+  .dropdown-menu .dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    text-decoration: none;
+    color: #333333;
+    font-size: 14px;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  
+  .dropdown-menu .dropdown-item:hover {
+    background: #56CCF2;
+    color: #ffffff;
+  }
+  
+  .login-link {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 2px solid white;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+  }
+  
+  .login-link:hover {
+    color: #4B793E;
+    background-color: #F4C542;
+    border-color: #F4C542;
+  }
+
+  /* ====================== EXPLORE HEADER STYLES ===================== */
+  .explore-header {
+    text-align: center;
+    padding: 30px;
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dddd;
+    margin-top: 1%;
+}
+
+  .search-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+  }
+
+  .search-bar {
+      width: 40%;
+      padding: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 20px;
+      font-size: 14px;
+  }
+
+  .categories {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+  }
+
+  .category-btn {
+      background-color: #4CAF50;
+      color: white;
+      padding: 8px 15px;
+      border-radius: 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      transition: 0.3s;
+      box-shadow: 0 1px 2px #101A0E;
+  }
+
+  .category-btn {
+      background-color: #4CAF50; 
+      color: white;
+      padding: 8px 15px;
+      border-radius: 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      transition: 0.3s;
+      text-align: center;
+  }
+
+  .category-btn a {
+      color: white; 
+      text-decoration: none; 
+      display: block; 
+  }
+
+  .category-btn:hover {
+      background-color: #4B793E;
+      box-shadow: 0 0px 0px #080D07;
+  }
+
+  .category-btn:hover a {
+      color:#F4C542;
+  }
+
+   /* ====================== COURSE CARD STYLES ===================== */
+   .card-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+
+  h3 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+  }
+
+  .card {
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+}
+  
+  .card-image {
+    height: 150px;
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+  
+  .card-content {
+    padding: 1rem;
+  }
+  
+  .course-status {
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-top: 0.25rem;
+  }
+  
+  .course-status.enrolled {
+    color: #2d5c34;
+  }
+  
+  .course-status.not-enrolled {
+    color: #c0392b;
+  }
+  
+  .course-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 5px 0;
+  }
+  
+  .course-type {
+    font-size: 14px;
+    color: #6c757d;
+    margin-top: 5%;
+    margin-bottom: 5%;
+  }
+  
+  .credit-badge {
+    font-size: 12px;
+    background: #28a745;
+    color: white;
+    padding: 3px 5px;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-right: 10px;
+  }
+</style>

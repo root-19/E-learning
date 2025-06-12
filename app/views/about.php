@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - LearnInsure</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header Section -->
+     <?php include 'header.php'; ?>
+
+    <!-- Hero Section -->
+    <section class="text-white py-20 mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h1 class="text-4xl text-black md:text-5xl font-bold mb-6">              Start Your Journey in 3 Easy Steps</h1>
+                <p class="text-xl text-black max-w-3xl mx-auto">
+
+How it works. How to start learning.
+
+
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl font-bold text-[#4B793E] mb-6">Our Mission</h2>
+                    <p class="text-gray-600 text-lg mb-6">
+                        At LearnInsure, we're dedicated to transforming insurance education through technology. 
+                        Our mission is to provide accessible, engaging, and practical learning experiences that 
+                        empower insurance professionals to excel in their careers.
+                    </p>
+                    <p class="text-gray-600 text-lg">
+                        We believe in creating a community where knowledge sharing and continuous learning 
+                        drive innovation in the insurance industry.
+                    </p>
+                </div>
+                <div class="relative">
+                    <img src="../resources/image/about-mission.jpg" alt="Our Mission" class="rounded-lg shadow-xl">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Values Section -->
+    <section class="py-20 bg-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-[#4B793E] text-center mb-12">Our Core Values</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <div class="text-[#F4C542] text-4xl mb-4">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Innovation</h3>
+                    <p class="text-gray-600">
+                        We continuously explore new ways to enhance the learning experience through 
+                        cutting-edge technology and creative teaching methods.
+                    </p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <div class="text-[#F4C542] text-4xl mb-4">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Community</h3>
+                    <p class="text-gray-600">
+                        We foster a supportive learning environment where professionals can connect, 
+                        share experiences, and grow together.
+                    </p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <div class="text-[#F4C542] text-4xl mb-4">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Excellence</h3>
+                    <p class="text-gray-600">
+                        We are committed to delivering high-quality educational content that meets 
+                        the highest standards of professional development.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-[#4B793E] text-center mb-12">Our Team</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <img src="../resources/image/team-1.jpg" alt="Team Member" class="w-48 h-48 rounded-full mx-auto mb-4 object-cover">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">John Smith</h3>
+                    <p class="text-[#4B793E] mb-2">Founder & CEO</p>
+                    <p class="text-gray-600">
+                        20+ years of experience in insurance education and technology
+                    </p>
+                </div>
+                <div class="text-center">
+                    <img src="../resources/image/team-2.jpg" alt="Team Member" class="w-48 h-48 rounded-full mx-auto mb-4 object-cover">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Sarah Johnson</h3>
+                    <p class="text-[#4B793E] mb-2">Head of Education</p>
+                    <p class="text-gray-600">
+                        Former insurance trainer with a passion for e-learning
+                    </p>
+                </div>
+                <div class="text-center">
+                    <img src="../resources/image/team-3.jpg" alt="Team Member" class="w-48 h-48 rounded-full mx-auto mb-4 object-cover">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Michael Chen</h3>
+                    <p class="text-[#4B793E] mb-2">Technical Director</p>
+                    <p class="text-gray-600">
+                        Expert in educational technology and platform development
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[#4B793E] text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-bold mb-4">LearnInsure</h3>
+                    <p class="text-gray-300">
+                        Empowering insurance professionals through innovative e-learning solutions.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="/" class="text-gray-300 hover:text-[#F4C542]">Home</a></li>
+                        <li><a href="/explore" class="text-gray-300 hover:text-[#F4C542]">Explore</a></li>
+                        <li><a href="/about" class="text-gray-300 hover:text-[#F4C542]">About Us</a></li>
+                        <li><a href="/contact" class="text-gray-300 hover:text-[#F4C542]">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Contact Us</h3>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><i class="fas fa-envelope mr-2"></i> info@learninsure.com</li>
+                        <li><i class="fas fa-phone mr-2"></i> (123) 456-7890</li>
+                        <li><i class="fas fa-map-marker-alt mr-2"></i> 123 Learning St, Education City</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Follow Us</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-300 hover:text-[#F4C542]"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-[#F4C542]"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-[#F4C542]"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-[#F4C542]"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
+                <p>&copy; 2024 LearnInsure. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html> 
